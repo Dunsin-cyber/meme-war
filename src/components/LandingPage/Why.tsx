@@ -2,7 +2,7 @@
 import React from "react";
 // import Image from '../assets/img/why-img.png'
 import Lottie from "lottie-react";
-import ICON from "@/components/GIF/pizza.json";
+import ICON from "@/components/GIF/arrow.json";
 
 const Why = () => {
   const options = {
@@ -33,15 +33,13 @@ const Why = () => {
           </div>
           {/* text */}
           <div className="w-full">
-            <h2 className="section-title">Why you should choose Katana</h2>
+            <h2 className="section-title">Why You Should Choose Suii</h2>
             <p className="section-subtitle">
-              Unlock the power of fractionalized ownership with Katana—no
-              barriers, no hidden fees. Seamlessly pool resources, secure
-              high-value blockchain assets, and enjoy real returns—all while
-              benefiting from a decentralized, transparent, and community-driven
-              ecosystem.
+              Transition from Web2 to Web3 effortlessly with Suii—powered by AI
+              automation. Migrate your applications to the BNB Chain, reduce
+              development costs, and unlock the full potential of decentralized
+              technologies with ease and security.
             </p>
-
             {/* <a
               href="https://medium.com/@glintfund"
               target="_blank"

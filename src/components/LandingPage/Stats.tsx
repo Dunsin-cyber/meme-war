@@ -7,7 +7,7 @@ import { HiChartBar, HiUser, HiGlobe } from "react-icons/hi";
 
 const Stats = () => {
   return (
-    <section className="section pt-24" data-aos="fade-up" data-aos-delay="1200">
+    <section className="section" data-aos="fade-up" data-aos-delay="1200">
       <div className="container mx-auto">
         <div
           className="flex flex-col gap-y-6 lg:flex-row
@@ -66,9 +66,9 @@ const Stats = () => {
                 className="text-2xl font-bold lg:text-[40px]
             lg:mb-2"
               >
-                195
+                7
               </div>
-              <div className="text-gray">Countries Supported</div>
+              <div className="text-gray">Codebase Converted</div>
             </div>
           </div>
         </div>

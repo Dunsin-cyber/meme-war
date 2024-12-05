@@ -10,7 +10,7 @@ import ICON from "@/components/GIF/home-icon.json";
 
 function Hero() {
   const router = useRouter();
-  const words_ = ["High-Value Digital Assets", "music", "art"];
+  const words_ = ["offchain services", "nodejs", "python"];
 
   const options = {
     animationData: ICON,
@@ -29,24 +29,25 @@ function Hero() {
 
             {/* title */}
             <h1
-              className="text-[32px] lg:text-[56px] font-bold leading-tight mb-6"
+              className="text-[32px] lg:text-[48px] font-bold leading-tight mb-6"
               data-aos="fade-down"
               data-aos-delay="500"
             >
-              Empowering Collaborative Asset Ownership with
-              <span className="text-[#A52A2A]"> Ethereum </span>
-              and
-              <span className="text-[#A52A2A]"> Ethena&apos;s </span>
-              Cutting-Edge Innovation.
+              Seamlessly
+              <span className="text-[#A52A2A]"> migrating </span>
+              Web2 applications to the
+              <span className="text-[#A52A2A]"> BNB Chain </span>
+              with AI-powered automation
+              {/* <span className="text-[#A52A2A]"> </span> */}
             </h1>
             <div
               className="max-w-[440px] text-[16px] lg:text-[24px] leading-relaxed mb-8"
               data-aos="fade-down"
               data-aos-delay="600"
             >
-              Slicing
+              convert your
               <FlipWords className="text-[#A52A2A]" words={words_} />
-              into Opportunities for Everyone.{" "}
+              to smart contract
             </div>
             <button
               className="btn gap-x-6 pl-6 text-sm lg:h-16 lg:text-base z-50"
