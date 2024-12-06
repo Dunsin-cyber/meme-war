@@ -13,12 +13,11 @@ import contractAbi from "@/hooks/abi.json";
 import { contractAddress } from "@/hooks";
 import { toast } from "react-hot-toast";
 import { parseEther } from "viem";
-import { bleTestnet } from "@/utils/wagmi";
 
 export default function TokenModal() {
   const { isCreateModalOpen, setIsCreateModalOpen } = useClient();
   const [loading, setLoading] = React.useState(false);
-  const { address } = useAccount();
+  const { address, chainId } = useAccount();
   const { data, error, writeContractAsync } = useWriteContract({
     config,
   });
@@ -44,13 +43,12 @@ export default function TokenModal() {
     try {
       if (!address) {
         await connectAsync({
-          chainId: bleTestnet.id,
           connector: injected(),
         });
       }
 
       const data = await writeContractAsync({
-        chainId: 52085143,
+        // chainId: chainId,
         address: contractAddress, // change to receipient address
         functionName: "uploadContent",
         abi: contractAbi,

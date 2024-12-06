@@ -15,7 +15,6 @@ import { contractAddress } from "@/hooks";
 import { toast } from "react-hot-toast";
 import { formatEther, parseEther } from "viem";
 import { useGetContents } from "@/hooks/index";
-import { bleTestnet } from "@/utils/wagmi";
 import erc20Abi from "@/hooks/erc-20.json";
 import { useRouter } from "next/router";
 
@@ -103,7 +102,7 @@ const Modal = () => {
 
   //interacting with smart contract
 
-  const { address } = useAccount();
+  const { address, chainId } = useAccount();
   const {
     data: data_,
     error,
@@ -119,13 +118,13 @@ const Modal = () => {
     try {
       if (!address) {
         await connectAsync({
-          chainId: bleTestnet.id,
+          chainId: chainId,
           connector: injected(),
         });
       }
       console.log(pricePerSlice);
       const data = await writeContractAsync({
-        chainId: bleTestnet.id,
+        // chainId: chainId,
         address: contractAddress, // change to receipient address
         functionName: "transferTokens",
         abi: contractAbi,
@@ -149,13 +148,13 @@ const Modal = () => {
     try {
       if (!address) {
         await connectAsync({
-          chainId: bleTestnet.id,
+          chainId: chainId,
           connector: injected(),
         });
       }
 
       const approve = await writeContractAsync({
-        chainId: bleTestnet.id,
+        // chainId: chainId,
         chain: undefined,
         account: address,
         address: content?.tokenAddress,
