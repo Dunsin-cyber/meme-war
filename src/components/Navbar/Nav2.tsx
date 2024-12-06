@@ -22,25 +22,13 @@ function Nav2() {
         >
           Home
         </button>
-        <a
-          href="https://medium.com/@glintfund"
-          target="_blank"
-          rel="GlintFund Medium"
-        >
+        <a href="#" target="_blank" rel="GlintFund Medium">
           <p className="cursor-pointer">Learn</p>
         </a>
-        <a
-          href="https://discord.gg/c7zQwM5h2E"
-          target="_blank"
-          rel="GlintFund Discord"
-        >
+        <a href="#" target="_blank" rel="GlintFund Discord">
           <p className="cursor-pointer">Community</p>
         </a>
-        <a
-          href="https://x.com/glintfund"
-          target="_blank"
-          rel="GlintFund Twitter"
-        >
+        <a href="#" target="_blank" rel="GlintFund Twitter">
           <p className="cursor-pointer">Support</p>
         </a>
       </div>

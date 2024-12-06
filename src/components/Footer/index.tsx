@@ -15,7 +15,7 @@ function Footer() {
             rel="Ethena"
             className="text-red-800 font-bold"
           >
-            Ethena
+            BNB
           </a>
         </p>
       </div>
@@ -25,16 +25,16 @@ function Footer() {
         <p className="cursor-pointer">Conditions</p>
       </div>
       <div className="flex gap-7 z-[100000]">
-        <a href="#" target="_blank" rel="Katana Twitter">
+        <a href="#" target="_blank" rel="Suii Twitter">
           <FaXTwitter />
         </a>
-        <a href="#" target="_blank" rel="Katana Discord">
+        <a href="#" target="_blank" rel="Suii Discord">
           <FaDiscord />
         </a>
-        <a href="#" target="_blank" rel="Katana Github">
+        <a href="#" target="_blank" rel="Suii Github">
           <FaGithub />
         </a>
-        <a href="#" target="_blank" rel="Katana Medium">
+        <a href="#" target="_blank" rel="Suii Medium">
           <FaMedium />
         </a>
       </div>

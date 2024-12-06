@@ -22,7 +22,7 @@ function WalletProvider({ children }) {
         theme={darkTheme()}
         locale={locale}
         appInfo={{
-          appName: "Katana",
+          appName: "Suii",
         }}
         modalSize="compact"
       >
