@@ -36,6 +36,7 @@ export const HoverEffect = ({
         //   }}
         // >
         <Link
+          key={Number(item?.contentId)}
           href={`/explore/${item?.contentId}`}
           className="relative group  block p-2 h-full w-full"
           onMouseEnter={() => setHoveredIndex(idx)}
