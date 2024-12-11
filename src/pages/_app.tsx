@@ -6,6 +6,8 @@ import { Toaster } from "react-hot-toast";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { WagmiProvider } from "wagmi";
 import { config } from "@/utils/wagmi";
+import Head from "next/head";
+import { PagesProgressBar as ProgressBar } from "next-nprogress-bar";
 
 import localFont from "next/font/local";
 
@@ -25,6 +27,9 @@ const queryClient = new QueryClient();
 const App = ({ Component, pageProps }) => {
   return (
     <Provider>
+      <Head>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <WagmiProvider config={config}>
         <QueryClientProvider client={queryClient}>
           <WalletProvider>
@@ -34,6 +39,12 @@ const App = ({ Component, pageProps }) => {
                 className={`${geistSans.variable} ${geistMono.variable} antialiased dark`}
               >
                 <Component {...pageProps} />
+                <ProgressBar
+                  height="4px"
+                  color="#2497D0"
+                  options={{ showSpinner: false }}
+                  shallowRouting
+                />
               </div>
             </UserContextProvider>
           </WalletProvider>

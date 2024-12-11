@@ -29,68 +29,68 @@ export const HoverEffect = ({
       )}
     >
       {items?.map((item, idx) => (
-        <div
-          key={Number(item?.contentId)}
-          onClick={() => {
-            assignId(Number(item?.contentId), item?.src);
-          }}
+        // <div
+        //   key={Number(item?.contentId)}
+        //   onClick={() => {
+        //     assignId(Number(item?.contentId), item?.src);
+        //   }}
+        // >
+        <Link
+          href={`/explore/${item?.contentId}`}
+          className="relative group  block p-2 h-full w-full"
+          onMouseEnter={() => setHoveredIndex(idx)}
+          onMouseLeave={() => setHoveredIndex(null)}
         >
-          <Link
-            href={"#"}
-            className="relative group  block p-2 h-full w-full"
-            onMouseEnter={() => setHoveredIndex(idx)}
-            onMouseLeave={() => setHoveredIndex(null)}
-          >
-            <AnimatePresence>
-              {hoveredIndex === idx && (
-                <motion.span
-                  className="absolute inset-0 h-full w-full bg-[#2C014D] dark:bg-slate-800/[0.8] block  rounded-3xl"
-                  layoutId="hoverBackground"
-                  initial={{ opacity: 0 }}
-                  animate={{
-                    opacity: 1,
-                    transition: { duration: 0.15 },
-                  }}
-                  exit={{
-                    opacity: 0,
-                    transition: { duration: 0.15, delay: 0.2 },
-                  }}
-                />
-              )}
-            </AnimatePresence>
-            <Card>
-              <CardTitle>{item.title}</CardTitle>
-              <CardDescription>
-                {item.description.slice(0, 100)}...
-              </CardDescription>
-              <CardContainer className="inter-var">
-                <ImageSection src={`/dummyPic/${item?.src}`} />
-              </CardContainer>
-              <div className="flex flex-row justify-between gap-y-3">
-                <div className=" flex-1 gap-y-3">
-                  <p className="text-zinc-400 tracking-wide leading-relaxed text-sm">
-                    Supported Tokens
-                  </p>
-                  <div className="flex-1 gap-x-5">
-                    <Tag>USDe</Tag> <Tag>ENA</Tag>
-                  </div>
-                </div>
-
-                <div className=" flex-1 gap-y-3">
-                  <p className="text-zinc-400 tracking-wide leading-relaxed text-sm">
-                    Token Supply / Adress
-                  </p>
-                  <div className="flex-1 gap-x-5">
-                    <Tag>
-                      {Number(formatEther(item?.totalSupply)).toLocaleString()}
-                    </Tag>{" "}
-                    <Tag>{item?.tokenAddress.slice(0, 20)}...</Tag>
-                  </div>
+          <AnimatePresence>
+            {hoveredIndex === idx && (
+              <motion.span
+                className="absolute inset-0 h-full w-full bg-[#2C014D] dark:bg-slate-800/[0.8] block  rounded-3xl"
+                layoutId="hoverBackground"
+                initial={{ opacity: 0 }}
+                animate={{
+                  opacity: 1,
+                  transition: { duration: 0.15 },
+                }}
+                exit={{
+                  opacity: 0,
+                  transition: { duration: 0.15, delay: 0.2 },
+                }}
+              />
+            )}
+          </AnimatePresence>
+          <Card>
+            <CardTitle>{item.title}</CardTitle>
+            <CardDescription>
+              {item.description.slice(0, 100)}...
+            </CardDescription>
+            <CardContainer className="inter-var">
+              <ImageSection src={`/dummyPic/${item?.src}`} />
+            </CardContainer>
+            <div className="flex flex-row justify-between gap-y-3">
+              <div className=" flex-1 gap-y-3">
+                <p className="text-zinc-400 tracking-wide leading-relaxed text-sm">
+                  Supported Tokens
+                </p>
+                <div className="flex-1 gap-x-5">
+                  <Tag>USDe</Tag> <Tag>ENA</Tag>
                 </div>
               </div>
-            </Card>
-          </Link>
-        </div>
+
+              <div className=" flex-1 gap-y-3">
+                <p className="text-zinc-400 tracking-wide leading-relaxed text-sm">
+                  Token Supply / Adress
+                </p>
+                <div className="flex-1 gap-x-5">
+                  <Tag>
+                    {Number(formatEther(item?.totalSupply)).toLocaleString()}
+                  </Tag>{" "}
+                  <Tag>{item?.tokenAddress.slice(0, 20)}...</Tag>
+                </div>
+              </div>
+            </div>
+          </Card>
+        </Link>
+        // </div>
       ))}
     </div>
   );
