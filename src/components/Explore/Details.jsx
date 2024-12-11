@@ -7,7 +7,7 @@ import { Input } from "@chakra-ui/react";
 import { createChart } from "lightweight-charts";
 
 const Explore = () => {
-  const chartContainerRef = React.useRef<HTMLDivElement>(null);
+  const chartContainerRef = React.useRef(null);
 
   const { setIsCreateModalOpen } = useClient();
 
@@ -75,14 +75,14 @@ const Explore = () => {
       <div className="bg-bgGradient mx-auto px-8 relative">
         <div className="flex pt-3 justify-between items-center  mx-auto ">
           <h2 className="font-extrabold">My Creations</h2>
-          <Input maxW={"40%"} placeholder="search" />
+          {/* <Input maxW={"40%"} placeholder="search" /> */}
           <button
-            className="btn px-9"
+            className="btn"
             onClick={() => {
               setIsCreateModalOpen(true);
             }}
           >
-            create content
+            create
           </button>
           <ConnectButton />
         </div>
@@ -91,9 +91,12 @@ const Explore = () => {
           <span className="text-[#2962FF]">BONK</span> vs{" "}
           <span className="text-[#28A745]">USDT</span>
         </div>
-        <div className="flex">
-          <div className="mt-5 w-[70%] h-[70vh]" ref={chartContainerRef}></div>
-          <div className="flex flex-col w-[25%] py-2 px-2 mx-auto  h-[300px] space-y-6 bg-primary50 rounded-xl">
+        <div className="flex flex-col md:flex-row">
+          <div
+            className="mt-5 w-full  md:w-[70%] h-[70vh]"
+            ref={chartContainerRef}
+          ></div>
+          <div className="flex flex-col w-full  md:w-[25%] py-2 px-2 mx-auto  h-[300px] space-y-6 bg-primary50 rounded-xl">
             <div className="flex rounded-lg w-full justify-between px-5 pt-5">
               <h2 className="flex justify-center bg-slate-600 px-5 py-3 rounded-xl w-[50%] h-12">
                 BUY

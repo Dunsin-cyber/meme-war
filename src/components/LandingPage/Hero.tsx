@@ -54,7 +54,7 @@ function Hero() {
               data-aos="fade-down"
               data-aos-delay="700"
               onClick={() => {
-                router.push("/connect-wallet");
+                router.push("/explore");
               }}
             >
               Get Started
