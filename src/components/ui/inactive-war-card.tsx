@@ -11,15 +11,15 @@ import { Tag } from "@/components/ui/tag";
 import { useClient } from "@/context";
 import { formatEther } from "viem";
 
-export const HoverEffect = ({
+export default function HoverEffect({
   items,
   className,
 }: {
   items: any;
   className?: string;
-}) => {
+}) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const { assignId } = useClient();
+  const { assignId, setWarModalOpen } = useClient();
 
   return (
     <div
@@ -29,16 +29,10 @@ export const HoverEffect = ({
       )}
     >
       {items?.map((item, idx) => (
-        // <div
-        //   key={Number(item?.contentId)}
-        //   onClick={() => {
-        //     assignId(Number(item?.contentId), item?.src);
-        //   }}
-        // >
-        <Link
+        <div
+
           key={Number(item?.contentId)}
-          href={`/explore/${item?.contentId}`}
-          className="relative group  block p-2 h-full w-full"
+          className="relative group  block p-2 h-full w-full cursor-pointer"
           onMouseEnter={() => setHoveredIndex(idx)}
           onMouseLeave={() => setHoveredIndex(null)}
         >
@@ -61,8 +55,7 @@ export const HoverEffect = ({
           </AnimatePresence>
           <Card>
             <CardTitle className="text-secondary100">
-              {item.title} 🆚{" "}
-              <span className="text-secondary200">{item.title}</span>
+              {item.title} 🆚 ---
             </CardTitle>
             <CardDescription>
               {item.description.slice(0, 100)}...
@@ -73,10 +66,10 @@ export const HoverEffect = ({
             <div className="flex flex-row justify-between gap-y-3">
               <div className=" flex-1 gap-y-3">
                 <p className="text-zinc-400 tracking-wide leading-relaxed text-sm">
-                  Deadline
+                  Duration
                 </p>
                 <div className="flex-1 gap-x-5">
-                  <Tag color="red.400">21 days left</Tag>
+                  <Tag color="red.400">21 days</Tag>
                 </div>
               </div>
 
@@ -107,17 +100,25 @@ export const HoverEffect = ({
                   Market Cap
                 </p>
                 <div className="flex-1 gap-x-5">
-                  <Tag color="green.700">$45.5k</Tag>
+                  <Tag color="green.700">---</Tag>
                 </div>
               </div>
             </div>
+            <div className="flex justify-end">
+              <button
+                className="btn py-2 px-6"
+                onClick={() => setWarModalOpen(true)}
+              >
+                Join War
+              </button>
+            </div>
           </Card>
-        </Link>
-        // </div>
+        {/* </Link> */}
+         </div>
       ))}
     </div>
   );
-};
+}
 
 export const Card = ({
   className,

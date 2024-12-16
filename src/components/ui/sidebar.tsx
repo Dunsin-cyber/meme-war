@@ -116,7 +116,7 @@ export const MobileSidebar = ({
     <>
       <div
         className={cn(
-          "h-10 px-4 font-sans py-4 flex flex-row md:hidden  items-center justify-between bg-custom-gradient  text-white  w-full"
+          "h-10 px-4 font-sans py-4 flex flex-row md:hidden  items-center justify-between bg-custom-gradient  text-white  w-full z-500"
         )}
         {...props}
       >
@@ -137,7 +137,7 @@ export const MobileSidebar = ({
                 ease: "easeInOut",
               }}
               className={cn(
-                "fixed h-full w-full inset-0 bg-custom-gradient p-10 z-[100] flex flex-col justify-between",
+                "fixed h-full w-full inset-0 bg-customPurple p-10 z-[100] flex flex-col justify-between",
                 className
               )}
             >

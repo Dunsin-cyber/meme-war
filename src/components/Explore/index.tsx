@@ -7,10 +7,11 @@ import { Input } from "@chakra-ui/react";
 import Modal from "./Modal";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useClient } from "@/context";
-import CreateToken from "./CreateToken";
+import CreateToken from "./CreateMeme";
 import { useGetContents, contractAddress } from "@/hooks/index";
 import contractAbi from "@/hooks/abi.json";
 import { SidebarDemo } from "@/components/Sidebar";
+import CreatedWar from "@/components/ui/inactive-war-card"
 
 const Explore = () => {
   React.useEffect(() => {}, []);
@@ -44,11 +45,17 @@ const Explore = () => {
               setIsCreateModalOpen(true);
             }}
           >
-            create content
+            create war
           </button>
           <ConnectButton />
         </div>
-        {data && !isLoading && <HoverEffect items={filteredContent} />}
+        <div className="mt-4">
+          <h2 className="text-3xl font-bold">Ongoing War</h2>
+          {data && !isLoading && <HoverEffect items={filteredContent} />}
+
+          <h2 className="text-3xl font-bold">Join War</h2>
+          {data && !isLoading && <CreatedWar items={filteredContent} />}
+        </div>
 
         <Modal />
         <CreateToken />

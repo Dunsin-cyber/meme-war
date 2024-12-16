@@ -21,7 +21,7 @@ const Explore = () => {
 
   React.useEffect(() => {
     if (chartContainerRef.current) {
-      const chartOptions = {
+      const chartOptions:any = {
         autoSize: true,
         layout: {
           textColor: "white",

@@ -13,6 +13,16 @@ import contractAbi from "@/hooks/abi.json";
 import { contractAddress } from "@/hooks";
 import { toast } from "react-hot-toast";
 import { parseEther } from "viem";
+import { createListCollection } from "@chakra-ui/react";
+
+import {
+  SelectContent,
+  SelectItem,
+  SelectLabel,
+  SelectRoot,
+  SelectTrigger,
+  SelectValueText,
+} from "@/components/ui/select";
 
 export default function TokenModal() {
   const { isCreateModalOpen, setIsCreateModalOpen } = useClient();
@@ -133,18 +143,21 @@ export default function TokenModal() {
                   htmlFor="metadataUrl"
                   className="block text-sm font-medium"
                 >
-                  Metadata URL
+                  Meme Type
                 </label>
-                <input
-                  type="url"
-                  id="metadataUrl"
-                  name="metadataUrl"
-                  value={formData.metadataUrl}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full p-2 border rounded"
-                  placeholder="Enter metadata URL"
-                />
+                <SelectRoot collection={undefined}>
+                  {/* </SelectTrigger> */}
+                  <SelectTrigger>
+                    <SelectValueText />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {frameworks.items.map((movie) => (
+                      <SelectItem item={movie} key={movie.value}>
+                        {movie.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </SelectRoot>
               </div>
 
               {/* Token Name */}
@@ -208,6 +221,27 @@ export default function TokenModal() {
                 />
               </div>
 
+              {/* Deadline */}
+              <div>
+                <label
+                  htmlFor="totalSupply"
+                  className="block text-sm font-medium"
+                >
+                  Deadline
+                </label>
+                <input
+                  type="date"
+                  id="deadline"
+                  name="deadline"
+                  value={formData.totalSupply}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full p-2 border rounded"
+                  placeholder="Enter total supply"
+                  min="1"
+                />
+              </div>
+
               {/* Submit Button */}
               <div className="flex justify-end space-x-2">
                 <button
@@ -233,3 +267,11 @@ export default function TokenModal() {
     </div>
   );
 }
+
+const frameworks = createListCollection({
+  items: [
+    { label: "meme", value: "meme" },
+    { label: "meme coin", value: "coin" },
+    { label: "NFT", value: "nft" },
+  ],
+});
