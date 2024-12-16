@@ -3,12 +3,20 @@ import React from "react";
 import { useClient } from "@/context";
 import { SidebarDemo } from "@/components/Sidebar";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { Input } from "@chakra-ui/react";
+import { Input, createListCollection } from "@chakra-ui/react";
 import { createChart } from "lightweight-charts";
+import {
+  SelectContent,
+  SelectItem,
+  SelectLabel,
+  SelectRoot,
+  SelectTrigger,
+  SelectValueText,
+} from "@/components/ui/select";
 
 const Explore = () => {
   const chartContainerRef = React.useRef(null);
-
+  const [active, setActive] = React.useState(true);
   const { setIsCreateModalOpen } = useClient();
 
   React.useEffect(() => {
@@ -75,15 +83,6 @@ const Explore = () => {
       <div className="bg-bgGradient mx-auto px-8 relative">
         <div className="flex pt-3 justify-between items-center  mx-auto ">
           <h2 className="font-extrabold">My Creations</h2>
-          {/* <Input maxW={"40%"} placeholder="search" /> */}
-          <button
-            className="btn"
-            onClick={() => {
-              setIsCreateModalOpen(true);
-            }}
-          >
-            create
-          </button>
           <ConnectButton />
         </div>
 
@@ -97,16 +96,42 @@ const Explore = () => {
             ref={chartContainerRef}
           ></div>
           <div className="flex flex-col w-full  md:w-[25%] py-2 px-2 mx-auto  h-[300px] space-y-6 bg-primary50 rounded-xl">
-            <div className="flex rounded-lg w-full justify-between px-5 pt-5">
-              <h2 className="flex justify-center bg-slate-600 px-5 py-3 rounded-xl w-[50%] h-12">
+            <div className="flex  justify-evenly my-3 w-full">
+              <h2
+                onClick={() => setActive(true)}
+                className={`flex rounded-xl py-2 px-6 transition duration-300 ease-in-out transform hover:scale-105  w-[50%] justify-center space-x-2 cursor-pointer items-center ${
+                  active && "bg-gray-700 "
+                } `}
+              >
                 BUY
               </h2>
-              <p className="flex justify-center bg-green-600 px-5 py-3 rounded-xl w-[50%] h-12">
+              <p
+                onClick={() => setActive(false)}
+                className={`flex rounded-xl py-2 px-6 transition duration-300 ease-in-out transform hover:scale-105   w-[50%] justify-center cursor-pointer items-center${
+                  !active && " bg-gray-700 "
+                } `}
+              >
                 SELL
               </p>
             </div>
+            <div className="flex">
+              Token :
+              <SelectRoot collection={undefined}>
+                <SelectLabel />
+                <SelectTrigger>
+                  <SelectValueText />
+                </SelectTrigger>
+                <SelectContent>
+                  {frameworks.items.map((movie) => (
+                    <SelectItem item={movie} key={movie.value}>
+                      {movie.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </SelectRoot>
+            </div>
             <div>
-              <Input width="full" placeholder="how much" variant="outline" />
+              <Input width="full" placeholder="0.00" variant="outline" />
             </div>
           </div>
         </div>
@@ -115,4 +140,15 @@ const Explore = () => {
   );
 };
 
+
+
 export default Explore;
+
+const frameworks = createListCollection({
+  items: [
+    { label: "React.js", value: "react" },
+    { label: "Vue.js", value: "vue" },
+    { label: "Angular", value: "angular" },
+    { label: "Svelte", value: "svelte" },
+  ],
+});

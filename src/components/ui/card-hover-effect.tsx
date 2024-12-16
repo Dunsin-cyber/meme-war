@@ -60,7 +60,10 @@ export const HoverEffect = ({
             )}
           </AnimatePresence>
           <Card>
-            <CardTitle>{item.title}</CardTitle>
+            <CardTitle className="text-secondary100">
+              {item.title} 🆚{" "}
+              <span className="text-secondary200">{item.title}</span>
+            </CardTitle>
             <CardDescription>
               {item.description.slice(0, 100)}...
             </CardDescription>
@@ -70,22 +73,41 @@ export const HoverEffect = ({
             <div className="flex flex-row justify-between gap-y-3">
               <div className=" flex-1 gap-y-3">
                 <p className="text-zinc-400 tracking-wide leading-relaxed text-sm">
-                  Supported Tokens
+                  Deadline
                 </p>
                 <div className="flex-1 gap-x-5">
-                  <Tag>USDe</Tag> <Tag>ENA</Tag>
+                  <Tag color="red.400">21 days left</Tag>
                 </div>
               </div>
 
               <div className=" flex-1 gap-y-3">
                 <p className="text-zinc-400 tracking-wide leading-relaxed text-sm">
-                  Token Supply / Adress
+                  supply
                 </p>
                 <div className="flex-1 gap-x-5">
-                  <Tag>
+                  <Tag color="yellow.500">
                     {Number(formatEther(item?.totalSupply)).toLocaleString()}
-                  </Tag>{" "}
-                  <Tag>{item?.tokenAddress.slice(0, 20)}...</Tag>
+                  </Tag>
+                </div>
+              </div>
+            </div>
+            {/* creator info */}
+            <div className="flex flex-row justify-between gap-y-3">
+              <div className=" flex-1 gap-y-3">
+                <p className="text-zinc-400 tracking-wide leading-relaxed text-sm">
+                  Created By
+                </p>
+                <div className="flex-1 gap-x-5">
+                  <Tag className="text-primary100">POxgddjno...</Tag>
+                </div>
+              </div>
+
+              <div className=" flex-1 gap-y-3">
+                <p className="text-zinc-400 tracking-wide leading-relaxed text-sm">
+                  Market Cap
+                </p>
+                <div className="flex-1 gap-x-5">
+                  <Tag color="green.700">$45.5k</Tag>
                 </div>
               </div>
             </div>
