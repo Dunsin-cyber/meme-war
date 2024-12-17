@@ -17,7 +17,7 @@ import WithdrawModal from "./WithdrawModal";
 const Profile = () => {
   React.useEffect(() => {}, []);
   const [contents, setContents] = React.useState(null);
-  const { setIsCreateModalOpen } = useClient();
+  const { setOpenWithdrawModal } = useClient();
   const { address } = useAccount();
   const { data, isLoading, error } = useGetContents();
   console.log("Content", data);
@@ -73,7 +73,7 @@ const Profile = () => {
                 ]}
               />
             </div>
-          <button className="btn px-6">Withdraw</button>
+          <button className="btn px-6" onClick={() => setOpenWithdrawModal(true)}>Withdraw</button>
           </div>
         </div>
         <p className="font-semibold text-3xl text-secondary50">
