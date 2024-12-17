@@ -13,6 +13,7 @@ import {
   SelectTrigger,
   SelectValueText,
 } from "@/components/ui/select";
+import { Table } from "@chakra-ui/react";
 
 const Explore = () => {
   const chartContainerRef = React.useRef(null);
@@ -21,7 +22,7 @@ const Explore = () => {
 
   React.useEffect(() => {
     if (chartContainerRef.current) {
-      const chartOptions:any = {
+      const chartOptions: any = {
         autoSize: true,
         layout: {
           textColor: "white",
@@ -95,43 +96,74 @@ const Explore = () => {
             className="mt-5 w-full  md:w-[70%] h-[70vh]"
             ref={chartContainerRef}
           ></div>
-          <div className="flex flex-col w-full  md:w-[25%] py-2 px-2 mx-auto  h-[300px] space-y-6 bg-primary50 rounded-xl">
-            <div className="flex  justify-evenly my-3 w-full">
-              <h2
-                onClick={() => setActive(true)}
-                className={`flex rounded-xl py-2 px-6 transition duration-300 ease-in-out transform hover:scale-105  w-[50%] justify-center space-x-2 cursor-pointer items-center ${
-                  active && "bg-gray-700 "
-                } `}
-              >
-                BUY
-              </h2>
-              <p
-                onClick={() => setActive(false)}
-                className={`flex rounded-xl py-2 px-6 transition duration-300 ease-in-out transform hover:scale-105   w-[50%] justify-center cursor-pointer items-center${
-                  !active && " bg-gray-700 "
-                } `}
-              >
-                SELL
-              </p>
+
+          {/* right hand side */}
+          <div className="flex flex-col mx-auto w-full   md:w-[25%]">
+            <div className="flex flex-col  py-2 px-2   h-[350px] space-y-6 bg-primary50 rounded-xl">
+              <div className="flex  justify-evenly my-3 w-full">
+                <h2
+                  onClick={() => setActive(true)}
+                  className={`flex rounded-xl py-2 px-6 transition duration-300 ease-in-out transform hover:scale-105  w-[50%] justify-center space-x-2 cursor-pointer items-center ${
+                    active && "bg-gray-700 "
+                  } `}
+                >
+                  BUY
+                </h2>
+                <button
+                  disabled={true}
+                  // onClick={() => setActive(false)}
+                  className={`flex rounded-xl py-2 px-6 transition duration-300 ease-in-out transform hover:scale-105   w-[50%] justify-center cursor-pointer items-center${
+                    !active && " bg-gray-700 "
+                  } `}
+                >
+                  SELL
+                </button>
+              </div>
+              <div className="flex">
+                <SelectRoot collection={frameworks}>
+                  <SelectLabel>Token</SelectLabel>
+                  <SelectTrigger>
+                    <SelectValueText placeholder="Select token" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {frameworks.items.map((movie) => (
+                      <SelectItem item={movie} key={movie.value}>
+                        {movie.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </SelectRoot>
+              </div>
+              <div>
+                <Input width="full" placeholder="0.00" variant="outline" />
+              </div>
+              {/* submit button */}
+              <div className="flex justify-center">
+                <button className="btn bg-gray-700 ">Place Order</button>
+              </div>
             </div>
-            <div className="flex">
-      
-              <SelectRoot collection={frameworks}>
-                <SelectLabel>Token</SelectLabel>
-                <SelectTrigger>
-                  <SelectValueText  placeholder="Select token"  />
-                </SelectTrigger>
-                <SelectContent>
-                  {frameworks.items.map((movie) => (
-                    <SelectItem item={movie} key={movie.value}>
-                      {movie.label}
-                    </SelectItem>
+
+            {/* holders  */}
+            <div className="mt-6">
+              <h2 className="font-semibold text-secondary100">Holders</h2>
+              <Table.Root size="sm" variant="outline">
+                <Table.Header>
+                  <Table.Row>
+                    <Table.ColumnHeader>Address</Table.ColumnHeader>
+                    <Table.ColumnHeader textAlign="end">
+                      Percentage
+                    </Table.ColumnHeader>
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                  {items.map((item) => (
+                    <Table.Row key={item.id}>
+                      <Table.Cell>{item.name}</Table.Cell>
+                      <Table.Cell textAlign="end">{item.price}</Table.Cell>
+                    </Table.Row>
                   ))}
-                </SelectContent>
-              </SelectRoot>
-            </div>
-            <div>
-              <Input width="full" placeholder="0.00" variant="outline" />
+                </Table.Body>
+              </Table.Root>
             </div>
           </div>
         </div>
@@ -139,8 +171,6 @@ const Explore = () => {
     </SidebarDemo>
   );
 };
-
-
 
 export default Explore;
 
@@ -152,3 +182,11 @@ const frameworks = createListCollection({
     { label: "Svelte", value: "svelte" },
   ],
 });
+
+const items = [
+  { id: 1, name: "oxcvchdui...",  price: 999.99 },
+  { id: 2, name: "hsyusgushs...",  price: 49.99 },
+  { id: 3, name: "ox23jejdjd...", price: 150.0 },
+  { id: 4, name: "xcosjsis..",  price: 799.99 },
+  { id: 5, name: "0kslmsksks.",  price: 199.99 },
+];
