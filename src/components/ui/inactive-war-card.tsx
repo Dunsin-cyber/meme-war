@@ -10,6 +10,7 @@ import { Tag } from "@/components/ui/tag";
 // import { ProgressBar, ProgressRoot } from "@/components/ui/progress";
 import { useClient } from "@/context";
 import { formatEther } from "viem";
+import { useRouter } from "next/router";
 
 export default function HoverEffect({
   items,
@@ -20,6 +21,7 @@ export default function HoverEffect({
 }) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const { assignId, setWarModalOpen } = useClient();
+  const router = useRouter();
 
   return (
     <div
@@ -29,10 +31,10 @@ export default function HoverEffect({
       )}
     >
       {items?.map((item, idx) => (
-        <div
-
+        <Link
           key={Number(item?.contentId)}
-          className="relative group  block p-2 h-full w-full cursor-pointer"
+          href={`/explore/join-war/${item?.contentId}`}
+          className="relative group  block p-2 h-full w-full"
           onMouseEnter={() => setHoveredIndex(idx)}
           onMouseLeave={() => setHoveredIndex(null)}
         >
@@ -107,14 +109,16 @@ export default function HoverEffect({
             <div className="flex justify-end">
               <button
                 className="btn py-2 px-6"
-                onClick={() => setWarModalOpen(true)}
+                onClick={() =>
+                  router.push(`/explore/join-war/${item?.contentId}`)
+                }
               >
                 Join War
               </button>
             </div>
           </Card>
-        {/* </Link> */}
-         </div>
+        </Link>
+        //  </div>
       ))}
     </div>
   );
