@@ -20,7 +20,7 @@ export default function HoverEffect({
   className?: string;
 }) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const { assignId, setWarModalOpen } = useClient();
+  const { assignId } = useClient();
   const router = useRouter();
 
   return (

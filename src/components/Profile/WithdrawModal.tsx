@@ -27,12 +27,12 @@ function WithdrawModal() {
             </div>
             {/* select token to withdraw */}
 
-              <div className="flex">
-              Token 
-              <SelectRoot collection={undefined}>
-                <SelectLabel />
+            <div className="flex px-5">
+              <SelectRoot collection={frameworks}>
+                <SelectLabel>Token</SelectLabel>
+
                 <SelectTrigger>
-                  <SelectValueText />
+                  <SelectValueText placeholder="select token to withdraw" />
                 </SelectTrigger>
                 <SelectContent>
                   {frameworks.items.map((movie) => (
@@ -42,10 +42,10 @@ function WithdrawModal() {
                   ))}
                 </SelectContent>
               </SelectRoot>
-              </div>
+            </div>
 
             {/* buttons */}
-            <div className="flex space-x-3 justify-end">
+            <div className="flex space-x-3 justify-end my-6 px-5">
               <button
                 className="btn px-6 bg-gray-500 text-black"
                 onClick={() => setOpenWithdrawModal(false)}

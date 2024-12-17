@@ -139,16 +139,10 @@ export default function TokenModal() {
 
               {/* Metadata URL */}
               <div>
-                <label
-                  htmlFor="metadataUrl"
-                  className="block text-sm font-medium"
-                >
-                  Meme Type
-                </label>
-                <SelectRoot collection={undefined}>
-                  {/* </SelectTrigger> */}
+                <SelectRoot collection={frameworks}>
+                  <SelectLabel>Meme Type</SelectLabel>
                   <SelectTrigger>
-                    <SelectValueText />
+                    <SelectValueText placeholder="select type" />
                   </SelectTrigger>
                   <SelectContent>
                     {frameworks.items.map((movie) => (

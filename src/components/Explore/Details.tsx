@@ -115,11 +115,11 @@ const Explore = () => {
               </p>
             </div>
             <div className="flex">
-              Token :
-              <SelectRoot collection={undefined}>
-                <SelectLabel />
+      
+              <SelectRoot collection={frameworks}>
+                <SelectLabel>Token</SelectLabel>
                 <SelectTrigger>
-                  <SelectValueText />
+                  <SelectValueText  placeholder="Select token"  />
                 </SelectTrigger>
                 <SelectContent>
                   {frameworks.items.map((movie) => (
