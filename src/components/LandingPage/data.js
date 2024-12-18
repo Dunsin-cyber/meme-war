@@ -1,23 +1,23 @@
 export const currency = [
   {
     image: "/img/art.jpg",
-    name: "Art",
-    abbr: "Art",
+    name: "Meme",
+    abbr: "Meme",
     description:
-      "Discover and invest in your favorite art pieces through tokenized ownership.",
+      "Create or battle with memes in high-stakes challenges and claim victory through community-driven engagement.",
   },
   {
     image: "/img/music.jpg",
-    name: "Music",
-    abbr: "Music",
+    name: "Token",
+    abbr: "Token",
     description:
-      "Shop for your favorite music tracks and own tokens tied to albums or artists.",
+      "Stake your tokens in competitive battles and showcase your dominance in the Meme War arena.",
   },
   {
     image: "/img/nft.jpg",
     name: "NFT",
     abbr: "NFT",
     description:
-      "Explore unique digital assets and collectibles available for tokenized ownership.",
+      "Use your NFTs to compete or stake in battles, unlocking new opportunities in the ultimate meme showdown.",
   },
 ];

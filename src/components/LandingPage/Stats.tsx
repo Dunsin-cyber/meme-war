@@ -68,7 +68,7 @@ const Stats = () => {
               >
                 7
               </div>
-              <div className="text-gray">Codebase Converted</div>
+              <div className="text-gray">War completed</div>
             </div>
           </div>
         </div>

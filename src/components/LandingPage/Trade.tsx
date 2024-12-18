@@ -2,14 +2,17 @@
 import React from "react";
 import { currency } from "./data";
 // import { IoIosArrowForward } from "react-icons/io";
+import {useRouter} from "next/router";
 
 const Trade = () => {
+  const router = useRouter();
   return (
     <section className="section bg-gradient-to-b from-[#f8f9fb] to-[#fafbff] text-customPurple">
       <div className="container mx-auto">
         <h2 className="section-title text-center mb-16">
-          Unlock the future of decentralized asset ownership with Katana—secure,
-          fractionalized, and community-driven investments.
+          Unlock the future of digital battles with Meme War—create or compete
+          using memes, tokens, or NFTs in a secure, community-driven arena for
+          ultimate supremacy!
         </h2>
         {/* items */}
         <div className="flex flex-col gap-[45px] lg:flex-row">
@@ -36,7 +39,7 @@ const Trade = () => {
                   {/* item description */}
                   <p className="mb-6 text-center">{description}</p>
                   {/* btn */}
-                  <button className="btn text-white">Start Investing</button>
+                  <button className="btn text-white" onClick={() => router.push("/explore")}>Start</button>
                 </div>
               </div>
             );

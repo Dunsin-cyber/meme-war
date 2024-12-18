@@ -6,7 +6,7 @@ function index({ title }) {
     <div>
       <Head>
         <link rel="icon" href="/favicon.ico" />
-        <title>Suii - {title}</title>
+        <title>Meme War - {title}</title>
       </Head>
     </div>
   );

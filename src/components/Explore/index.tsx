@@ -35,12 +35,12 @@ const Explore = () => {
     <SidebarDemo>
       <div className="bg-bgGradient mx-auto px-8 relative">
         <div className="flex pt-3 justify-between items-center  mx-auto ">
-          <h2 className="font-extrabold">Musics and Arts</h2>
+          <h2 className="font-extrabold"> Meme War</h2>
           <Input maxW={"40%"} placeholder="search" />
           <button
             className="btn px-9"
             onClick={() => {
-              setIsCreateModalOpen( true);
+              setIsCreateModalOpen(true);
             }}
           >
             create war

@@ -5,7 +5,7 @@ import Head from "@/components/Head";
 function Explore() {
   return (
     <div>
-      <Head title="" />
+      <Head title="Explore" />
       <Explore_ />
     </div>
   );

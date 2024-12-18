@@ -33,12 +33,12 @@ const Why = () => {
           </div>
           {/* text */}
           <div className="w-full">
-            <h2 className="section-title">Why You Should Choose Suii</h2>
+            <h2 className="section-title">Why You Should Join Meme War</h2>
             <p className="section-subtitle">
-              Transition from Web2 to Web3 effortlessly with Suii—powered by AI
-              automation. Migrate your applications to the BNB Chain, reduce
-              development costs, and unlock the full potential of decentralized
-              technologies with ease and security.
+              Dive into the ultimate meme showdown! Compete in high-stakes
+              battles, engage with the community, and win rewards powered by
+              blockchain and AI. Showcase your creativity, claim victory, and
+              dominate the Meme War arena with ease and fairness.
             </p>
             {/* <a
               href="https://medium.com/@glintfund"
