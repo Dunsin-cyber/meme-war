@@ -32,10 +32,11 @@ import {
 
 import { PlusOutlined } from "@ant-design/icons";
 import type { StepsProps, SelectProps } from "antd";
-import { Popover, Steps , Select } from "antd";
-
-
-
+import { Popover, Steps, Select } from "antd";
+import { useMemeClient } from "@/context/createMemeContext";
+import CreateMeme from "./CreateMeme";
+import CreateToken from "./CreateToken";
+import SelectType from "./SelectType";
 
 export default function TokenModal() {
   const { isCreateModalOpen, setIsCreateModalOpen } = useClient();
@@ -45,6 +46,7 @@ export default function TokenModal() {
     config,
   });
   const { connectAsync } = useConnect();
+  const { steps, setSteps } = useMemeClient();
 
   const [formData, setFormData] = useState({
     tokenName: "",
@@ -125,7 +127,7 @@ export default function TokenModal() {
               <h2 className="text-xl font-bold">Create Meme</h2>
               <Steps
                 // className="text-white"
-                current={0}
+                current={steps}
                 items={[
                   {
                     title: "Select Meme Type",
@@ -148,23 +150,21 @@ export default function TokenModal() {
             </div>
 
             {/* slect type  */}
-            <div className="flex justify-center items-center flex-col space-y-4 my-4">
-              <h2 className="text-2xl font-semibold ">Select Meme Type</h2>
-              <Select
-                size={"large"}
-                defaultValue="meme"
-                onChange={handleInputChange}
-                style={{ width: "60%" }}
-                options={memeTypes}
-              />
-            </div>
+         
+
+            <div>{Screens({steps})}</div>
 
             {/* next button */}
             <div className="flex justify-end space-x-2">
               <button
                 type="button"
                 disabled={loading}
-                onClick={() => setIsCreateModalOpen(false)}
+                onClick={() => {
+                  if (steps != 0) {
+                    setSteps(steps - 1);
+                  }
+                }}
+                // onClick={() => setIsCreateModalOpen(false)}
                 className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 text-black"
               >
                 Cancel
@@ -172,6 +172,7 @@ export default function TokenModal() {
               <button
                 disabled={loading}
                 type="submit"
+                onClick={() => setSteps(steps + 1)}
                 className="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600"
               >
                 {loading ? "loading..." : "Submit"}
@@ -184,13 +185,25 @@ export default function TokenModal() {
   );
 }
 
-const memeTypes = [
-    { label: "meme", value: "meme" },
-    { label: "meme coin", value: "coin" },
-    { label: "NFT", value: "nft" },
-  ]
 
 
+
+function Screens ({steps}:{steps:number}) {
+
+  switch (steps) {
+    case 0:
+      return <SelectType/>;
+    case 1:
+      return <CreateMeme/>;
+    case 2:
+      return <CreateToken/>;
+    case 3:
+      return <p>Error loading data!</p>;
+    default:
+      return <p>Unknown status</p>;
+  }
+
+}
 {
   /* <form onSubmit={handleSubmit} className="space-y-4">
     

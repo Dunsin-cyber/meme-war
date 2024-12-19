@@ -5,7 +5,7 @@ import { HoverEffect } from "@/components/ui/card-hover-effect";
 import { Input } from "@chakra-ui/react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useClient } from "@/context";
-import CreateToken from "./CreateMeme";
+import CreateMeme from "../CreateMeme";
 import { useGetContents, contractAddress } from "@/hooks/index";
 import contractAbi from "@/hooks/abi.json";
 import { SidebarDemo } from "@/components/Sidebar";
@@ -56,7 +56,7 @@ const Explore = () => {
             {data && !isLoading && <CreatedWar items={filteredContent} />}
           </div>
         )}
-        <CreateToken />
+        <CreateMeme />
       </div>
     </SidebarDemo>
   );
