@@ -4,16 +4,20 @@ import { useAccount } from "wagmi";
 import { useRouter } from "next/navigation";
 
 const CreateMemeContext = React.createContext<{
+    steps: number;
+    setSteps: any;
 }>({
 
+    steps: 0,
+    setSteps:undefined
 });
 
 export const useCreateMemeContext = () => {
     const [steps, setSteps] = useState(0);
-    
+
 
   return {
-
+    steps, setSteps
   };
 };
 
