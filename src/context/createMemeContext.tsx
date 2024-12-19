@@ -9,7 +9,8 @@ const CreateMemeContext = React.createContext<{
 });
 
 export const useCreateMemeContext = () => {
-
+    const [steps, setSteps] = useState(0);
+    
 
   return {
 
