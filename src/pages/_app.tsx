@@ -9,6 +9,8 @@ import { config } from "@/utils/wagmi";
 import Head from "next/head";
 import { PagesProgressBar as ProgressBar } from "next-nprogress-bar";
 
+import { ConfigProvider, theme } from "antd";
+
 import localFont from "next/font/local";
 
 const geistSans = localFont({
@@ -30,26 +32,38 @@ const App = ({ Component, pageProps }) => {
       <Head>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <WagmiProvider config={config}>
-        <QueryClientProvider client={queryClient}>
-          <WalletProvider>
-            <Toaster />
-            <UserContextProvider>
-              <div
-                className={`${geistSans.variable} ${geistMono.variable} antialiased dark`}
-              >
-                <Component {...pageProps} />
-                <ProgressBar
-                  height="4px"
-                  color="#2497D0"
-                  options={{ showSpinner: false }}
-                  shallowRouting
-                />
-              </div>
-            </UserContextProvider>
-          </WalletProvider>
-        </QueryClientProvider>
-      </WagmiProvider>
+      <ConfigProvider
+        theme={{
+          algorithm: theme.darkAlgorithm,
+          token: {
+            colorPrimaryActive: "#fc923b",
+            colorPrimary: "#fc923b",
+            colorPrimaryHover: "#fc923b",
+            colorText: "#fff",
+          },
+        }}
+      >
+        <WagmiProvider config={config}>
+          <QueryClientProvider client={queryClient}>
+            <WalletProvider>
+              <Toaster />
+              <UserContextProvider>
+                <div
+                  className={`${geistSans.variable} ${geistMono.variable} antialiased dark`}
+                >
+                  <Component {...pageProps} />
+                  <ProgressBar
+                    height="4px"
+                    color="#2497D0"
+                    options={{ showSpinner: false }}
+                    shallowRouting
+                  />
+                </div>
+              </UserContextProvider>
+            </WalletProvider>
+          </QueryClientProvider>
+        </WagmiProvider>
+      </ConfigProvider>
     </Provider>
   );
 };

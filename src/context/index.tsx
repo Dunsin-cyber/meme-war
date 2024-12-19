@@ -2,6 +2,7 @@
 import React, { useContext, useState } from "react";
 import { useAccount } from "wagmi";
 import { useRouter } from "next/navigation";
+import { CreateMemeContextProvider } from "./createMemeContext";
 
 interface DrawerParam {
   title: string;
@@ -66,7 +67,13 @@ export const useUserContext = () => {
 
 export const UserContextProvider = ({ children }) => {
   const auth = useUserContext();
-  return <UserContext.Provider value={auth}>{children}</UserContext.Provider>;
+  return (
+    <UserContext.Provider value={auth}>
+      <CreateMemeContextProvider>
+      {children}
+      </CreateMemeContextProvider>
+    </UserContext.Provider>
+  );
 };
 
 export const useClient = () => useContext(UserContext);
