@@ -4,7 +4,7 @@ import contractAbi from "@/hooks/abi.json";
 import type { Address } from "viem";
 import { config } from "@/utils/wagmi";
 
-export const contractAddress = "0x86C41594e9aDeCcf8c85ba9EEe0138C7c9E70dBc";
+export const contractAddress = "0x3e19FF87CD3624878f5ca797bA89C122C5851835";
 
 type ReturnType = {
   isLoading: boolean;

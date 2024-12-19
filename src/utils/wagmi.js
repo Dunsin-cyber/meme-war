@@ -30,11 +30,11 @@ export const config = getDefaultConfig({
   appName: "Suii",
   projectId: "YOUR_PROJECT_ID",
   chains: [
-    opBNBTestnet,
+    // opBNBTestnet,
     bscTestnet,
-    bleTestnet,
+    // bleTestnet,
     ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true"
-      ? [opBNBTestnet, bscTestnet, bleTestnet]
+      ? [ bscTestnet]
       : []),
   ],
   ssr: true,
