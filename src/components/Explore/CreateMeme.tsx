@@ -14,7 +14,7 @@ import { contractAddress } from "@/hooks";
 import { toast } from "react-hot-toast";
 import { parseEther } from "viem";
 import { createListCollection, HStack } from "@chakra-ui/react";
-import { ulid } from "ulid";
+// import { ulid } from "ulid";
 import {
   ProgressBar,
   ProgressRoot,
@@ -34,14 +34,7 @@ import { PlusOutlined } from "@ant-design/icons";
 import type { StepsProps, SelectProps } from "antd";
 import { Popover, Steps , Select } from "antd";
 
-const options: SelectProps["options"] = [];
 
-for (let i = 10; i < 36; i++) {
-  options.push({
-    value: i.toString(36) + i,
-    label: i.toString(36) + i,
-  });
-}
 
 
 export default function TokenModal() {
@@ -119,7 +112,7 @@ export default function TokenModal() {
     }
   };
 
-  const description = "You can hover on the dot.";
+  const description = "steps to create a meme";
 
   return (
     <div className="relative">
@@ -132,22 +125,22 @@ export default function TokenModal() {
               <h2 className="text-xl font-bold">Create Meme</h2>
               <Steps
                 // className="text-white"
-                current={1}
+                current={0}
                 items={[
                   {
-                    title: "Finished",
+                    title: "Select Meme Type",
                     description,
                   },
                   {
-                    title: "In Progress",
+                    title: "Create Meme",
                     description,
                   },
                   {
-                    title: "Waiting",
+                    title: "Create Token",
                     description,
                   },
                   {
-                    title: "Waiting",
+                    title: "Create NFT",
                     description,
                   },
                 ]}
@@ -158,11 +151,11 @@ export default function TokenModal() {
             <div className="flex justify-center items-center flex-col space-y-4 my-4">
               <h2 className="text-2xl font-semibold ">Select Meme Type</h2>
               <Select
-                size={"middle"}
-                defaultValue="a1"
+                size={"large"}
+                defaultValue="meme"
                 onChange={handleInputChange}
                 style={{ width: "60%" }}
-                options={options}
+                options={memeTypes}
               />
             </div>
 
@@ -191,13 +184,11 @@ export default function TokenModal() {
   );
 }
 
-const memeTypes = createListCollection({
-  items: [
+const memeTypes = [
     { label: "meme", value: "meme" },
     { label: "meme coin", value: "coin" },
     { label: "NFT", value: "nft" },
-  ],
-});
+  ]
 
 
 {
