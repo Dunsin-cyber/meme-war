@@ -46,7 +46,7 @@ export default function TokenModal() {
     config,
   });
   const { connectAsync } = useConnect();
-  const { steps, setSteps } = useMemeClient();
+  const { steps, setSteps, data:data_ } = useMemeClient();
 
   const [formData, setFormData] = useState({
     tokenName: "",
@@ -116,6 +116,24 @@ export default function TokenModal() {
 
   const description = "steps to create a meme";
 
+  const handleNext = () => {
+    if (steps === 0 ) {
+        if(data_.memeType.length > 1) {
+
+          setSteps(steps + 1);
+          return
+        }
+        return
+    } 
+    else if (steps === 1 ) {
+      if (data_.memeType) {
+           setSteps(steps + 1);
+      }
+      return
+    }
+
+  }
+
   return (
     <div className="relative">
       {/* Modal */}
@@ -128,24 +146,34 @@ export default function TokenModal() {
               <Steps
                 // className="text-white"
                 current={steps}
-                items={[
-                  {
-                    title: "Select Meme Type",
-                    description,
-                  },
-                  {
-                    title: "Create Meme",
-                    description,
-                  },
-                  {
-                    title: "Create Token",
-                    description,
-                  },
-                  {
-                    title: "Create NFT",
-                    description: "coming soon!",
-                  },
-                ]}
+                items={
+                  data_.memeType === "meme"
+                    ? [
+                        {
+                          title: "Select Meme Type",
+                          description,
+                        },
+                        {
+                          title: "Create Meme",
+                          description,
+                        },
+                      ]
+                    : [
+                        {
+                          title: "Select Meme Type",
+                          description,
+                        },
+                        {
+                          title: "Create Meme",
+                          description,
+                        }
+                        ,
+                        {
+                          title: "Create Token",
+                          description,
+                        }
+                      ]
+                }
               />
               <div
                 className="text-2xl ml-4"
@@ -177,7 +205,7 @@ export default function TokenModal() {
               <button
                 disabled={loading}
                 type="submit"
-                onClick={() => setSteps(steps + 1)}
+                onClick={handleNext}
                 className="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600"
               >
                 {loading ? "loading..." : "Next"}
