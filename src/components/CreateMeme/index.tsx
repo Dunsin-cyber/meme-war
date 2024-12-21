@@ -30,7 +30,9 @@ import {
   SelectValueText,
 } from "@/components/ui/select";
 
-import {  Steps } from "antd";
+import { IoCloseSharp } from "react-icons/io5";
+
+import { Steps } from "antd";
 import { useMemeClient } from "@/context/createMemeContext";
 import CreateMeme from "./CreateMeme";
 import CreateToken from "./CreateToken";
@@ -121,7 +123,7 @@ export default function TokenModal() {
         <div className=" fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-primary50 rounded-2xl w-[70%] shadow-lg p-6">
             {/* header */}
-            <div className="flex justify-between mb-4">
+            <div className="flex justify-evenly mb-4">
               <h2 className="text-xl font-bold">Create Meme</h2>
               <Steps
                 // className="text-white"
@@ -141,16 +143,21 @@ export default function TokenModal() {
                   },
                   {
                     title: "Create NFT",
-                    description,
+                    description: "coming soon!",
                   },
                 ]}
-              /> 
+              />
+              <div
+                className="text-2xl ml-4"
+                onClick={() => setIsCreateModalOpen(false)}
+              >
+                <IoCloseSharp />
+              </div>
             </div>
 
             {/* slect type  */}
-         
 
-            <div>{Screens({steps})}</div>
+            <div>{Screens({ steps })}</div>
 
             {/* next button */}
             <div className="flex justify-end space-x-2">
@@ -165,7 +172,7 @@ export default function TokenModal() {
                 // onClick={() => setIsCreateModalOpen(false)}
                 className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 text-black"
               >
-                Cancel
+                Back
               </button>
               <button
                 disabled={loading}
@@ -173,7 +180,7 @@ export default function TokenModal() {
                 onClick={() => setSteps(steps + 1)}
                 className="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600"
               >
-                {loading ? "loading..." : "Submit"}
+                {loading ? "loading..." : "Next"}
               </button>
             </div>
           </div>
@@ -183,24 +190,23 @@ export default function TokenModal() {
   );
 }
 
-
-
-
-function Screens ({steps}:{steps:number}) {
-
+function Screens({ steps }: { steps: number }) {
   switch (steps) {
     case 0:
-      return <SelectType/>;
+      return <SelectType />;
     case 1:
-      return <CreateMeme/>;
+      return <CreateMeme />;
     case 2:
-      return <CreateToken/>;
+      return <CreateToken />;
     case 3:
-      return <p>Error loading data!</p>;
+      return (
+        <p className="flex justify-center font-bold  text-2xl ">
+          coming soon ❤🏗
+        </p>
+      );
     default:
       return <p>Unknown status</p>;
   }
-
 }
 {
   /* <form onSubmit={handleSubmit} className="space-y-4">
