@@ -30,9 +30,7 @@ import {
   SelectValueText,
 } from "@/components/ui/select";
 
-import { PlusOutlined } from "@ant-design/icons";
-import type { StepsProps, SelectProps } from "antd";
-import { Popover, Steps, Select } from "antd";
+import {  Steps } from "antd";
 import { useMemeClient } from "@/context/createMemeContext";
 import CreateMeme from "./CreateMeme";
 import CreateToken from "./CreateToken";
@@ -146,7 +144,7 @@ export default function TokenModal() {
                     description,
                   },
                 ]}
-              />
+              /> 
             </div>
 
             {/* slect type  */}

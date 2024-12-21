@@ -7,6 +7,7 @@ import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { WagmiProvider } from "wagmi";
 import { config } from "@/utils/wagmi";
 import Head from "next/head";
+import React from "react";
 import { PagesProgressBar as ProgressBar } from "next-nprogress-bar";
 
 import { ConfigProvider, theme } from "antd";

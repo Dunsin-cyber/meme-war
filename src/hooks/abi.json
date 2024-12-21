@@ -1,1 +1,287 @@
-[{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"battleId","type":"uint256"},{"indexed":false,"internalType":"address","name":"winner","type":"address"}],"name":"BattleConcluded","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"battleId","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"meme1Id","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"wager","type":"uint256"}],"name":"BattleCreated","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"memeId","type":"uint256"},{"indexed":true,"internalType":"address","name":"creator","type":"address"},{"indexed":false,"internalType":"string","name":"name","type":"string"},{"indexed":false,"internalType":"uint256","name":"milestone","type":"uint256"}],"name":"MemeCreated","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"battleId","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"meme2Id","type":"uint256"},{"indexed":true,"internalType":"address","name":"participant","type":"address"}],"name":"ParticipantJoined","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"memeId","type":"uint256"},{"indexed":true,"internalType":"address","name":"voter","type":"address"}],"name":"Vote","type":"event"},{"inputs":[],"name":"battleCount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"battles","outputs":[{"internalType":"uint256","name":"meme1Id","type":"uint256"},{"internalType":"uint256","name":"meme2Id","type":"uint256"},{"internalType":"address","name":"participant1","type":"address"},{"internalType":"address","name":"participant2","type":"address"},{"internalType":"uint256","name":"wager","type":"uint256"},{"internalType":"bool","name":"isActive","type":"bool"},{"internalType":"bool","name":"isConcluded","type":"bool"},{"internalType":"bool","name":"milestoneBased","type":"bool"},{"internalType":"uint256","name":"startTime","type":"uint256"},{"internalType":"uint256","name":"endTime","type":"uint256"},{"internalType":"address","name":"token1","type":"address"},{"internalType":"address","name":"token2","type":"address"},{"internalType":"string","name":"token1Name","type":"string"},{"internalType":"string","name":"token2Name","type":"string"},{"internalType":"address","name":"winner","type":"address"},{"internalType":"uint256","name":"milestoneTarget","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"memeId","type":"uint256"},{"internalType":"uint256","name":"wager","type":"uint256"},{"internalType":"uint256","name":"_duration","type":"uint256"},{"internalType":"address","name":"_token1","type":"address"},{"internalType":"string","name":"_token1Name","type":"string"},{"internalType":"bool","name":"milestoneBased","type":"bool"},{"internalType":"uint256","name":"_milestoneTarget","type":"uint256"}],"name":"createBattle","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"string","name":"name","type":"string"},{"internalType":"string","name":"uri","type":"string"},{"internalType":"uint256","name":"milestone","type":"uint256"}],"name":"createMeme","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"endTime","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"address","name":"","type":"address"}],"name":"hasVoted","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"battleId","type":"uint256"},{"internalType":"address","name":"_token2","type":"address"},{"internalType":"string","name":"_token2Name","type":"string"},{"internalType":"uint256","name":"memeId","type":"uint256"}],"name":"joinTokenBattle","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"memeCount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"memes","outputs":[{"internalType":"address","name":"creator","type":"address"},{"internalType":"uint256","name":"memeId","type":"uint256"},{"internalType":"string","name":"uri","type":"string"},{"internalType":"string","name":"name","type":"string"},{"internalType":"uint256","name":"currentVotes","type":"uint256"},{"internalType":"uint256","name":"milestone","type":"uint256"},{"internalType":"bool","name":"isActive","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"uint256","name":"","type":"uint256"}],"name":"participants","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"participationFee","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"startTime","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"battleId","type":"uint256"},{"internalType":"uint256","name":"memeId","type":"uint256"}],"name":"voteMeme","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"warActive","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"winner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"stateMutability":"payable","type":"receive"}]
+[
+  { "inputs": [], "stateMutability": "nonpayable", "type": "constructor" },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "battleId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "winner",
+        "type": "address"
+      }
+    ],
+    "name": "BattleConcluded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "battleId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "meme1Id",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "wager",
+        "type": "uint256"
+      }
+    ],
+    "name": "BattleCreated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "memeId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "creator",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "milestone",
+        "type": "uint256"
+      }
+    ],
+    "name": "MemeCreated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "battleId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "meme2Id",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "participant",
+        "type": "address"
+      }
+    ],
+    "name": "ParticipantJoined",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "memeId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "voter",
+        "type": "address"
+      }
+    ],
+    "name": "Vote",
+    "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "battleCount",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "name": "battles",
+    "outputs": [
+      { "internalType": "uint256", "name": "meme1Id", "type": "uint256" },
+      { "internalType": "uint256", "name": "meme2Id", "type": "uint256" },
+      { "internalType": "address", "name": "participant1", "type": "address" },
+      { "internalType": "address", "name": "participant2", "type": "address" },
+      { "internalType": "uint256", "name": "wager", "type": "uint256" },
+      { "internalType": "bool", "name": "isActive", "type": "bool" },
+      { "internalType": "bool", "name": "isConcluded", "type": "bool" },
+      { "internalType": "bool", "name": "milestoneBased", "type": "bool" },
+      { "internalType": "uint256", "name": "startTime", "type": "uint256" },
+      { "internalType": "uint256", "name": "endTime", "type": "uint256" },
+      { "internalType": "address", "name": "token1", "type": "address" },
+      { "internalType": "address", "name": "token2", "type": "address" },
+      { "internalType": "string", "name": "token1Name", "type": "string" },
+      { "internalType": "string", "name": "token2Name", "type": "string" },
+      { "internalType": "address", "name": "winner", "type": "address" },
+      {
+        "internalType": "uint256",
+        "name": "milestoneTarget",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "memeId", "type": "uint256" },
+      { "internalType": "uint256", "name": "wager", "type": "uint256" },
+      { "internalType": "uint256", "name": "_duration", "type": "uint256" },
+      { "internalType": "address", "name": "_token1", "type": "address" },
+      { "internalType": "string", "name": "_token1Name", "type": "string" },
+      { "internalType": "bool", "name": "milestoneBased", "type": "bool" },
+      {
+        "internalType": "uint256",
+        "name": "_milestoneTarget",
+        "type": "uint256"
+      }
+    ],
+    "name": "createBattle",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "string", "name": "name", "type": "string" },
+      { "internalType": "string", "name": "uri", "type": "string" },
+      { "internalType": "uint256", "name": "milestone", "type": "uint256" }
+    ],
+    "name": "createMeme",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "endTime",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "", "type": "uint256" },
+      { "internalType": "address", "name": "", "type": "address" }
+    ],
+    "name": "hasVoted",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "battleId", "type": "uint256" },
+      { "internalType": "address", "name": "_token2", "type": "address" },
+      { "internalType": "string", "name": "_token2Name", "type": "string" },
+      { "internalType": "uint256", "name": "memeId", "type": "uint256" }
+    ],
+    "name": "joinTokenBattle",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "memeCount",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "name": "memes",
+    "outputs": [
+      { "internalType": "address", "name": "creator", "type": "address" },
+      { "internalType": "uint256", "name": "memeId", "type": "uint256" },
+      { "internalType": "string", "name": "uri", "type": "string" },
+      { "internalType": "string", "name": "name", "type": "string" },
+      { "internalType": "uint256", "name": "currentVotes", "type": "uint256" },
+      { "internalType": "uint256", "name": "milestone", "type": "uint256" },
+      { "internalType": "bool", "name": "isActive", "type": "bool" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "", "type": "uint256" },
+      { "internalType": "uint256", "name": "", "type": "uint256" }
+    ],
+    "name": "participants",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "participationFee",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "startTime",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "battleId", "type": "uint256" },
+      { "internalType": "uint256", "name": "memeId", "type": "uint256" }
+    ],
+    "name": "voteMeme",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "warActive",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "winner",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  { "stateMutability": "payable", "type": "receive" }
+]
