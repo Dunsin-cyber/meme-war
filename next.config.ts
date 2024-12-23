@@ -10,6 +10,12 @@ const nextConfig: NextConfig = {
   experimental: {
     esmExternals: true, // Enable ESM support for dependencies
   },
+  publicRuntimeConfig: {
+    NEXT_PUBLIC_GATEWAY_URL: process.env.NEXT_PUBLIC_GATEWAY_URL,
+    NEXT_PUBLIC_ENABLE_TESTNETS: process.env.NEXT_PUBLIC_ENABLE_TESTNETS,
+    NEXT_PUBLIC_PINATA_JWT:
+      process.env.NEXT_PUBLIC_PINATA_JWT,
+  },
   transpilePackages: [
     "antd",
     "@ant-design/plots",
@@ -31,8 +37,11 @@ const nextConfig: NextConfig = {
     "rc-util",
     "rc-tree",
     "rc-tooltip",
-    "rc-input"
+    "rc-input",
   ],
+  images: {
+    domains: [""],
+  },
 };
 
 export default nextConfig;

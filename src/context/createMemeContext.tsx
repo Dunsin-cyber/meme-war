@@ -6,27 +6,36 @@ import { useRouter } from "next/navigation";
 const CreateMemeContext = React.createContext<{
     steps: number;
     setSteps: any;
-    data:any;
-    setData:any
+    memeData:any;
+    setMemeData:any
 }>({
 
     steps: 0,
     setSteps:undefined,
-    data:undefined,
-    setData:undefined
+    memeData:undefined,
+    setMemeData:undefined
 });
 
 export const useCreateMemeContext = () => {
     const [steps, setSteps] = useState(0);
-    const [data, setData] = useState({
-      memeType:""
+    const [memeData, setMemeData] = useState({
+      memeType:"",
+      memeName:"",
+      memeUrl: "",
+      milestone:"",
+      tokenName: "",
+      tokenSymbol: "",
+      milestoneBased: false,
+      deadline: "",
+      memeId: ""
+
     })
 
-    console.log("data",data)
+    console.log("memeData",memeData)
 
 
   return {
-    steps, setSteps, data, setData
+    steps, setSteps, memeData, setMemeData
   };
 };
 

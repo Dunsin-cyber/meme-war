@@ -13,25 +13,8 @@ import contractAbi from "@/hooks/abi.json";
 import { contractAddress } from "@/hooks";
 import { toast } from "react-hot-toast";
 import { parseEther } from "viem";
-import { createListCollection, HStack } from "@chakra-ui/react";
 // import { ulid } from "ulid";
-import {
-  ProgressBar,
-  ProgressRoot,
-  ProgressValueText,
-} from "@/components/ui/progress";
-
-import {
-  SelectContent,
-  SelectItem,
-  SelectLabel,
-  SelectRoot,
-  SelectTrigger,
-  SelectValueText,
-} from "@/components/ui/select";
-
 import { IoCloseSharp } from "react-icons/io5";
-
 import { Steps } from "antd";
 import { useMemeClient } from "@/context/createMemeContext";
 import CreateMeme from "./CreateMeme";
@@ -46,7 +29,7 @@ export default function TokenModal() {
     config,
   });
   const { connectAsync } = useConnect();
-  const { steps, setSteps, data:data_ } = useMemeClient();
+  const { steps, setSteps, memeData } = useMemeClient();
 
   const [formData, setFormData] = useState({
     tokenName: "",
@@ -118,7 +101,7 @@ export default function TokenModal() {
 
   const handleNext = () => {
     if (steps === 0 ) {
-        if(data_.memeType.length > 1) {
+        if(memeData.memeType.length > 1) {
 
           setSteps(steps + 1);
           return
@@ -126,10 +109,12 @@ export default function TokenModal() {
         return
     } 
     else if (steps === 1 ) {
-      if (data_.memeType) {
-           setSteps(steps + 1);
+      if (memeData.memeType === "meme") {
       }
-      return
+      else {
+        // if (memeData.memeUrl.length > 1 && memeData.memeName.length > 1 && memeData.milestone.length > 1)
+        return  setSteps(steps + 1);
+      }
     }
 
   }
@@ -147,7 +132,7 @@ export default function TokenModal() {
                 // className="text-white"
                 current={steps}
                 items={
-                  data_.memeType === "meme"
+                  memeData.memeType === "meme"
                     ? [
                         {
                           title: "Select Meme Type",
@@ -166,12 +151,11 @@ export default function TokenModal() {
                         {
                           title: "Create Meme",
                           description,
-                        }
-                        ,
+                        },
                         {
                           title: "Create Token",
                           description,
-                        }
+                        },
                       ]
                 }
               />

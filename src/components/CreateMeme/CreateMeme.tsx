@@ -1,16 +1,15 @@
 import React from 'react'
-import {
-  ConfigProvider,
-  DatePicker,
-  DatePickerProps,
-  Input,
-  InputRef,
-  Select,
-  Tag,
-  theme,
-} from "antd";
+import { Input, Upload } from "antd";
+import { useMemeClient } from "@/context/createMemeContext"; 
+import UploadMeme from "./UploadMeme"
+const { TextArea } = Input;
 
 function CreateMeme() {
+  const { memeData, setMemeData } = useMemeClient();
+
+  const handleInputChange = (e:any) => {
+    setMemeData({...memeData, [e.target.name]:e.target.value })
+  }
   return (
     <div className="flex justify-center items-center mx-auto my-6 space-y-5 flex-col w-full">
       {" "}
@@ -19,34 +18,27 @@ function CreateMeme() {
         <p>Meme Name</p>
         <Input
           // ref={inputRef}
+          name="memeName"
           type="text"
-          size="large"   
-          // value={inputValue}
-          // onChange={handleInputChange}
+          size="large"
+          value={memeData.memeName}
+          onChange={handleInputChange}
           // onBlur={handleInputConfirm}
           // onPressEnter={handleInputConfirm}
         />
       </div>
       <div className="flex flex-col space-y-3 w-[70%]">
-        <p>url</p>
-        <Input
-          // ref={inputRef}
-          type="text"
-          size="large"
-          // value={inputValue}
-          // onChange={handleInputChange}
-          // onBlur={handleInputConfirm}
-          // onPressEnter={handleInputConfirm}
-        />
+        <p>meme</p>
+        <UploadMeme/>
       </div>
       <div className="flex flex-col  space-y-3 w-[70%]">
         <p>milestone</p>
-        <Input
+        <TextArea
           // ref={inputRef}
-          type="text"
-          size="large"
-          // value={inputValue}
-          // onChange={handleInputChange}
+          name="milestone"
+          autoSize={{ minRows: 4, maxRows: 8 }}
+          value={memeData.milestone}
+          onChange={handleInputChange}
           // onBlur={handleInputConfirm}
           // onPressEnter={handleInputConfirm}
         />

@@ -1,16 +1,18 @@
-import React from 'react'
-import {
-  ConfigProvider,
-  DatePicker,
-  DatePickerProps,
-  Input,
-  InputRef,
-  Select,
-  Tag,
-  theme,
-} from "antd";
+import React from "react";
+import { DatePicker, Input, Switch } from "antd";
+import { useMemeClient } from "@/context/createMemeContext";
 
 function CreateToken() {
+  const { memeData, setMemeData } = useMemeClient();
+
+  const handleInputChange = (e: any) => {
+    setMemeData({ ...memeData, [e.target.name]: e.target.value });
+  };
+
+  const handleMilestoneChange = (checked: boolean) => {
+    setMemeData({ ...memeData, milestoneBased: checked });
+  };
+
   return (
     <div className="flex justify-center items-center mx-auto my-6 space-y-5 flex-col w-full">
       {" "}
@@ -18,49 +20,43 @@ function CreateToken() {
       <div className="flex flex-col   space-y-3 w-[70%]">
         <p>Token Name</p>
         <Input
-          // ref={inputRef}
           type="text"
           size="large"
-          // value={inputValue}
-          // onChange={handleInputChange}
-          // onBlur={handleInputConfirm}
-          // onPressEnter={handleInputConfirm}
+          name="tokenName"
+          value={memeData.tokenName}
+          onChange={handleInputChange}
         />
       </div>
       <div className="flex flex-col space-y-3 w-[70%]">
         <p>Token Symbol</p>
         <Input
-          // ref={inputRef}
           type="text"
           size="large"
-          // value={inputValue}
-          // onChange={handleInputChange}
-          // onBlur={handleInputConfirm}
-          // onPressEnter={handleInputConfirm}
+          name="tokenSymbol"
+          value={memeData.tokenSymbol}
+          onChange={handleInputChange}
         />
       </div>
       <div className="flex flex-col  space-y-3 w-[70%]">
         <p>Milestone Based</p>
-        <Input
-          // ref={inputRef}
-          type="text"
-          size="large"
-          // value={inputValue}
-          // onChange={handleInputChange}
-          // onBlur={handleInputConfirm}
-          // onPressEnter={handleInputConfirm}
+        <Switch
+          className="w-[5%]"
+          value={memeData.milestoneBased}
+          onChange={handleMilestoneChange}
         />
       </div>
       <div className="flex flex-col  space-y-3 w-[70%]">
         <p>Duration</p>
         <DatePicker
+          name="deadline"
           size="large"
-          // disabledDate={disabledDate}
-          // onChange={onDateChange}
+          onChange={(date, dateString) => {
+            setMemeData({ ...memeData, deadline: dateString });
+          }}
         />
       </div>
     </div>
   );
 }
 
-export default CreateToken
+export default CreateToken;

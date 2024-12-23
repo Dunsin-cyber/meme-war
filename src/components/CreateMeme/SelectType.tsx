@@ -3,17 +3,18 @@ import React from "react";
 import { useMemeClient } from "@/context/createMemeContext";
 
 function SelectType() {
-  const { data, setData } = useMemeClient();
+  const { memeData, setMemeData } = useMemeClient();
   return (
     <div>
       <div className="flex justify-center items-center flex-col space-y-4 my-4">
         <h2 className="text-2xl font-semibold ">Select Meme Type</h2>
         <Select
           size={"large"}
+          value={memeData.memeType}
           // defaultValue="meme"
           onChange={(value) => {
             console.log(value);
-            setData({ ...data, memeType: value });
+            setMemeData({ ...memeData, memeType: value });
           }}
           style={{ width: "60%" }}
           options={memeTypes}
