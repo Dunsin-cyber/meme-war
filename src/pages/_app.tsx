@@ -47,7 +47,19 @@ const App = ({ Component, pageProps }) => {
         <WagmiProvider config={config}>
           <QueryClientProvider client={queryClient}>
             <WalletProvider>
-              <Toaster />
+              <Toaster
+                toastOptions={{
+                  className: "",
+                  style: {
+                    border: `1px solid #AC6AFF`,
+                    padding: "16px",
+                    color: "#AC6AFF",
+                    backgroundColor: "#FFC876",
+                    borderRadius: "8px",
+                    fontFamily: "Arial, sans-serif",
+                  },
+                }}
+              />
               <UserContextProvider>
                 <div
                   className={`${geistSans.variable} ${geistMono.variable} antialiased dark`}

@@ -3,6 +3,10 @@ import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import { Flex, message, Upload } from "antd";
 import type { GetProp, UploadProps } from "antd";
 import { pinata } from "@/utils/config";
+import { useMemeClient } from "@/context/createMemeContext";
+import toast from "react-hot-toast";
+
+
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
@@ -31,10 +35,11 @@ const UploadMeme: React.FC = () => {
   const [file ,setFile] = useState<File>()
   const [loading, setLoading] = useState<boolean>(false)
   const [uploading, setUploading] = useState(false);
+     const { memeData, setMemeData } = useMemeClient();
     
   const uploadFile = async (file_:File) => {
     if (!file_) {
-      alert("No file selected");
+      toast.error("No file selected");
       return;
     }
 
@@ -46,12 +51,13 @@ const UploadMeme: React.FC = () => {
       const upload = await pinata.upload.file(file_).key(keyData.key.JWT);
       const ipfsUrl = await pinata.gateways.convert(upload.IpfsHash);
       setImageUrl(ipfsUrl);
+      setMemeData({ ...memeData, memeUrl: ipfsUrl });
       console.log(ipfsUrl);
       setUploading(false);
     } catch (e) {
       console.log(e);
       setUploading(false);
-      alert("Trouble uploading file");
+      toast.error("Trouble uploading file");
     }
   };
 

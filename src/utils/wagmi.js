@@ -27,7 +27,7 @@ export const bleTestnet = {
 };
 
 export const config = getDefaultConfig({
-  appName: "Suii",
+  appName: "meme war",
   projectId: "YOUR_PROJECT_ID",
   chains: [
     // opBNBTestnet,

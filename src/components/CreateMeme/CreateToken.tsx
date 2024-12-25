@@ -17,35 +17,57 @@ function CreateToken() {
     <div className="flex justify-center items-center mx-auto my-6 space-y-5 flex-col w-full">
       {" "}
       <h2 className="text-2xl font-semibold ">Create Token</h2>
-      <div className="flex flex-col   space-y-3 w-[70%]">
-        <p>Token Name</p>
+      <div className="flex justify-between space-x-2 items-center w-[70%]">
+        <div className="flex flex-col space-y-3 w-full">
+          <p>Token Name</p>
+          <Input
+            type="text"
+            size="large"
+            name="tokenName"
+            value={memeData.tokenName}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div className="flex flex-col space-y-3 w-full">
+          <p>Token Symbol</p>
+          <Input
+            type="text"
+            size="large"
+            name="tokenSymbol"
+            value={memeData.tokenSymbol}
+            onChange={handleInputChange}
+          />
+        </div>
+      </div>
+      <div className="flex flex-col space-y-3 w-[70%]">
+        <p>Token Description</p>
         <Input
           type="text"
           size="large"
-          name="tokenName"
-          value={memeData.tokenName}
+          name="description"
+          value={memeData.description}
           onChange={handleInputChange}
         />
       </div>
       <div className="flex flex-col space-y-3 w-[70%]">
-        <p>Token Symbol</p>
+        <p>Sale Target</p>
         <Input
-          type="text"
+          type="number"
           size="large"
-          name="tokenSymbol"
-          value={memeData.tokenSymbol}
+          name="saleTarget"
+          value={memeData.saleTarget}
           onChange={handleInputChange}
         />
       </div>
-      <div className="flex flex-col  space-y-3 w-[70%]">
+      {/* <div className="flex flex-col  space-y-3 w-[70%]">
         <p>Milestone Based</p>
         <Switch
           className="w-[5%]"
           value={memeData.milestoneBased}
           onChange={handleMilestoneChange}
         />
-      </div>
-      <div className="flex flex-col  space-y-3 w-[70%]">
+      </div> */}
+      {/* <div className="flex flex-col  space-y-3 w-[70%]">
         <p>Duration</p>
         <DatePicker
           name="deadline"
@@ -54,7 +76,7 @@ function CreateToken() {
             setMemeData({ ...memeData, deadline: dateString });
           }}
         />
-      </div>
+      </div> */}
     </div>
   );
 }

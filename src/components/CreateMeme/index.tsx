@@ -12,7 +12,7 @@ import { injected } from "wagmi/connectors";
 import contractAbi from "@/hooks/abi.json";
 import { contractAddress } from "@/hooks";
 import { toast } from "react-hot-toast";
-import { parseEther } from "viem";
+import { parseEther, formatEther } from "viem";
 // import { ulid } from "ulid";
 import { IoCloseSharp } from "react-icons/io5";
 import { Steps } from "antd";
@@ -20,6 +20,8 @@ import { useMemeClient } from "@/context/createMemeContext";
 import CreateMeme from "./CreateMeme";
 import CreateToken from "./CreateToken";
 import SelectType from "./SelectType";
+import erc20Abi from "@/hooks/erc-20.json";
+import { bscTestnet } from "wagmi/chains";
 
 export default function TokenModal() {
   const { isCreateModalOpen, setIsCreateModalOpen } = useClient();
@@ -31,32 +33,92 @@ export default function TokenModal() {
   const { connectAsync } = useConnect();
   const { steps, setSteps, memeData } = useMemeClient();
 
-  const [formData, setFormData] = useState({
-    tokenName: "",
-    description: "",
-    metadataUrl: "",
-    tokenSymbol: "",
-    totalSupply: "",
-    title: "",
-    //new
-    createBattle: 0,
-    memeId: 0,
-    wager: 0,
-    _duration: 0,
-    _token1: "",
-    _token1Name: "",
-    milestoneBased: false,
-    _milestoneTarget: 0,
-    type: "",
-  });
+  const handleApprove = async () => {
+    setLoading(true);
+    try {
+      if (!address) {
+        await connectAsync({
+          chainId: bscTestnet.id,
+          connector: injected(),
+        });
+      }
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+      const approve = await writeContractAsync({
+        chainId: bscTestnet.id,
+        chain: undefined,
+        account: address,
+        address: contractAddress /* content?.tokenAddress */,
+        abi: erc20Abi,
+        functionName: "approve",
+        args: [
+          contractAddress /* parseEther(formatEther(content?.totalSupply)) */,
+        ],
+      });
+      toast.success("Approved!");
+      // closeModal();
+    } catch (err) {
+      console.log(err);
+      toast.error("Something Went Wrong");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
+  const handleCreateMeme = async () => {
+    try {
+      const data = await writeContractAsync({
+        chainId: bscTestnet.id,
+        address: contractAddress, // change to receipient address
+        functionName: "createMemeWar",
+        abi: contractAbi,
+        args: [
+          memeData.memeUrl,
+          memeData.pointTarget,
+          memeData.description,
+        ],
+        chain: undefined,
+        account: address,
+      });
+      setLoading(true);
+      toast.success("meme created");
+        if (memeData.memeType === "meme") return setIsCreateModalOpen(false);
+    } catch (err) {
+      toast.error(err.message);
+      console.log("[ERROR CREATING MEME]", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCreateMemeToken = async () => {
+    try {
+        const data = await writeContractAsync({
+          chainId: bscTestnet.id,
+          address: contractAddress, // change to receipient address
+          functionName: "createMemeTokenWar",
+          abi: contractAbi,
+          args: [
+            memeData.tokenName,
+            memeData.tokenSymbol,
+            memeData.saleTarget,
+            memeData.memeUrl,
+            memeData.description],
+          chain: undefined,
+          account: address,
+        });
+      setLoading(true);
+      toast.success("meme token created");
+      setIsCreateModalOpen(false);
+    } catch (err) {
+      toast.error(err.message);
+      console.log("[ERROR CREATING MEME TOKEN]", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmit = async () => {
+  
     setLoading(true);
     try {
       if (!address) {
@@ -64,35 +126,16 @@ export default function TokenModal() {
           connector: injected(),
         });
       }
-
-      const data = await writeContractAsync({
-        // chainId: chainId,
-        address: contractAddress, // change to receipient address
-        functionName: "createBattle",
-        abi: contractAbi,
-        args: [
-          formData.metadataUrl,
-          formData.tokenName,
-          formData.tokenSymbol,
-          parseEther(`${formData.totalSupply}`),
-          formData.description,
-          formData.title,
-        ],
-        chain: undefined,
-        account: address,
-      });
-
-      toast(
-        "Created Successfully, your creation will appear after the transcation is confirmed"
-      );
-      setLoading(false);
-      setIsCreateModalOpen(false);
-      //  const dd=  `https://testnet.explorer.ethena.fi/address/${data}`}
-
-      // console.log(data);
+      if (steps === 1) {
+        //create meme
+        await handleCreateMeme();
+      } else if (steps === 2) {
+        // create meme token
+        await handleCreateMemeToken();
+      }
     } catch (err) {
       console.log(err);
-      toast("Something Went Wrong");
+      toast.error("Something Went Wrong");
       setLoading(false);
     }
   };
@@ -100,24 +143,38 @@ export default function TokenModal() {
   const description = "steps to create a meme";
 
   const handleNext = () => {
-    if (steps === 0 ) {
-        if(memeData.memeType.length > 1) {
+    if (steps === 0) {
+      if (memeData.memeType.length > 1) {
+        setSteps(steps + 1);
+        return;
+      }
+      return;
+    } else if (steps === 1) {
 
-          setSteps(steps + 1);
-          return
+        if (memeData.memeUrl.length > 1 && memeData.memeName.length > 1 && memeData.pointTarget > 0) {
+          handleSubmit();
+          return setSteps(steps + 1);
         }
-        return
-    } 
-    else if (steps === 1 ) {
-      if (memeData.memeType === "meme") {
-      }
-      else {
-        // if (memeData.memeUrl.length > 1 && memeData.memeName.length > 1 && memeData.milestone.length > 1)
-        return  setSteps(steps + 1);
-      }
+        else {
+          //if no content in meme page,
+          toast.error("make sure all fields are filled");
+        }
+   
+    } else if (steps === 2) {
+        if (
+          memeData.tokenName.length > 1 &&
+          memeData.tokenSymbol.length > 1 &&
+          memeData.description.length > 1 &&
+          memeData.saleTarget > 0
+        ) {
+          handleSubmit();
+        }
+        else {
+        //if no content in meme token page or all fields have not been filled yet,
+          toast.error("make sure all fields are filled");
+        }
     }
-
-  }
+  };
 
   return (
     <div className="relative">
@@ -219,132 +276,4 @@ function Screens({ steps }: { steps: number }) {
     default:
       return <p>Unknown status</p>;
   }
-}
-{
-  /* <form onSubmit={handleSubmit} className="space-y-4">
-    
-
-
-
-    <div>
-      <label htmlFor="tokenName" className="block text-sm font-medium">
-        Token Name
-      </label>
-      <input
-        type="text"
-        id="_token1Name"
-        name="_token1Name"
-        value={formData._token1Name}
-        onChange={handleInputChange}
-        required
-        className="w-full p-2 border rounded"
-        placeholder="Enter token name"
-      />
-    </div>
-
-  
-    <div>
-      <label htmlFor="description" className="block text-sm font-medium">
-        Description
-      </label>
-      <textarea
-        id="description"
-        name="description"
-        value={formData.description}
-        onChange={handleInputChange}
-        required
-        className="w-full p-2 border rounded"
-        placeholder="Enter token description"
-      />
-    </div>
-
-  
-    <div>
-      <label htmlFor="tokenName" className="block text-sm font-medium">
-        Token Name
-      </label>
-      <input
-        type="text"
-        id="tokenName"
-        name="tokenName"
-        value={formData.tokenName}
-        onChange={handleInputChange}
-        required
-        className="w-full p-2 border rounded"
-        placeholder="Enter token name"
-      />
-    </div>
-
-  
-    <div>
-      <label htmlFor="tokenSymbol" className="block text-sm font-medium">
-        Token Symbol
-      </label>
-      <input
-        type="text"
-        id="tokenSymbol"
-        name="tokenSymbol"
-        value={formData.tokenSymbol}
-        onChange={handleInputChange}
-        required
-        className="w-full p-2 border rounded"
-        placeholder="Enter token symbol"
-      />
-    </div>
-
-   
-    <div>
-      <label htmlFor="totalSupply" className="block text-sm font-medium">
-        Total Supply
-      </label>
-      <input
-        type="number"
-        id="totalSupply"
-        name="totalSupply"
-        value={formData.totalSupply}
-        onChange={handleInputChange}
-        required
-        className="w-full p-2 border rounded"
-        placeholder="Enter total supply"
-        min="1"
-      />
-    </div>
-
-    <div>
-      <label htmlFor="totalSupply" className="block text-sm font-medium">
-        Deadline
-      </label>
-      <input
-        type="date"
-        id="deadline"
-        name="deadline"
-        value={formData.totalSupply}
-        onChange={handleInputChange}
-        required
-        className="w-full p-2 border rounded"
-        placeholder="Enter total supply"
-        min="1"
-      />
-    </div>
-
-   
-    <div className="flex justify-end space-x-2">
-      <button
-        type="button"
-        disabled={loading}
-        onClick={() => setIsCreateModalOpen(false)}
-        className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 text-black"
-      >
-        Cancel
-      </button>
-      <button
-        disabled={loading}
-        type="submit"
-        className="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600"
-      >
-        {loading ? "loading..." : "Submit"}
-      </button>
-    </div>
-  </form>
-   */
 }

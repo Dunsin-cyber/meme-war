@@ -19,17 +19,19 @@ const CreateMemeContext = React.createContext<{
 export const useCreateMemeContext = () => {
     const [steps, setSteps] = useState(0);
     const [memeData, setMemeData] = useState({
-      memeType:"",
-      memeName:"",
+      memeType: "",
+      memeName: "",
       memeUrl: "",
-      milestone:"",
+      milestone: "",
       tokenName: "",
       tokenSymbol: "",
       milestoneBased: false,
       deadline: "",
-      memeId: ""
-
-    })
+      memeId: "",
+      saleTarget: 0,
+      pointTarget: 0,
+      description: ""
+    });
 
     console.log("memeData",memeData)
 
