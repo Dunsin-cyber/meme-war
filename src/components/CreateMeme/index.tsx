@@ -74,7 +74,7 @@ export default function TokenModal() {
         args: [
           memeData.memeUrl,
           memeData.pointTarget,
-          memeData.description,
+          memeData.milestone,
         ],
         chain: undefined,
         account: address,
@@ -142,7 +142,7 @@ export default function TokenModal() {
 
   const description = "steps to create a meme";
 
-  const handleNext = () => {
+  const handleNext = async() => {
     if (steps === 0) {
       if (memeData.memeType.length > 1) {
         setSteps(steps + 1);
@@ -152,7 +152,7 @@ export default function TokenModal() {
     } else if (steps === 1) {
 
         if (memeData.memeUrl.length > 1 && memeData.memeName.length > 1 && memeData.pointTarget > 0) {
-          handleSubmit();
+        await handleSubmit();
           return setSteps(steps + 1);
         }
         else {

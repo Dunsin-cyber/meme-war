@@ -13,8 +13,7 @@ const nextConfig: NextConfig = {
   publicRuntimeConfig: {
     NEXT_PUBLIC_GATEWAY_URL: process.env.NEXT_PUBLIC_GATEWAY_URL,
     NEXT_PUBLIC_ENABLE_TESTNETS: process.env.NEXT_PUBLIC_ENABLE_TESTNETS,
-    NEXT_PUBLIC_PINATA_JWT:
-      process.env.NEXT_PUBLIC_PINATA_JWT,
+    // NEXT_PUBLIC_PINATA_JWT: process.env.NEXT_PUBLIC_PINATA_JWT,
   },
   transpilePackages: [
     "antd",
