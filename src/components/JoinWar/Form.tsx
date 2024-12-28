@@ -1,15 +1,15 @@
 "use client";
-import React from "react";
+import React, {useState} from "react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { cn } from "@/components/lib/utils";
-import {
-  IconBrandGithub,
-  IconBrandGoogle,
-  IconBrandOnlyfans,
-} from "@tabler/icons-react";
+
 
 export function Form() {
+  const [name, setName] = useState("")
+  const [symbol, setSymbol] = useState("")
+
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Form submitted");
@@ -28,21 +28,21 @@ export function Form() {
         <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
           <LabelInputContainer>
             <Label htmlFor="firstname">Name</Label>
-            <Input id="firstname" placeholder="floki coin" type="text" />
+            <Input id="firstname" placeholder="floki coin" value={name} type="text" onChange={(e) => setName(e.target.value) } />
           </LabelInputContainer>
         </div>
           <LabelInputContainer>
-            <Label htmlFor="lastname">Description</Label>
-            <Input id="lastname" placeholder="describe what your meme is all about" type="text" />
+            <Label htmlFor="lastname">Symbol</Label>
+            <Input id="lastname" placeholder="AXN" type="text" value={symbol}  onChange={(e) => setSymbol(e.target.value) } />
           </LabelInputContainer>
-        <LabelInputContainer className="mb-4">
+        {/* <LabelInputContainer className="mb-4">
           <Label htmlFor="email">Total Supply</Label>
           <Input id="email" placeholder="0" type="number" />
         </LabelInputContainer>
         <LabelInputContainer className="mb-4">
           <Label htmlFor="password">X Handle</Label>
           <Input id="password" placeholder="https://x.xom.mmm" type="text" />
-        </LabelInputContainer>
+        </LabelInputContainer> */}
         {/* <LabelInputContainer className="mb-8">
           <Label htmlFor="twitterpassword">unknown</Label>
           <Input
