@@ -53,12 +53,12 @@ const Explore = () => {
         {data && (
           <div className="mt-4">
             <h2 className="text-3xl font-bold">Ongoing Token War</h2>
-            {data && !isLoading && <HoverEffect items={filteredContent} />}
+            {/* {data && !isLoading && <HoverEffect items={filteredContent} />} */}
 
             {/* <h2 className="text-3xl font-bold">Ongoing Meme War</h2>
             {data && !isLoading && <UnPairedMeme items={data} />} */}
 
-            <h2 className="text-3xl font-bold">Join War</h2>
+            {/* <h2 className="text-3xl font-bold">Join War</h2> */}
             <CreatedWar />
           </div>
         )}

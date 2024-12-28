@@ -1,7 +1,7 @@
 "use client";
 import { cn } from "../lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
-import { Image } from "@chakra-ui/react";
+import { Image as Image_ } from "@chakra-ui/react";
 import { useState } from "react";
 import { CardContainer, CardItem } from "./3d-card";
 // import { CampaignT } from "../redux/types";
@@ -12,26 +12,19 @@ import { useClient } from "@/context";
 import { formatEther } from "viem";
 import { useRouter } from "next/router";
 import { useGetMemeWars } from "@/hooks/index";
+import { Image } from "antd";
 
-
-export default function HoverEffect({
- 
-  className,
-}: {
-  className?: string;
-}) {
+export default function HoverEffect({ className }: { className?: string }) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const { assignId } = useClient();
   const router = useRouter();
 
-   const { data, isLoading, error } = useGetMemeWars();
+  const { data, isLoading, error } = useGetMemeWars();
 
-
- const items = data?.map((d: any, index: number) => ({
-   ...d,
-   id: index + 1, // Increment the id starting from 1
- }));
-
+  const items = data?.map((d: any, index: number) => ({
+    ...d,
+    id: index + 1, // Increment the id starting from 1
+  }));
 
   return (
     <div
@@ -43,7 +36,11 @@ export default function HoverEffect({
       {items?.map((item, idx) => (
         <Link
           key={Number(item?.id)}
-          href={`/explore/join-war/${item?.id}`}
+          href={
+            item.meme2URI
+              ? `/explore/${item?.id}`
+              : `explore/join-war/${item?.id}`
+          }
           className="relative group  block p-2 h-full w-full"
           onMouseEnter={() => setHoveredIndex(idx)}
           onMouseLeave={() => setHoveredIndex(null)}
@@ -73,7 +70,58 @@ export default function HoverEffect({
               {item.description.slice(0, 100)}...
             </CardDescription>
             <CardContainer className="inter-var">
-              <ImageSection src={item.meme1URI} />
+              {/* <ImageSection src={item.meme1URI} /> */}
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  position: "relative",
+                }}
+              >
+                <Image.PreviewGroup
+                  preview={{
+                    onChange: (current, prev) =>
+                      console.log(
+                        `current index: ${current}, prev index: ${prev}`
+                      ),
+                  }}
+                >
+                  <Image width={200} src={item.meme1URI} />
+                  {item.meme2URI.length > 10 && (
+
+                    
+                    <div
+                    style={{
+                      position: "absolute",
+                      left: "50%",
+                      top: "50%",
+                      transform: "translate(-50%, -50%)",
+                      fontSize: "50px",
+                      fontWeight: "bold",
+                      color: "red",
+                      zIndex: 10,
+                    }}
+                    >
+                    VS
+                  </div>
+                  )
+                  }
+                  {item.meme2URI.length > 10 ? (
+                    <Image width={200} src={item.meme2URI} />
+                  ) : (
+                    <div className="flex justify-end">
+                    <button
+                      className="btn mt-2 px-3 mr-3 font-normal text-sm"
+                      onClick={() =>
+                        router.push(`/explore/join-war/${item.id}`)
+                      }
+                    >
+                      Join War
+                    </button>
+                    </div>
+                  )}
+                </Image.PreviewGroup>
+              </div>
             </CardContainer>
             <div className="flex flex-row justify-between gap-y-3">
               {item.isTokenWar ? (
@@ -94,7 +142,7 @@ export default function HoverEffect({
                   </p>
                   <div className="flex-1 gap-x-5">
                     <Tag color="yellow.500">
-                        {Number(item.pointTarget).toLocaleString()}
+                      {Number(item.pointTarget).toLocaleString()}
                     </Tag>
                   </div>
                 </div>
@@ -125,16 +173,6 @@ export default function HoverEffect({
                   )}
                 </div>
               </div>
-            </div>
-            <div className="flex justify-end">
-              <button
-                className="btn mt-2 px-6"
-                onClick={() =>
-                  router.push(`/explore/join-war/${item.id}`)
-                }
-              >
-                Join War
-              </button>
             </div>
           </Card>
         </Link>
@@ -205,7 +243,7 @@ export const ImageSection = ({
 }) => {
   return (
     <CardItem translateZ="100" className="w-full mt-1">
-      <Image
+      <Image_
         src={src}
         height="40"
         width="1000"

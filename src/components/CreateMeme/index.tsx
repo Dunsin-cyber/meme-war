@@ -3,7 +3,6 @@ import { useClient } from "@/context";
 import {
   useAccount,
   useWriteContract,
-  BaseError,
   useConnect,
   useReadContract,
 } from "wagmi";

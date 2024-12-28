@@ -103,7 +103,7 @@ function index({id}: {id: string}) {
           {/* Your war */}
 
           <div className="max-w-full md:w-[50%] space-y-6">
-            <Form />
+            <Form id={+id} />
           </div>
         </div>
       </div>
