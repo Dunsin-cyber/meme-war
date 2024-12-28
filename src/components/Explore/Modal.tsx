@@ -14,7 +14,7 @@ import contractAbi from "@/hooks/abi.json";
 import { contractAddress } from "@/hooks";
 import { toast } from "react-hot-toast";
 import { formatEther, parseEther } from "viem";
-import { useGetContents } from "@/hooks/index";
+import { useGetMemeWars } from "@/hooks/index";
 import erc20Abi from "@/hooks/erc-20.json";
 import { useRouter } from "next/router";
 
@@ -41,7 +41,7 @@ const Modal = () => {
   };
   //this fetched "campaigns" and by the index, we can get the exact campaign,
   //so it will just be a getallcampaigns, then filter all camaigns to match this id
-  const { data } = useGetContents();
+  const { data } = useGetMemeWars();
   const content = data?.find((p) => Number(p.contentId) === activeId);
 
   console.log("Content", content);
