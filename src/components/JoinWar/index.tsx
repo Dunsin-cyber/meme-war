@@ -9,7 +9,7 @@ import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
 import {Form} from "./Form"
 import {useGetAMemeDetail} from "@/hooks"
 
-function index({id}: {id: string}) {
+function JoinWar ({id}: {id: string}) {
 
   const {data, isLoading} = useGetAMemeDetail(+id)
   console.log("DETAIL",data);
@@ -112,7 +112,7 @@ function index({id}: {id: string}) {
   );
 }
 
-export default index;
+export default JoinWar;
 
 const testimonials = [
   {
