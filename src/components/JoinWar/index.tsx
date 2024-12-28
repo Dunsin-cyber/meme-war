@@ -16,20 +16,20 @@ function index({id}: {id: string}) {
   
   return (
     <SidebarDemo>
+      {data && (
       <div className="bg-bgGradient mx-auto px-8 py-5 relative">
         <h1 className="font-semibold">Join Battle NFT war ⚔️</h1>
         <div className="flex  py-6 flex-col md:flex-row">
           {/* Exixsting War */}
-          <div className=" max-w-full md:max-w-[50%] space-y-6">
-            <p className="text-secondary100 text-2xl font-bold">
+           <div className=" max-w-full md:max-w-[50%] space-y-6">
+          {/*  <p className="text-secondary100 text-2xl font-bold">
               {" "}
               Subzero Coin
-            </p>
+            </p> */}
+            <img src={data[4]} alt="meme" className="h-[300px] w-[300px]" />
+            {/* description */}
             <p className="text-gray-400">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla,
-              officia deserunt? Consequuntur odio veritatis esse eius ex
-              repudiandae facere debitis nam harum dolore quidem quas, cumque
-              nemo pariatur maxime enim?
+              {data[11]}
             </p>
             {/* stat */}
             <div className="flex flex-row justify-between gap-y-3">
@@ -61,7 +61,7 @@ function index({id}: {id: string}) {
                   Created By
                 </p>
                 <div className="flex-1 gap-x-5">
-                  <Tag className="text-primary100">POxgddjno...</Tag>
+                  <Tag className="text-primary100">{data[0]}</Tag>
                 </div>
               </div>
 
@@ -107,6 +107,7 @@ function index({id}: {id: string}) {
           </div>
         </div>
       </div>
+      )}
     </SidebarDemo>
   );
 }
