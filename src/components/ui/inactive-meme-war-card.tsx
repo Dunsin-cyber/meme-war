@@ -11,27 +11,17 @@ import { Tag } from "@/components/ui/tag";
 import { useClient } from "@/context";
 import { formatEther } from "viem";
 import { useRouter } from "next/router";
-import { useGetMemeWars } from "@/hooks/index";
-
 
 export default function HoverEffect({
- 
+  items,
   className,
 }: {
+  items: any;
   className?: string;
 }) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const { assignId } = useClient();
   const router = useRouter();
-
-   const { data, isLoading, error } = useGetMemeWars();
-
-
- const items = data?.map((d: any, index: number) => ({
-   ...d,
-   id: index + 1, // Increment the id starting from 1
- }));
-
 
   return (
     <div
@@ -42,8 +32,8 @@ export default function HoverEffect({
     >
       {items?.map((item, idx) => (
         <Link
-          key={Number(item?.id)}
-          href={`/explore/join-war/${item?.id}`}
+          key={Number(item?.creatorToken)}
+          href={`/explore/join-war/${item?.creatorToken}`}
           className="relative group  block p-2 h-full w-full"
           onMouseEnter={() => setHoveredIndex(idx)}
           onMouseLeave={() => setHoveredIndex(null)}
@@ -76,61 +66,51 @@ export default function HoverEffect({
               <ImageSection src={item.meme1URI} />
             </CardContainer>
             <div className="flex flex-row justify-between gap-y-3">
-              {item.isTokenWar ? (
-                <div className=" flex-1 gap-y-3">
-                  <p className="text-zinc-400 tracking-wide leading-relaxed text-sm">
-                    Sale Target
-                  </p>
-                  <div className="flex-1 gap-x-5">
-                    <Tag color="red.400">
-                      {Number(item.saleTarget).toLocaleString()}
-                    </Tag>
-                  </div>
+              <div className=" flex-1 gap-y-3">
+                <p className="text-zinc-400 tracking-wide leading-relaxed text-sm">
+                  Duration
+                </p>
+                <div className="flex-1 gap-x-5">
+                  <Tag color="red.400">21 days</Tag>
                 </div>
-              ) : (
-                <div className=" flex-1 gap-y-3">
-                  <p className="text-zinc-400 tracking-wide leading-relaxed text-sm">
-                    Point Target
-                  </p>
-                  <div className="flex-1 gap-x-5">
-                    <Tag color="yellow.500">
-                        {Number(item.pointTarget).toLocaleString()}
-                    </Tag>
-                  </div>
+              </div>
+
+              <div className=" flex-1 gap-y-3">
+                <p className="text-zinc-400 tracking-wide leading-relaxed text-sm">
+                  supply
+                </p>
+                <div className="flex-1 gap-x-5">
+                  <Tag color="yellow.500">
+                    {item?.creator}
+                  </Tag>
                 </div>
-              )}
+              </div>
             </div>
             {/* creator info */}
             <div className="flex flex-row justify-between gap-y-3">
-              <div className=" flex flex-col gap-y-3">
+              <div className=" flex-1 gap-y-3">
                 <p className="text-zinc-400 tracking-wide leading-relaxed text-sm">
                   Created By
                 </p>
                 <div className="flex-1 gap-x-5">
-                  <Tag className="text-primary100">
-                    {item.creator.slice(0, 20)}...
-                  </Tag>
+                  <Tag className="text-primary100">{item.creator.slice(0,100)}...</Tag>
                 </div>
               </div>
 
-              <div className=" flex flex-col gap-y-3">
+              <div className=" flex-1 gap-y-3">
                 <p className="text-zinc-400 tracking-wide leading-relaxed text-sm">
-                  War Type
+                  Market Cap
                 </p>
                 <div className="flex-1 gap-x-5">
-                  {item.isTokenWar ? (
-                    <Tag color="green.700">Token</Tag>
-                  ) : (
-                    <Tag color="green.700">Meme</Tag>
-                  )}
+                  <Tag color="green.700">---</Tag>
                 </div>
               </div>
             </div>
             <div className="flex justify-end">
               <button
-                className="btn mt-2 px-6"
+                className="btn py-2 px-6"
                 onClick={() =>
-                  router.push(`/explore/join-war/${item.id}`)
+                  router.push(`/explore/join-war/${item?.creatorToken}`)
                 }
               >
                 Join War

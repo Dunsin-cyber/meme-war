@@ -7,8 +7,13 @@ import { FaXTwitter, FaGithub, FaMedium } from "react-icons/fa6";
 import { FaDiscord } from "react-icons/fa";
 import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
 import {Form} from "./Form"
+import {useGetAMemeDetail} from "@/hooks"
 
-function index() {
+function index({id}: {id: string}) {
+
+  const {data, isLoading} = useGetAMemeDetail(+id)
+  console.log("DETAIL",data);
+  
   return (
     <SidebarDemo>
       <div className="bg-bgGradient mx-auto px-8 py-5 relative">

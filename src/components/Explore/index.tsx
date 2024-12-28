@@ -6,17 +6,18 @@ import { Input } from "@chakra-ui/react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useClient } from "@/context";
 import CreateMeme from "../CreateMeme";
-import { useGetContents, contractAddress } from "@/hooks/index";
+import { useGetMemeWars, contractAddress } from "@/hooks/index";
 import contractAbi from "@/hooks/abi.json";
 import { SidebarDemo } from "@/components/Sidebar";
 import CreatedWar from "@/components/ui/inactive-war-card";
+// import UnPairedMeme from "@/components/ui/inactive-meme-war-card";
 
 const Explore = () => {
   React.useEffect(() => {}, []);
   const [contents, setContents] = React.useState(null);
   const { setIsCreateModalOpen } = useClient();
 
-  const { data, isLoading, error } = useGetContents();
+  const { data, isLoading, error } = useGetMemeWars();
   console.log("Content", data);
   console.log("error", error);
 
@@ -26,7 +27,9 @@ const Explore = () => {
     return pics[Math.floor(Math.random() * pics.length)];
   };
 
-  const filteredContent = data?.map((d: any) => ({
+  const data_ = [];
+
+  const filteredContent = data_?.map((d: any) => ({
     ...d, // Spread existing properties of each campaign
     src: getRandomImage(),
   }));
@@ -49,11 +52,14 @@ const Explore = () => {
         </div>
         {data && (
           <div className="mt-4">
-            <h2 className="text-3xl font-bold">Ongoing War</h2>
+            <h2 className="text-3xl font-bold">Ongoing Token War</h2>
             {data && !isLoading && <HoverEffect items={filteredContent} />}
 
+            {/* <h2 className="text-3xl font-bold">Ongoing Meme War</h2>
+            {data && !isLoading && <UnPairedMeme items={data} />} */}
+
             <h2 className="text-3xl font-bold">Join War</h2>
-            {data && !isLoading && <CreatedWar items={filteredContent} />}
+            <CreatedWar />
           </div>
         )}
         <CreateMeme />
@@ -61,7 +67,6 @@ const Explore = () => {
     </SidebarDemo>
   );
 };
-
 
 export default Explore;
 

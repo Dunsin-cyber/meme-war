@@ -13,12 +13,27 @@ type ReturnType = {
   refetch?: any;
 };
 
-export const useGetContents = () => {
+export const useGetMemeWars = () => {
   // Fetch data for each item
   const { data, error } = useReadContract({
     abi: contractAbi,
     address: contractAddress,
-    functionName: "getAllTheContents",
+    functionName: "getAllMemeWars",
+  });
+
+  return {
+    isLoading: !data && !error,
+    data: data as any,
+    error,
+  };
+};
+
+export const useGetMemeTokenWars = () => {
+  // Fetch data for each item
+  const { data, error } = useReadContract({
+    abi: contractAbi,
+    address: contractAddress,
+    functionName: "getAllMemeTOkenWars",
   });
 
   return {
@@ -44,15 +59,14 @@ export const useGetContentCount = () => {
   };
 };
 
-export const useGetACampaign = (id: any) => {
-  console.log("--calling--");
+export const useGetAMemeDetail = (id: any) => {
 
   const shouldFetch = React.useMemo(() => !!id, [id]); // Only allow fetching if id exists
 
   const { data, error } = useReadContract({
     abi: contractAbi,
     address: contractAddress,
-    functionName: "campaigns",
+    functionName: "memeWars",
     args: [id],
     query: { enabled: shouldFetch }, // Prevent fetching if id is invalid
   });
@@ -63,6 +77,8 @@ export const useGetACampaign = (id: any) => {
     error,
   };
 };
+
+
 export const useGetAllCampaigns = (): ReturnType => {
   const { data, error, refetch } = useReadContract({
     abi: contractAbi,

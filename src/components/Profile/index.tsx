@@ -1,38 +1,26 @@
 "use client";
 import React, { useEffect } from "react";
-import { HoverEffect } from "@/components/ui/card-hover-effect";
 import { CardBody, CardContainer, CardItem } from "@/components/ui/3d-card";
 import { Input } from "@chakra-ui/react";
 import Modal from "@/components/Explore/Modal";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useClient } from "@/context";
-import { useGetContents, contractAddress } from "@/hooks/index";
+import {  contractAddress } from "@/hooks/index";
 import contractAbi from "@/hooks/abi.json";
 import { useAccount } from "wagmi";
 import { SidebarDemo } from "@/components/Sidebar";
 import { Tag } from "@/components/ui/tag";
 import { PieChart } from "react-minimal-pie-chart";
 import WithdrawModal from "./WithdrawModal";
+import CreatedWar from "@/components/ui/inactive-war-card"
 
 const Profile = () => {
   React.useEffect(() => {}, []);
   const [contents, setContents] = React.useState(null);
   const { setOpenWithdrawModal } = useClient();
   const { address } = useAccount();
-  const { data, isLoading, error } = useGetContents();
-  console.log("Content", data);
-  console.log("error", error);
 
-  const pics = ["album-1.jpg", "album-2.jpg", "album-3.jpg", "album-4.jpg"];
 
-  const getRandomImage = () => {
-    return pics[Math.floor(Math.random() * pics.length)];
-  };
-
-  const filteredContent = data?.map((d: any) => ({
-    ...d, // Spread existing properties of each campaign
-    src: getRandomImage(),
-  }));
 
   return (
     <SidebarDemo>
@@ -79,7 +67,7 @@ const Profile = () => {
         <p className="font-semibold text-3xl text-secondary50">
           Explore More ⚔️
         </p>
-        {data && !isLoading && <HoverEffect items={filteredContent} />}
+        <CreatedWar />
       </div>
       <WithdrawModal/>
     </SidebarDemo>
