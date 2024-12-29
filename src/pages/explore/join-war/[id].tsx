@@ -4,6 +4,7 @@ import React from "react";
 import Head from "@/components/Head";
 import dynamic from "next/dynamic";
 import JoinWar from "@/components/JoinWar"
+import { useRouter } from "next/router";
 
 // import { GetServerSideProps } from "next";
 
@@ -18,11 +19,14 @@ import JoinWar from "@/components/JoinWar"
 
 
 function Details() {
+    const router = useRouter();
+    const { id } = router.query;
+
   return (
     <div>
       <Head title="Join War" />
       {/* <JoinWar id={id} /> */}
-            <JoinWar id={"2"} />
+            <JoinWar id={id as string} />
 
     </div>
   );
