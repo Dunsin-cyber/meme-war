@@ -1,7 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 
-function index() {
+function Resolve() {
   const router = useRouter();
   const { oauth_token } = router.query;
 
@@ -22,4 +22,4 @@ function index() {
   return <div className="flex justify-center items-center">resolving...</div>;
 }
 
-export default index;
+export default Resolve;
