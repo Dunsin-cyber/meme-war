@@ -13,12 +13,24 @@ import { Tag } from "@/components/ui/tag";
 import { PieChart } from "react-minimal-pie-chart";
 import WithdrawModal from "./WithdrawModal";
 import CreatedWar from "@/components/ui/inactive-war-card"
+import { toast } from "react-hot-toast";
 
 const Profile = () => {
   React.useEffect(() => {}, []);
   const [contents, setContents] = React.useState(null);
   const { setOpenWithdrawModal } = useClient();
   const { address } = useAccount();
+
+  const handleGetAuthLink = async() => {
+    try {
+     const data = await fetch("/api/twitter-auth-link");
+      const url = await data.json();
+      window.open(url.name, "_blank");
+    }
+    catch(err) {
+      toast.error(err.error)
+    }
+  }
 
 
 
@@ -61,7 +73,16 @@ const Profile = () => {
                 ]}
               />
             </div>
-          <button className="btn px-6" onClick={() => setOpenWithdrawModal(true)}>Withdraw</button>
+            <button className="btn px-6" onClick={handleGetAuthLink}>
+              Connect X
+            </button>
+
+            <button
+              className="btn px-6"
+              onClick={() => setOpenWithdrawModal(true)}
+            >
+              Withdraw
+            </button>
           </div>
         </div>
         <p className="font-semibold text-3xl text-secondary50">
@@ -69,7 +90,7 @@ const Profile = () => {
         </p>
         <CreatedWar />
       </div>
-      <WithdrawModal/>
+      <WithdrawModal />
     </SidebarDemo>
   );
 };
