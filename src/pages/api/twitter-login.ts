@@ -37,8 +37,8 @@ export default async function handler(
       const client = new TwitterApi({
         appKey: CONSUMER_KEY,
         appSecret: CONSUMER_SECRET,
-        accessToken: oauth_token,
-        accessSecret: oauth_token_secret,
+        // accessToken: oauth_token,
+        // accessSecret: oauth_token_secret,
       });
 
       client
