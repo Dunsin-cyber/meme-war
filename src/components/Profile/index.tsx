@@ -1,12 +1,7 @@
 "use client";
 import React, { useEffect } from "react";
-import { CardBody, CardContainer, CardItem } from "@/components/ui/3d-card";
-import { Input } from "@chakra-ui/react";
-import Modal from "@/components/Explore/Modal";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useClient } from "@/context";
-import { contractAddress } from "@/hooks/index";
-import contractAbi from "@/hooks/abi.json";
 import { useAccount } from "wagmi";
 import { SidebarDemo } from "@/components/Sidebar";
 import { Tag } from "@/components/ui/tag";
@@ -16,22 +11,21 @@ import CreatedWar from "@/components/ui/inactive-war-card";
 import { toast } from "react-hot-toast";
 import { FaXTwitter } from "react-icons/fa6";
 // import { Button, InputNumber } from "antd";
+import {addProfile} from "@/redux/slice/ProfileSlice"
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
 
 const Profile = () => {
   const [contents, setContents] = React.useState(null);
   const { setOpenWithdrawModal } = useClient();
   const { address } = useAccount();
   const [xLoading, setXLoading] = React.useState(false);
-  const [userDetails, setUserDetails] = React.useState({
-    username: "",
-    name: "",
-    id: "",
-  });
+  const dispatch = useAppDispatch()
+  const userDetails = useAppSelector((state) => state.profile);
 
   const handleGetAuthLink = async () => {
     try {
       setXLoading(true);
-      if (userDetails?.username.length > 1) {
+      if (userDetails?.username?.length > 1) {
         handleLogout();
         return;
       }
@@ -72,11 +66,13 @@ const Profile = () => {
         toast.error(data_.error);
         return;
       }
-      setUserDetails({
-        username: data_.data.username,
-        name: data_.data.name,
-        id: data_.data.id,
-      });
+      const payload = {
+        username: data_.data.data.username,
+        name: data_.data.data.name,
+        id: data_.data.data.id,
+      };
+      // console.log("payload",payload)
+      dispatch(addProfile(payload));
       console.log("user details from profile", data_);
     } catch (err) {
 
@@ -153,7 +149,7 @@ const Profile = () => {
               />
             </div>
             {/* twitter details */}
-            {userDetails?.username && (
+            {userDetails?.username?.length > 1 && (
               <div className="space-x-2 space-y-2">
                 <div className="cursor-pointer flex space-x-2 justify-center items-center">
                   <FaXTwitter /> <p>@ {userDetails?.username}</p>
@@ -168,13 +164,13 @@ const Profile = () => {
               <div className="btn px-6 bg-blue-700" onClick={handleGetAuthLink}>
                 {xLoading ? (
                   <p>
-                    {userDetails?.username.length > 1
+                    {userDetails?.username?.length > 1
                       ? "unlinking..."
                       : "connecting..."}
                   </p>
                 ) : (
                   <div className="cursor-pointer flex space-x-2 justify-center items-center">
-                    {userDetails?.username.length > 1 ? (
+                    {userDetails?.username?.length > 1 ? (
                       <div className="cursor-pointer flex space-x-2 justify-center items-center">
                         <p>Unlink </p> <FaXTwitter />
                       </div>

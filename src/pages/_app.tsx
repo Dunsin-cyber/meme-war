@@ -9,7 +9,8 @@ import { config } from "@/utils/wagmi";
 import Head from "next/head";
 import React from "react";
 import { PagesProgressBar as ProgressBar } from "next-nprogress-bar";
-
+import { Provider as ReduxProvider } from "react-redux";
+import store from "@/redux/store";
 import { ConfigProvider, theme } from "antd";
 
 import localFont from "next/font/local";
@@ -33,6 +34,8 @@ const App = ({ Component, pageProps }) => {
       <Head>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+          <ReduxProvider store={store}>
+
       <ConfigProvider
         theme={{
           algorithm: theme.darkAlgorithm,
@@ -43,7 +46,7 @@ const App = ({ Component, pageProps }) => {
             colorText: "#fff",
           },
         }}
-      >
+        >
         <WagmiProvider config={config}>
           <QueryClientProvider client={queryClient}>
             <WalletProvider>
@@ -77,6 +80,7 @@ const App = ({ Component, pageProps }) => {
           </QueryClientProvider>
         </WagmiProvider>
       </ConfigProvider>
+        </ReduxProvider>
     </Provider>
   );
 };

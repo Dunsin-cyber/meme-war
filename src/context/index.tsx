@@ -18,7 +18,9 @@ const UserContext = React.createContext<{
   setIsCreateModalOpen: any;
   activePic: any;
   setOpenWithdrawModal:any;
-  openWithdrawModal: any
+  openWithdrawModal: any;
+  userDetails: any;
+  setUserDetails:any
 }>({
   isModalOpen: undefined,
   setIsModalOpen: undefined,
@@ -28,7 +30,9 @@ const UserContext = React.createContext<{
   setIsCreateModalOpen: undefined,
   activePic: undefined,
   setOpenWithdrawModal:undefined,
-  openWithdrawModal: undefined
+  openWithdrawModal: undefined,
+  userDetails: undefined,
+  setUserDetails: undefined
 });
 
 export const useUserContext = () => {
@@ -39,6 +43,11 @@ export const useUserContext = () => {
   const [openWithdrawModal,setOpenWithdrawModal] = useState(false);
   const { address } = useAccount();
   const router = useRouter();
+    const [userDetails, setUserDetails] = React.useState({
+      username: "",
+      name: "",
+      id: "",
+    });
 
   const assignId = (id: number, pic: string) => {
     setActiveId(id);
@@ -61,7 +70,9 @@ export const useUserContext = () => {
     setIsCreateModalOpen,
     activePic,
     setOpenWithdrawModal,
-    openWithdrawModal
+    openWithdrawModal,
+    userDetails,
+    setUserDetails
   };
 };
 
