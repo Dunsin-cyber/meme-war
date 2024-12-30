@@ -5,6 +5,9 @@ export interface SessionData {
   accessSecret: string;
   oauth_token: string;
   oauth_token_secret: string;
+  codeVerifier: string;
+  state: string;
+  refreshToken: string
 }
 
 export const defaultSession: SessionData = {
@@ -12,6 +15,9 @@ export const defaultSession: SessionData = {
   accessSecret: "",
   oauth_token: "",
   oauth_token_secret: "",
+  state: "",
+  codeVerifier: "",
+  refreshToken: "",
 };
 
 export const sessionOptions: SessionOptions = {

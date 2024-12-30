@@ -13,7 +13,10 @@ type Data = {
 const X_BEARER_TOKEN = process.env.X_BEARER_TOKEN;
 const CONSUMER_KEY = process.env.X_API_KEY;
 const CONSUMER_SECRET = process.env.X_SECRET_KEY;
-const CALLBACK_URL = process.env.CALLBACK_URL;
+const CALLBACK_URL = process.env.X_CALLBACK_URL;
+const CLIENT_ID = process.env.X_CLIENT_ID;
+const CLIENT_SECRET = process.env.X_CLIENT_SECRET;
+
 
 export default async function handler(
   req: NextApiRequest,
@@ -24,36 +27,48 @@ export default async function handler(
   if (req.method === "GET") {
     try {
       // Extract tokens from query string
-      const { oauth_token, oauth_verifier } = req.query;
-      // Get the saved oauth_token_secret from session
-      const oauth_token_secret = session.oauth_token_secret;
+      const { state, code } = req.query;
+      // Get the saved codeVerifier from session
+      const codeVerifier = session.codeVerifier;
+      const sessionState = session.state;
 
-      if (!oauth_token || !oauth_verifier || !oauth_token_secret) {
+
+      console.log("state", state, "sessionState",  sessionState);
+      if (!codeVerifier || !state || !sessionState || !code) {
         return res
           .status(400)
           .json({ error: "You denied the app or your session expired!" });
       }
+      if (state !== sessionState) {
+        return res.status(400).json({ error: "Stored tokens didnt match!" });
+      }
 
+      // Obtain access token
       const client = new TwitterApi({
-        appKey: CONSUMER_KEY,
-        appSecret: CONSUMER_SECRET,
-        // accessToken: oauth_token,
-        // accessSecret: oauth_token_secret,
+        clientId: CLIENT_ID,
+        clientSecret: CLIENT_SECRET,
       });
 
-      client
-        .login(oauth_verifier as string)
-        .then(async ({ client: loggedClient, accessToken, accessSecret }) => {
-          // loggedClient is an authenticated client in behalf of some user
-          // Store accessToken & accessSecret somewhere
-          session.accessToken = accessToken;
-          session.accessSecret = accessSecret;
-          await session.save();
-          return res.status(200).json({ data: loggedClient });
-        })
-        .catch(() =>
-          res.status(403).json({ error: "Invalid verifier or access tokens!" })
-        );
+   
+  client
+    .loginWithOAuth2({ code: code as string, codeVerifier, redirectUri: CALLBACK_URL })
+    .then(
+      async ({
+        client: loggedClient,
+        accessToken,
+        refreshToken,
+        expiresIn,
+      }) => {
+        session.accessToken = accessToken;
+        session.refreshToken = refreshToken;
+        await session.save()
+    
+        const { data: userObject } = await loggedClient.v2.me();
+              return res.status(200).json({ data: userObject });
+
+      }
+    )
+    .catch(() => res.status(403).json({error:"Invalid verifier or access tokens!"}));
     } catch (error) {
       console.log(error.data);
       return res.status(500).json({ error: "Error getting logged in user" });
