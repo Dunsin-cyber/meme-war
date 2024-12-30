@@ -31,7 +31,7 @@ const Profile = () => {
   const handleGetAuthLink = async () => {
     try {
       setXLoading(true);
-      if (userDetails.username.length > 1) {
+      if (userDetails?.username.length > 1) {
         handleLogout();
         return;
       }
@@ -168,13 +168,13 @@ const Profile = () => {
               <div className="btn px-6 bg-blue-700" onClick={handleGetAuthLink}>
                 {xLoading ? (
                   <p>
-                    {userDetails.username.length > 1
+                    {userDetails?.username.length > 1
                       ? "unlinking..."
                       : "connecting..."}
                   </p>
                 ) : (
                   <div className="cursor-pointer flex space-x-2 justify-center items-center">
-                    {userDetails.username.length > 1 ? (
+                    {userDetails?.username.length > 1 ? (
                       <div className="cursor-pointer flex space-x-2 justify-center items-center">
                         <p>Unlink </p> <FaXTwitter />
                       </div>

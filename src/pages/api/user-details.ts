@@ -38,7 +38,7 @@ export default async function handler(
       return res.status(200).json({ data: user });
     } catch (error) {
       console.log(error);
-      return res.status(error.data.status).json({ error: error });
+      return res.status(error.status).json({ error: error });
     }
   } else {
     // Handle unsupported HTTP methods
