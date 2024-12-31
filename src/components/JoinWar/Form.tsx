@@ -33,23 +33,23 @@ export function Form({ id }: { id: number }) {
   } = useForm();
 
   const handleCreateMeme = async (data: any) => {
-    if (memeData.memeUrl.length < 10) {
-      toast.error("upload a meme pic");
-      return;
-    }
+    // if (memeData.memeUrl.length < 10) {
+    //   toast.error("upload a meme pic");
+    //   return;
+    // }
     try {
       setLoading(true);
-      await writeContractAsync({
-        chainId: bscTestnet.id,
-        address: contractAddress,
-        functionName: "acceptMemeWar",
-        abi: contractAbi,
-        args: [id, data.name, data.symbol, memeData.memeUrl],
-        chain: undefined,
-        account: address,
-      });
+      // await writeContractAsync({
+      //   chainId: bscTestnet.id,
+      //   address: contractAddress,
+      //   functionName: "acceptMemeWar",
+      //   abi: contractAbi,
+      //   args: [id, data.name, data.symbol, memeData.memeUrl],
+      //   chain: undefined,
+      //   account: address,
+      // });
       await handlePostOnX(data)
-      setLoading(true);
+      setLoading(false);
       toast.success("joined successfully");
       router.push("/explore");
     } catch (err) {
@@ -62,10 +62,15 @@ export function Form({ id }: { id: number }) {
 
   const handlePostOnX = async (param: any) => {
     try {
-      const post = {
-        title: param.name,
-        option: param.symbol,
-      };
+      // const post = {
+      //   title: param.name,
+      //   option: param.symbol,
+      // };
+        const post = {
+          title: "POST",
+          option: "Vote Kloki",
+          option2: "votr floki ooo"
+        };
       const createPost = await fetch("/api/post-tweet", {
         method: "POST",
         body: JSON.stringify(post),

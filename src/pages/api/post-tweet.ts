@@ -25,7 +25,7 @@ export default async function handler(
 
   if (req.method === "POST") {
     try {
-      const { post } = req.body;
+      const  post  = req.body;
       // Get the saved oauth_token_secret from session
       const accessToken = session.accessToken;
 
@@ -39,10 +39,15 @@ export default async function handler(
         plugins: [rateLimitPlugin],
       });
 
+
       const { data: createdTweet } = await client.v2.tweet(post.title, {
-        poll: { duration_minutes: 2, options: [post.option] },
+        poll: { duration_minutes: 5, options: [post.option, post.option2] },
       });
-      return res.status(200).json({ data: createdTweet });
+
+       return res.status(201).json({
+         data: createdTweet,
+       });
+
     } catch (error) {
       if (
         error instanceof ApiResponseError &&
@@ -54,7 +59,7 @@ export default async function handler(
         });
       }
 
-      console.log(error);
+      console.log(error.data);
       return res.status(401).json({ error: "Error creating the tweet" });
     }
   } else {

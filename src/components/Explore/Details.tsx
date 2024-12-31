@@ -143,8 +143,8 @@ const Explore = () => {
         </div>
 
         <div>
-          <span className="text-[#2962FF]">BONK</span> vs{" "}
-          <span className="text-[#28A745]">USDT</span>
+          <span className="text-[#2962FF]">RAGNER</span> vs{" "}
+          <span className="text-[#28A745]">FLOKI</span>
         </div>
         <div className="flex flex-col md:flex-row">
           <div

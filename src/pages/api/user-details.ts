@@ -31,7 +31,7 @@ export default async function handler(
       if (!accessToken) {
         return res
           .status(400)
-          .json({ error: "your session has expired, please login aagin" });
+          .json({ error: "your session has expired, please login again" });
       }
 
       const client = new TwitterApi(accessToken);
