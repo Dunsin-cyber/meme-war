@@ -9,19 +9,70 @@ import Link from "next/link";
 import { Tag } from "@/components/ui/tag";
 // import { ProgressBar, ProgressRoot } from "@/components/ui/progress";
 import { useClient } from "@/context";
-import { formatEther } from "viem";
+import { formatEther, parseEther } from "viem";
 import { useRouter } from "next/router";
+import { useGetMemeWars, contractAddress } from "@/hooks/index";
+import {
+  useAccount,
+  useWriteContract,
+  useConnect,
+  useReadContract,
+} from "wagmi";
+import { toast } from "react-hot-toast";
+import erc20Abi from "@/hooks/erc-20.json";
+import { config } from "@/utils/wagmi";
+import { injected } from "wagmi/connectors";
+import { bscTestnet } from "viem/chains";
 
-export default function HoverEffect({
-  items,
-  className,
-}: {
-  items: any;
-  className?: string;
-}) {
+export default function HoverEffect({ className }: { className?: string }) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const { assignId } = useClient();
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const { address, chainId } = useAccount();
+  const { writeContractAsync } = useWriteContract({
+    config,
+  });
+  const { connectAsync } = useConnect();
+
+  const { data, isLoading, error } = useGetMemeWars();
+  // console.log(data);
+  const items = data
+    ?.filter((item) => item.challenger === address || item.creator === address)
+    .map((d: any, index: number) => ({
+      ...d,
+      id: index + 1, // Increment the id starting from 1
+    }));
+
+  const handleApprove = async (tokenAddress: `0x${string}`) => {
+    setLoading(true);
+    try {
+      if (!address) {
+        await connectAsync({
+          chainId: bscTestnet.id,
+          connector: injected(),
+        });
+      }
+
+      const approve = await writeContractAsync({
+        chainId: bscTestnet.id,
+        chain: undefined,
+        account: address,
+        address: tokenAddress /* content?.tokenAddress */,
+        abi: erc20Abi,
+        functionName: "approve",
+        args: [contractAddress, parseEther("500000")],
+      });
+      toast.success("Approved!");
+
+      // closeModal();
+    } catch (err) {
+      console.log(err);
+      toast.error("Something Went Wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div
@@ -31,12 +82,9 @@ export default function HoverEffect({
       )}
     >
       {items?.map((item, idx) => (
-        <Link
-          key={Number(item?.creatorToken)}
-          href={`/explore/join-war/${item?.creatorToken}`}
+        <div
+          key={Number(item?.id)}
           className="relative group  block p-2 h-full w-full"
-          onMouseEnter={() => setHoveredIndex(idx)}
-          onMouseLeave={() => setHoveredIndex(null)}
         >
           <AnimatePresence>
             {hoveredIndex === idx && (
@@ -63,7 +111,7 @@ export default function HoverEffect({
               {item.description.slice(0, 100)}...
             </CardDescription>
             <CardContainer className="inter-var">
-              <ImageSection src={item.meme1URI} />
+              <ImageSection src={item.creator === address ? item.meme1URI : item.meme2URI} />
             </CardContainer>
             <div className="flex flex-row justify-between gap-y-3">
               <div className=" flex-1 gap-y-3">
@@ -80,9 +128,7 @@ export default function HoverEffect({
                   supply
                 </p>
                 <div className="flex-1 gap-x-5">
-                  <Tag color="yellow.500">
-                    {item?.creator}
-                  </Tag>
+                  <Tag color="yellow.500">{item?.creator}</Tag>
                 </div>
               </div>
             </div>
@@ -93,7 +139,9 @@ export default function HoverEffect({
                   Created By
                 </p>
                 <div className="flex-1 gap-x-5">
-                  <Tag className="text-primary100">{item.creator.slice(0,100)}...</Tag>
+                  <Tag className="text-primary100">
+                    {item.creator.slice(0, 100)}...
+                  </Tag>
                 </div>
               </div>
 
@@ -106,18 +154,18 @@ export default function HoverEffect({
                 </div>
               </div>
             </div>
-            <div className="flex justify-end">
-              <button
-                className="btn py-2 px-6"
-                onClick={() =>
-                  router.push(`/explore/join-war/${item?.creatorToken}`)
-                }
-              >
-                Join War
-              </button>
-            </div>
+            {item.isTokenWar && (
+              <div className="flex justify-end">
+                <button
+                  className="btn py-2 px-6"
+                  onClick={() => handleApprove(item.creator === address ?  item.creatorToken: item.challengerToken)}
+                >
+                  Approve Meme war
+                </button>
+              </div>
+            )}
           </Card>
-        </Link>
+        </div>
         //  </div>
       ))}
     </div>

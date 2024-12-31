@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useWriteContract, useReadContract } from "wagmi";
 import contractAbi from "@/hooks/abi.json";
+import erc20Abi from "@/hooks/erc-20.json"
 import type { Address } from "viem";
 import { config } from "@/utils/wagmi";
+import { formatEther } from "viem";
 
-export const contractAddress = "0xdd8f8fA5F6aFfD7fb6c6B4C779aDEf3Ff7fAC85A";
+export const contractAddress = "0x6eebBa28dBb953E5E0976f368777dDbcb69B0E14";
 
 type ReturnType = {
   isLoading: boolean;
@@ -12,6 +14,25 @@ type ReturnType = {
   error: any;
   refetch?: any;
 };
+
+export const useGetTokenBalance = (tokenAddress:`0x${string}`) => {
+   const { data, error } = useReadContract({
+     abi: erc20Abi,
+     address: tokenAddress,
+     functionName: "balanceOf",
+     args: [tokenAddress]
+   });
+
+   return {
+     isLoading: !data && !error,
+     data: data as any,
+     error,
+   };
+}
+
+export const useBuyToken = () => {
+
+}
 
 export const useGetMemeWars = () => {
   // Fetch data for each item

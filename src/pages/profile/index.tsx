@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import Profle_ from "@/components/Profile";
 import Head from "@/components/Head";

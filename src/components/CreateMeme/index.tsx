@@ -32,36 +32,7 @@ export default function TokenModal() {
   const { connectAsync } = useConnect();
   const { steps, setSteps, memeData } = useMemeClient();
 
-  const handleApprove = async () => {
-    setLoading(true);
-    try {
-      if (!address) {
-        await connectAsync({
-          chainId: bscTestnet.id,
-          connector: injected(),
-        });
-      }
 
-      const approve = await writeContractAsync({
-        chainId: bscTestnet.id,
-        chain: undefined,
-        account: address,
-        address: contractAddress /* content?.tokenAddress */,
-        abi: erc20Abi,
-        functionName: "approve",
-        args: [
-          contractAddress /* parseEther(formatEther(content?.totalSupply)) */,
-        ],
-      });
-      toast.success("Approved!");
-      // closeModal();
-    } catch (err) {
-      console.log(err);
-      toast.error("Something Went Wrong");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleCreateMeme = async () => {
     try {

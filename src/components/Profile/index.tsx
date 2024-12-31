@@ -7,7 +7,7 @@ import { SidebarDemo } from "@/components/Sidebar";
 import { Tag } from "@/components/ui/tag";
 import { PieChart } from "react-minimal-pie-chart";
 import WithdrawModal from "./WithdrawModal";
-import CreatedWar from "@/components/ui/inactive-war-card";
+import MyCreatedWar from "@/components/ui/my-created-war"
 import { toast } from "react-hot-toast";
 import { FaXTwitter } from "react-icons/fa6";
 // import { Button, InputNumber } from "antd";
@@ -187,7 +187,7 @@ const Profile = () => {
         <p className="font-semibold text-3xl text-secondary50">
           Explore More ⚔️
         </p>
-        <CreatedWar />
+        <MyCreatedWar />
       </div>
       <WithdrawModal />
     </SidebarDemo>

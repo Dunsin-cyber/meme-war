@@ -14,23 +14,66 @@ import {
   SelectValueText,
 } from "@/components/ui/select";
 import { Table } from "@chakra-ui/react";
-
-import { createWalletClient, http } from 'viem';
-import { bscTestnet } from 'viem/chains';
-
-
+import { useGetAMemeDetail, useGetTokenBalance } from "@/hooks/index";
+import { toast } from "react-hot-toast";
+import { formatEther, parseEther } from "viem";
+import { bscTestnet } from "viem/chains";
+import { useAccount, useWriteContract, useConnect } from "wagmi";
+import erc20Abi from "@/hooks/erc-20.json";
+import { config } from "@/utils/wagmi";
+import { injected } from "wagmi/connectors";
+import { useRouter } from "next/router";
 
 const Explore = () => {
   const chartContainerRef = React.useRef(null);
   const [active, setActive] = React.useState(true);
   const { setIsCreateModalOpen } = useClient();
+  const router = useRouter();
+  const { id } = router.query;
+  const { address } = useAccount();
+  const { data: data_, writeContractAsync } = useWriteContract({
+    config,
+  });
+  const { connectAsync } = useConnect();
 
-const walletClient = createWalletClient({
-  chain: bscTestnet,
-  transport: http(),
-});
+  const { data: memeDetail } = useGetAMemeDetail(id);
+  console.log("memeDetail", memeDetail);
 
+  const { data, error } = useGetTokenBalance(memeDetail && memeDetail[2]);
+  // if (data) {
+  console.log("token 1 contract balance", data);
+  // }
+  console.log("token contract error", error);
 
+  /* TOKEN TWO */
+    const { data:data2  } = useGetTokenBalance(memeDetail && memeDetail[3]);
+  // if (data) {
+  console.log("token  2 contract balance", data2);
+
+  const BuyToken = async (tokenAddress: `0x${string}`) => {
+    try {
+      if (!address) {
+        await connectAsync({
+          chainId: bscTestnet.id,
+          connector: injected(),
+        });
+      }
+      const data = await writeContractAsync({
+        chainId: bscTestnet.id,
+        address: memeDetail[2], // tokenAddress, // change to receipient address
+        functionName: "buyTokens",
+        abi: erc20Abi,
+        args: [parseEther("1")],
+        chain: undefined,
+        account: address,
+      });
+      toast.success("purchsed successfully");
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+      toast.error(err.message);
+    }
+  };
 
   React.useEffect(() => {
     if (chartContainerRef.current) {
@@ -151,7 +194,14 @@ const walletClient = createWalletClient({
               </div>
               {/* submit button */}
               <div className="flex justify-center">
-                <button className="btn bg-gray-700 ">Place Order</button>
+                <button
+                  className="btn bg-gray-700 "
+                  onClick={() =>
+                    BuyToken("0x0305631Ba091823Da01A488d150311ce34300ae7")
+                  }
+                >
+                  Place Order
+                </button>
               </div>
             </div>
 
@@ -196,9 +246,9 @@ const frameworks = createListCollection({
 });
 
 const items = [
-  { id: 1, name: "oxcvchdui...",  price: 999.99 },
-  { id: 2, name: "hsyusgushs...",  price: 49.99 },
+  { id: 1, name: "oxcvchdui...", price: 999.99 },
+  { id: 2, name: "hsyusgushs...", price: 49.99 },
   { id: 3, name: "ox23jejdjd...", price: 150.0 },
-  { id: 4, name: "xcosjsis..",  price: 799.99 },
-  { id: 5, name: "0kslmsksks.",  price: 199.99 },
+  { id: 4, name: "xcosjsis..", price: 799.99 },
+  { id: 5, name: "0kslmsksks.", price: 199.99 },
 ];

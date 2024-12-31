@@ -33,7 +33,7 @@ export const useCreateMemeContext = () => {
       description: ""
     });
 
-    console.log("memeData",memeData)
+    // console.log("memeData",memeData)
 
 
   return {
