@@ -35,7 +35,7 @@ const Profile = () => {
         toast.error(url.error);
         return;
       }
-      window.open(url.name, "_blank");
+      window.open(url.name);
     } catch (err) {
       console.log(err);
       toast.error(err.message);
@@ -55,14 +55,6 @@ const Profile = () => {
       const data_ = await data.json();
       console.log(data_)
       if (data_.error) {
-          if (data_.error.code === 429) {
-            const resetTime = data_.error.rateLimit.reset; // Reset time in seconds
-            const waitTime = (resetTime - Date.now() / 1000) * 1000; // Calculate wait time
-            console.log(`Rate limit exceeded. Retrying after ${waitTime} ms`);
-            toast.error(`Rate limit exceeded. Retrying after ${waitTime} ms`);
-            await delay(waitTime);
-            return handleGetUser(); // Retry the request
-          }
         toast.error(data_.error);
         return;
       }
@@ -71,11 +63,9 @@ const Profile = () => {
         name: data_.data.data.name,
         id: data_.data.data.id,
       };
-      // console.log("payload",payload)
       dispatch(addProfile(payload));
       console.log("user details from profile", data_);
     } catch (err) {
-
       console.log(err);
       toast.error(err.message);
     } finally {
@@ -103,8 +93,9 @@ const Profile = () => {
   };
 
   React.useEffect(() => {
-    console.log("called get user")
-    handleGetUser();
+    if(!userDetails) {
+      handleGetUser();
+    }
   }, []);
 
 

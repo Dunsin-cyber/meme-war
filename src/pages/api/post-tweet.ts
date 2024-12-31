@@ -6,7 +6,7 @@ import { TwitterApiRateLimitPlugin } from "@twitter-api-v2/plugin-rate-limit";
 
 type Data = {
   name?: string;
-  error?: string;
+  error?: any;
   data?: any;
 };
 
@@ -23,8 +23,9 @@ export default async function handler(
   const session = await getIronSession<SessionData>(req, res, sessionOptions);
   const rateLimitPlugin = new TwitterApiRateLimitPlugin();
 
-  if (req.method === "GET") {
+  if (req.method === "POST") {
     try {
+      const { post } = req.body;
       // Get the saved oauth_token_secret from session
       const accessToken = session.accessToken;
 
@@ -34,12 +35,15 @@ export default async function handler(
           .json({ error: "your session has expired, please login aagin" });
       }
 
-      const client = new TwitterApi(accessToken);
+      const client = new TwitterApi(accessToken, {
+        plugins: [rateLimitPlugin],
+      });
 
-      const user = await client.v2.me();
-      return res.status(200).json({ data: user });
+      const { data: createdTweet } = await client.v2.tweet(post.title, {
+        poll: { duration_minutes: 2, options: [post.option] },
+      });
+      return res.status(200).json({ data: createdTweet });
     } catch (error) {
-      console.log(error);
       if (
         error instanceof ApiResponseError &&
         error.rateLimitError &&
@@ -49,11 +53,13 @@ export default async function handler(
           error: `You just hit the X rate limit! Limit for this endpoint is ${error.rateLimit.limit} requests!, Request counter will reset at timestamp ${error.rateLimit.reset}.`,
         });
       }
-      return res.status(401).json({ error: "Error getting user details from X" });
+
+      console.log(error);
+      return res.status(401).json({ error: "Error creating the tweet" });
     }
   } else {
     // Handle unsupported HTTP methods
-    res.setHeader("Allow", ["GET"]);
+    res.setHeader("Allow", ["POST"]);
     res.status(405).json({ error: `Method ${req.method} not allowed` });
   }
 }

@@ -79,6 +79,11 @@ export default function TokenModal() {
         account: address,
       });
       setLoading(true);
+       const post = {
+         title: memeData.memeName,
+         option: memeData.milestone,
+       };
+       await handlePostOnX(post);
       toast.success("meme created");
         if (memeData.memeType === "meme") return setIsCreateModalOpen(false);
     } catch (err) {
@@ -115,6 +120,32 @@ export default function TokenModal() {
       setLoading(false);
     }
   };
+
+    const handlePostOnX = async (param: any) => {
+      try {
+        const post = {
+          title: param.name,
+          option: param.symbol,
+        };
+        const createPost = await fetch("/api/post-tweet", {
+          method: "POST",
+          body: JSON.stringify(post),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const data = await createPost.json();
+        if (data.error) {
+          toast.error(data.error)
+        }
+        toast.success("meme created on twitter")
+        console.log(data)
+        
+      } catch (err) {
+        toast.error(err.message);
+        console.log("[ERROR POSTING MEME ON X]", err);
+      }
+    };
 
   const handleSubmit = async () => {
   

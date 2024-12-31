@@ -1,8 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { TwitterApi } from "twitter-api-v2";
+import { ApiResponseError, TwitterApi } from "twitter-api-v2";
 import { getIronSession } from "iron-session";
 import { SessionData, sessionOptions } from "@/utils/session";
-// import { withSessionRoute } from "@/utils/session";
+import { TwitterApiRateLimitPlugin } from "@twitter-api-v2/plugin-rate-limit";
+
+
 type Data = {
   name?: string;
   error?: string;
@@ -22,6 +24,8 @@ export default async function handler(
 ) {
   const session = await getIronSession<SessionData>(req, res, sessionOptions);
   session.destroy();
+    const rateLimitPlugin = new TwitterApiRateLimitPlugin();
+
   if (req.method === "GET") {
     try {
       // const client = new TwitterApi({
@@ -31,6 +35,9 @@ export default async function handler(
       const client = new TwitterApi({
         clientId: CLIENT_ID,
         clientSecret: CLIENT_SECRET,
+      }, {
+        plugins: [rateLimitPlugin],
+
       });
 
       // By default, oauth/authenticate are used for auth links, you can change with linkMode
@@ -50,6 +57,15 @@ export default async function handler(
       return res.status(200).json({ name: url });
     } catch (error) {
       console.log(error);
+        if (
+              error instanceof ApiResponseError &&
+              error.rateLimitError &&
+              error.rateLimit
+            ) {
+              return res.status(401).json({
+                error: `You just hit the X rate limit! Limit for this endpoint is ${error.rateLimit.limit} requests!, Request counter will reset at timestamp ${error.rateLimit.reset}.`,
+              });
+            }
       return res.status(500).json({ error: "Error generating link" });
     }
   } else {

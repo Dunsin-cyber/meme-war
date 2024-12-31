@@ -38,7 +38,9 @@ export default function HoverEffect({ className }: { className?: string }) {
           key={Number(item?.id)}
           href={
             item.meme2URI
-              ? `/explore/${item?.id}`
+              ? item.isTokenWar
+                ? `/explore/${item?.id}`
+                : `/explore/meme-war/${item?.id}`
               : `explore/join-war/${item?.id}`
           }
           className="relative group  block p-2 h-full w-full"
@@ -88,36 +90,33 @@ export default function HoverEffect({ className }: { className?: string }) {
                 >
                   <Image width={200} src={item.meme1URI} />
                   {item.meme2URI.length > 10 && (
-
-                    
                     <div
-                    style={{
-                      position: "absolute",
-                      left: "50%",
-                      top: "50%",
-                      transform: "translate(-50%, -50%)",
-                      fontSize: "50px",
-                      fontWeight: "bold",
-                      color: "red",
-                      zIndex: 10,
-                    }}
+                      style={{
+                        position: "absolute",
+                        left: "50%",
+                        top: "50%",
+                        transform: "translate(-50%, -50%)",
+                        fontSize: "50px",
+                        fontWeight: "bold",
+                        color: "red",
+                        zIndex: 10,
+                      }}
                     >
-                    VS
-                  </div>
-                  )
-                  }
+                      VS
+                    </div>
+                  )}
                   {item.meme2URI.length > 10 ? (
                     <Image width={200} src={item.meme2URI} />
                   ) : (
                     <div className="flex justify-end">
-                    <button
-                      className="btn mt-2 px-3 mr-3 font-normal text-sm"
-                      onClick={() =>
-                        router.push(`/explore/join-war/${item.id}`)
-                      }
-                    >
-                      Join War
-                    </button>
+                      <button
+                        className="btn mt-2 px-3 mr-3 font-normal text-sm"
+                        onClick={() =>
+                          router.push(`/explore/join-war/${item.id}`)
+                        }
+                      >
+                        Join War
+                      </button>
                     </div>
                   )}
                 </Image.PreviewGroup>

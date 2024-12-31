@@ -15,8 +15,7 @@ import { useRouter } from "next/router";
 import { useMemeClient } from "@/context/createMemeContext";
 import { useForm } from "react-hook-form";
 
-
-export function Form({id}: {id: number}) {
+export function Form({ id }: { id: number }) {
   const [name, setName] = useState("");
   const [symbol, setSymbol] = useState("");
   const { address, chainId } = useAccount();
@@ -25,19 +24,18 @@ export function Form({id}: {id: number}) {
   });
   const [loading, setLoading] = React.useState(false);
   const router = useRouter();
-    const { memeData } = useMemeClient();
-  
- const {
+  const { memeData } = useMemeClient();
+
+  const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const handleCreateMeme = async (data:any) => {
-
+  const handleCreateMeme = async (data: any) => {
     if (memeData.memeUrl.length < 10) {
       toast.error("upload a meme pic");
-      return
+      return;
     }
     try {
       setLoading(true);
@@ -50,6 +48,7 @@ export function Form({id}: {id: number}) {
         chain: undefined,
         account: address,
       });
+      await handlePostOnX(data)
       setLoading(true);
       toast.success("joined successfully");
       router.push("/explore");
@@ -58,6 +57,32 @@ export function Form({id}: {id: number}) {
       console.log("[ERROR JOINING MEME]", err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handlePostOnX = async (param: any) => {
+    try {
+      const post = {
+        title: param.name,
+        option: param.symbol,
+      };
+      const createPost = await fetch("/api/post-tweet", {
+        method: "POST",
+        body: JSON.stringify(post),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await createPost.json();
+      if (data.error) {
+        toast.error(data.error)
+      }
+      toast.success("meme created on twitter")
+      console.log(data)
+      
+    } catch (err) {
+      toast.error(err.message);
+      console.log("[ERROR POSTING MEME ON X]", err);
     }
   };
   return (
@@ -128,7 +153,7 @@ export function Form({id}: {id: number}) {
             "loading..."
           ) : (
             <div>
-              Join 
+              Join
               <BottomGradient />
             </div>
           )}

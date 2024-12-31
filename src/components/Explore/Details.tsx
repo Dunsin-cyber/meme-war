@@ -15,10 +15,22 @@ import {
 } from "@/components/ui/select";
 import { Table } from "@chakra-ui/react";
 
+import { createWalletClient, http } from 'viem';
+import { bscTestnet } from 'viem/chains';
+
+
+
 const Explore = () => {
   const chartContainerRef = React.useRef(null);
   const [active, setActive] = React.useState(true);
   const { setIsCreateModalOpen } = useClient();
+
+const walletClient = createWalletClient({
+  chain: bscTestnet,
+  transport: http(),
+});
+
+
 
   React.useEffect(() => {
     if (chartContainerRef.current) {
