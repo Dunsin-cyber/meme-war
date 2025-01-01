@@ -71,7 +71,7 @@ const Explore = () => {
         address: selectedToken, // tokenAddress, // change to receipient address
         functionName: "buyTokens",
         abi: bep20Abi.abi,
-        args: [amount],
+        args: [parseEther(amount)],
         chain: undefined,
         account: address,
                             // 30        // 0.001       

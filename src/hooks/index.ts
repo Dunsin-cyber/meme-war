@@ -10,7 +10,7 @@ import { useAppDispatch } from "@/redux/hook";
 import { addToken1, addToken2 } from "@/redux/slice/TokenSlice";
 
 // export const contractAddress = "0xa414e73BA933bEEd29D765D69aDF3737a8504A6B";
-export const contractAddress = "0xD20B189A329930c1a3A0a8EFbB53fDa86307d5e5";
+export const contractAddress = "0xEFE4479B9056B6520831A4d5A7987A07e8dF3402";
 type ReturnType = {
   isLoading: boolean;
   data: any;
