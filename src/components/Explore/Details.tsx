@@ -83,15 +83,15 @@ const Explore = () => {
     try {
       setLogsFetching(false);
 
-      const unwatch = watchContractEvent(config, {
-        address: "0x6b175474e89094c44da98b954eedeac495271d0f",
-        abi:bep20Abi.abi,
-        eventName: "Transfer",
-        onLogs(logs: any) {
-          console.log("New logs!", logs);
-        },
-      });
-      unwatch();
+      // const unwatch = watchContractEvent(config, {
+      //   address: "0x6b175474e89094c44da98b954eedeac495271d0f",
+      //   abi:bep20Abi.abi,
+      //   eventName: "Transfer",
+      //   onLogs(logs: any) {
+      //     console.log("New logs!", logs);
+      //   },
+      // });
+      // unwatch();
     } catch (err) {
       console.log(err);
       toast.error(err.message);
