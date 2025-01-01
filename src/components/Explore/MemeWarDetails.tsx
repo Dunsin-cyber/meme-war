@@ -26,7 +26,7 @@ function MemeWarDetails({ id }: { id: string }) {
             </p> */}
               <img src={data[4]} alt="meme" className="h-[300px] w-[300px]" />
               {/* description */}
-              <p className="text-gray-400">{data[11]}</p>
+              <p className="text-gray-400">{data[13]}</p>
               {/* stat */}
               <div className="flex flex-row justify-between gap-y-3">
                 <div className=" flex-1 gap-y-3">
@@ -44,7 +44,7 @@ function MemeWarDetails({ id }: { id: string }) {
                   </p>
                   <div className="flex-1 gap-x-5">
                     <Tag color="yellow.500">
-                      {Number(data[7]).toLocaleString()}
+                      {Number(data[9]).toLocaleString()}
                     </Tag>
                   </div>
                 </div>
@@ -73,7 +73,7 @@ function MemeWarDetails({ id }: { id: string }) {
               <div className="flex justify-center mt-3 text-2xl">
                 <div className="flex gap-7 z-[100] items-center">
                   vote here ▶
-                  <a href="#" target="_blank" rel="Suii Twitter">
+                  <a href={data[6]} target="_blank" rel="meme war Twitter">
                     <FaXTwitter />
                   </a>
                 </div>
@@ -101,7 +101,7 @@ function MemeWarDetails({ id }: { id: string }) {
             </p> */}
                 <img src={data[5]} alt="meme" className="h-[300px] w-[300px]" />
                 {/* description */}
-                <p className="text-gray-400">{data[11]}</p>
+                <p className="text-gray-400">{data[13]}</p>
                 {/* stat */}
                 <div className="flex flex-row justify-between gap-y-3">
                   <div className=" flex-1 gap-y-3">
@@ -119,7 +119,7 @@ function MemeWarDetails({ id }: { id: string }) {
                     </p>
                     <div className="flex-1 gap-x-5">
                       <Tag color="yellow.500">
-                        {Number(data[7]).toLocaleString()}
+                        {Number(data[9]).toLocaleString()}
                       </Tag>
                     </div>
                   </div>
@@ -148,7 +148,7 @@ function MemeWarDetails({ id }: { id: string }) {
                 <div className="flex justify-center mt-3">
                   <div className="flex gap-7 z-[100] items-center">
                   vote here ▶
-                  <a href="#" target="_blank" rel="Suii Twitter">
+                  <a href={data[7]} target="_blank" rel="Suii Twitter">
                     <FaXTwitter />
                   </a>
                 </div>

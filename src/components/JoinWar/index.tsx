@@ -28,7 +28,7 @@ function JoinWar ({id}: {id: string}) {
             </p> */}
               <img src={data[4]} alt="meme" className="h-[300px] w-[300px]" />
               {/* description */}
-              <p className="text-gray-400">{data[11]}</p>
+              <p className="text-gray-400">{data[13]}</p>
               {/* stat */}
               <div className="flex flex-row justify-between gap-y-3">
                 <div className=" flex-1 gap-y-3">
@@ -46,7 +46,7 @@ function JoinWar ({id}: {id: string}) {
                   </p>
                   <div className="flex-1 gap-x-5">
                     <Tag color="yellow.500">
-                      {Number(formatEther(data[6])).toLocaleString()}
+                      {Number(formatEther(data[8])).toLocaleString()}
                     </Tag>
                   </div>
                 </div>

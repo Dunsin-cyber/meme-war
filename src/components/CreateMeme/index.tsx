@@ -21,6 +21,7 @@ import CreateToken from "./CreateToken";
 import SelectType from "./SelectType";
 import erc20Abi from "@/hooks/erc-20.json";
 import { bscTestnet } from "wagmi/chains";
+import { useAppSelector } from "@/redux/hook";
 
 export default function TokenModal() {
   const { isCreateModalOpen, setIsCreateModalOpen } = useClient();
@@ -30,8 +31,9 @@ export default function TokenModal() {
     config,
   });
   const { connectAsync } = useConnect();
-  const { steps, setSteps, memeData } = useMemeClient();
-
+  const { steps, setSteps, memeData, setMemeData } = useMemeClient();
+    const userDetails = useAppSelector((state) => state.profile);
+  
 
 
   const handleCreateMeme = async () => {
@@ -50,11 +52,6 @@ export default function TokenModal() {
         account: address,
       });
       setLoading(true);
-       const post = {
-         title: memeData.memeName,
-         option: memeData.milestone,
-       };
-       await handlePostOnX(post);
       toast.success("meme created");
         if (memeData.memeType === "meme") return setIsCreateModalOpen(false);
     } catch (err) {
@@ -67,6 +64,13 @@ export default function TokenModal() {
 
   const handleCreateMemeToken = async () => {
     try {
+         const post = {
+           title: memeData.memeName + "(FROM MEME WAR)",
+           option: memeData.tokenSymbol,
+           option2: "Vote Against Me",
+         };
+       const url = await handlePostOnX(post);
+         console.log("MEMEDATA",url)
         const data = await writeContractAsync({
           chainId: bscTestnet.id,
           address: contractAddress, // change to receipient address
@@ -78,6 +82,7 @@ export default function TokenModal() {
             parseEther(memeData.saleTarget.toString()),
             memeData.memeUrl,
             memeData.description,
+            url,
           ],
           chain: undefined,
           account: address,
@@ -95,13 +100,10 @@ export default function TokenModal() {
 
     const handlePostOnX = async (param: any) => {
       try {
-        const post = {
-          title: param.name,
-          option: param.symbol,
-        };
+        const username = localStorage.getItem("xname")
         const createPost = await fetch("/api/post-tweet", {
           method: "POST",
-          body: JSON.stringify(post),
+          body: JSON.stringify(param),
           headers: {
             "Content-Type": "application/json",
           },
@@ -112,7 +114,9 @@ export default function TokenModal() {
         }
         toast.success("meme created on twitter")
         console.log(data)
-        
+        const url = `https://x/com/${username}/status/${data?.data?.id}`;
+        // setMemeData({...memeData, meme1Twitter: url })
+        return url
       } catch (err) {
         toast.error(err.message);
         console.log("[ERROR POSTING MEME ON X]", err);

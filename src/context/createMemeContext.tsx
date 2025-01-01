@@ -30,7 +30,9 @@ export const useCreateMemeContext = () => {
       memeId: "",
       saleTarget: 0,
       pointTarget: 0,
-      description: ""
+      description: "",
+      meme1Twitter:"",
+      meme2Twitter: "" 
     });
 
     // console.log("memeData",memeData)

@@ -58,6 +58,7 @@ const Profile = () => {
         toast.error(data_.error);
         return;
       }
+      localStorage.setItem("xname",data_.data.data.username)
       const payload = {
         username: data_.data.data.username,
         name: data_.data.data.name,
@@ -123,19 +124,19 @@ const Profile = () => {
           <div className="flex justify-between">
             <div className="flex space-x-6 items-center">
               <div className="flex flex-col space-y-4 mt-3 max-w-[120px]">
-                <Tag color="#E38627">BONKIMI - 0.002</Tag>
-                <Tag color="#C13C37">SOLANA - 0.002</Tag>
-                <Tag color="#6A2135">KAPA - 0.002</Tag>
-                <Tag color="blue">LMAP - 0.004</Tag>
+                <Tag color="#E38627">FLOKI - 0.002</Tag>
+                <Tag color="#C13C37">CATBAG - 0.002</Tag>
+                {/* <Tag color="#6A2135">KAPA - 0.002</Tag>
+                <Tag color="blue">LMAP - 0.004</Tag> */}
               </div>
               {/* pie chart */}
               <PieChart
                 className="w-[120px] h-[120px]"
                 data={[
-                  { title: "BONKIMI", value: 20, color: "#E38627" },
-                  { title: "SOLANA", value: 20, color: "#C13C37" },
-                  { title: "KAPA", value: 20, color: "#6A2135" },
-                  { title: "LMAP", value: 40, color: "blue" },
+                  { title: "FLOKI", value: 50, color: "#E38627" },
+                  { title: "CATBAG", value: 50, color: "#C13C37" },
+                  // { title: "KAPA", value: 20, color: "#6A2135" },
+                  // { title: "LMAP", value: 40, color: "blue" },
                 ]}
               />
             </div>

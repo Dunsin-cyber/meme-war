@@ -24,7 +24,7 @@ export function Form({ id }: { id: number }) {
   });
   const [loading, setLoading] = React.useState(false);
   const router = useRouter();
-  const { memeData } = useMemeClient();
+  const { memeData, setMemeData } = useMemeClient();
   const { connectAsync } = useConnect();
 
   const {
@@ -44,22 +44,28 @@ export function Form({ id }: { id: number }) {
             });
           }
 
-    try {
-      setLoading(true);
-      await writeContractAsync({
-        chainId: bscTestnet.id,
-        address: contractAddress,
-        functionName: "acceptMemeWar",
-        abi: contractAbi,
-        args: [id, data.name, data.symbol, memeData.memeUrl],
-        chain: undefined,
-        account: address,
-      });
-      // await handlePostOnX(data)
-      setLoading(false);
-      toast.success("joined successfully");
-      router.push("/explore");
-    } catch (err) {
+          try {
+            const post = {
+              title: data.name + "(FROM MEME WAR)",
+              option: data.symbol,
+              option2: "VOTE AGAINST ME",
+            };
+           const url = await handlePostOnX(post)
+            
+            setLoading(true);
+            await writeContractAsync({
+              chainId: bscTestnet.id,
+              address: contractAddress,
+              functionName: "acceptMemeWar",
+              abi: contractAbi,
+              args: [id, data.name, data.symbol, memeData.memeUrl, url],
+              chain: undefined,
+              account: address,
+            });
+            setLoading(false);
+            toast.success("joined successfully");
+            router.push("/explore");
+          } catch (err) {
       toast.error(err.message);
       console.log("[ERROR JOINING MEME]", err);
     } finally {
@@ -69,29 +75,24 @@ export function Form({ id }: { id: number }) {
 
   const handlePostOnX = async (param: any) => {
     try {
-      // const post = {
-      //   title: param.name,
-      //   option: param.symbol,
-      // };
-        const post = {
-          title: "POST",
-          option: "Vote Kloki",
-          option2: "votr floki ooo"
-        };
+        const username = localStorage.getItem("xname")
+
       const createPost = await fetch("/api/post-tweet", {
         method: "POST",
-        body: JSON.stringify(post),
+        body: JSON.stringify(param),
         headers: {
           "Content-Type": "application/json",
         },
       });
       const data = await createPost.json();
       if (data.error) {
-        toast.error(data.error)
+        toast.error(data.error);
       }
-      toast.success("meme created on twitter")
-      console.log(data)
-      
+      toast.success("meme created on twitter");
+      console.log(data);
+      const url = `https://x/com/${username}/status/${data?.data?.id}`;
+      // setMemeData({...memeData, meme2Twitter: url })
+        return url
     } catch (err) {
       toast.error(err.message);
       console.log("[ERROR POSTING MEME ON X]", err);
