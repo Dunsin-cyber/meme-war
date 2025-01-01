@@ -10,7 +10,7 @@ import { useAppDispatch } from "@/redux/hook";
 import { addToken1, addToken2 } from "@/redux/slice/TokenSlice";
 
 // export const contractAddress = "0xa414e73BA933bEEd29D765D69aDF3737a8504A6B";
-export const contractAddress = "0x6eebBa28dBb953E5E0976f368777dDbcb69B0E14";
+export const contractAddress = "0x358784E27b1dbC0f39af89D80B0ed796977f9137";
 type ReturnType = {
   isLoading: boolean;
   data: any;
@@ -32,6 +32,20 @@ export const useGetTokenBalance = (tokenAddress:`0x${string}`) => {
      error,
    };
 }
+export const useCalculatePrice = (tokenAddress: `0x${string}`) => {
+  const { data, error } = useReadContract({
+    abi: bep20Abi.abi,
+    address: tokenAddress,
+    functionName: "calculatePrice",
+    args: [],
+  });
+
+  return {
+    isLoading: !data && !error,
+    data: data as any,
+    error,
+  };
+};
 
 
 export const useGetTokenDetails = (
@@ -58,13 +72,27 @@ export const useGetTokenDetails = (
     functionName: "decimals",
   });
 
-  // UseEffect to dispatch only when the data changes
+    const { data:price } = useReadContract({
+      abi: bep20Abi.abi,
+      address: tokenAddress,
+      functionName: "calculatePrice",
+      args: [],
+    });
+
+    
+    // UseEffect to dispatch only when the data changes
   useEffect(() => {
-    if (typeof name === "string" && typeof symbol === "string") {
+    if (
+      typeof name === "string" &&
+      typeof symbol === "string" &&
+      typeof price === "bigint"
+    ) {
+      console.log("PRICEEEE",(Number(price)/ 10 ** 18));
       const param = {
         address: tokenAddress,
         name,
         symbol,
+        price:formatEther(price)
       };
 
       if (tokenIndex === 1) {

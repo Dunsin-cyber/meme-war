@@ -9,6 +9,7 @@ import { Table } from "@chakra-ui/react";
 import {
   useGetAMemeDetail,
   useGetTokenDetails,
+  useCalculatePrice,
 } from "@/hooks/index";
 import { toast } from "react-hot-toast";
 import { formatEther, parseEther } from "viem";
@@ -51,8 +52,14 @@ const Explore = () => {
   const BuyToken = async () => {
     try {
       setLoading(true);
+      const foundToken = [tokens.token1, tokens.token2].find(
+        (token) => token?.address === selectedToken
+      );
+      console.log("HELLO", parseEther((+amount * +foundToken.price).toString()))
       if (!amount || !selectedToken || (!amount && !selectedToken)) {
         return toast.error("please select token to buy and amount");
+      } else if (!foundToken) {
+        return toast.error("Could not find token");
       } else if (!address) {
         await connectAsync({
           chainId: bscTestnet.id,
@@ -67,6 +74,8 @@ const Explore = () => {
         args: [parseEther(amount)],
         chain: undefined,
         account: address,
+                            // 30        // 0.001       
+        value: parseEther((+amount * +foundToken.price).toString()),
       });
       toast.success("purchsed successfully");
       setAmount("");
