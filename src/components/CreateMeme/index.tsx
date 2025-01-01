@@ -75,9 +75,10 @@ export default function TokenModal() {
           args: [
             memeData.tokenName,
             memeData.tokenSymbol,
-            memeData.saleTarget,
+            parseEther(memeData.saleTarget.toString()),
             memeData.memeUrl,
-            memeData.description],
+            memeData.description,
+          ],
           chain: undefined,
           account: address,
         });

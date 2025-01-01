@@ -4,7 +4,7 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { cn } from "@/components/lib/utils";
 import UploadPic from "@/components/CreateMeme/UploadMeme";
-import { useAccount, useWriteContract } from "wagmi";
+import { useAccount, useWriteContract, useConnect } from "wagmi";
 import { bscTestnet } from "wagmi/chains";
 import { config } from "../../utils/wagmi";
 import { injected } from "wagmi/connectors";
@@ -25,6 +25,7 @@ export function Form({ id }: { id: number }) {
   const [loading, setLoading] = React.useState(false);
   const router = useRouter();
   const { memeData } = useMemeClient();
+  const { connectAsync } = useConnect();
 
   const {
     register,
@@ -37,6 +38,12 @@ export function Form({ id }: { id: number }) {
       toast.error("upload a meme pic");
       return;
     }
+       if (!address) {
+            await connectAsync({
+              connector: injected(),
+            });
+          }
+
     try {
       setLoading(true);
       await writeContractAsync({

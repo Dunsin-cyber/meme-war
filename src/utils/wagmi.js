@@ -30,9 +30,7 @@ export const config = getDefaultConfig({
   appName: "meme war",
   projectId: "YOUR_PROJECT_ID",
   chains: [
-    // opBNBTestnet,
     bscTestnet,
-    // bleTestnet,
     ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true"
       ? [ bscTestnet]
       : []),
@@ -40,6 +38,16 @@ export const config = getDefaultConfig({
   ssr: true,
 });
 
+
+// import { http, createConfig } from "@wagmi/core";
+// import { mainnet, sepolia } from "@wagmi/core/chains";
+
+// export const config_ = createConfig({
+//   chains: [bscTestnet],
+//   transports: {
+//     [bscTestnet.id]: http()
+//   },
+// });
 /* 
 - dahboard shows lists of public agents
 - manage agents shows list of my agents and allows me to create a new one

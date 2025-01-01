@@ -5,30 +5,27 @@ import { SidebarDemo } from "@/components/Sidebar";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { createListCollection } from "@chakra-ui/react";
 import { createChart } from "lightweight-charts";
-import {
-  SelectContent,
-  SelectItem,
-  SelectLabel,
-  SelectRoot,
-  SelectTrigger,
-  SelectValueText,
-} from "@/components/ui/select";
 import { Table } from "@chakra-ui/react";
 import {
   useGetAMemeDetail,
-  useGetTokenBalance,
   useGetTokenDetails,
 } from "@/hooks/index";
 import { toast } from "react-hot-toast";
 import { formatEther, parseEther } from "viem";
 import { bscTestnet } from "viem/chains";
-import { useAccount, useWriteContract, useConnect } from "wagmi";
+import {
+  useAccount,
+  useWriteContract,
+  useConnect,
+  useWatchContractEvent,
+} from "wagmi";
 import bep20Abi from "@/hooks/bep-20.json";
 import { config } from "@/utils/wagmi";
 import { injected } from "wagmi/connectors";
 import { useRouter } from "next/router";
 import { useAppSelector } from "@/redux/hook";
 import { Select, Input, Button } from "antd";
+import { watchContractEvent } from "viem/actions";
 
 const Explore = () => {
   const chartContainerRef = React.useRef(null);
@@ -45,6 +42,7 @@ const Explore = () => {
   const [amount, setAmount] = React.useState<string>("");
   const [loading, setLoading] = React.useState(false);
   const { data: memeDetail } = useGetAMemeDetail(id);
+  const [logsFetching, setLogsFetching] = React.useState(false);
   console.log("memeDetail", memeDetail);
 
   useGetTokenDetails(1, memeDetail && memeDetail[2]);
@@ -53,7 +51,7 @@ const Explore = () => {
   const BuyToken = async () => {
     try {
       setLoading(true);
-      if (!amount || !selectedToken || !amount && !selectedToken) {
+      if (!amount || !selectedToken || (!amount && !selectedToken)) {
         return toast.error("please select token to buy and amount");
       } else if (!address) {
         await connectAsync({
@@ -71,7 +69,7 @@ const Explore = () => {
         account: address,
       });
       toast.success("purchsed successfully");
-      setAmount("")
+      setAmount("");
       console.log(data);
     } catch (err) {
       console.log(err);
@@ -80,6 +78,30 @@ const Explore = () => {
       setLoading(false);
     }
   };
+
+  const GetTokenLogs = async () => {
+    try {
+      setLogsFetching(false);
+
+      const unwatch = watchContractEvent(config, {
+        address: "0x6b175474e89094c44da98b954eedeac495271d0f",
+        abi:bep20Abi.abi,
+        eventName: "Transfer",
+        onLogs(logs: any) {
+          console.log("New logs!", logs);
+        },
+      });
+      unwatch();
+    } catch (err) {
+      console.log(err);
+      toast.error(err.message);
+    } finally {
+      setLogsFetching(false);
+    }
+  };
+  React.useEffect(() => {
+    GetTokenLogs();
+  }, []);
 
   React.useEffect(() => {
     if (chartContainerRef.current) {
@@ -218,7 +240,11 @@ const Explore = () => {
               </div>
               {/* submit button */}
               <div className="flex justify-center">
-                <Button loading={loading} className="btn bg-gray-700 " onClick={() => BuyToken()}>
+                <Button
+                  loading={loading}
+                  className="btn bg-gray-700 "
+                  onClick={() => BuyToken()}
+                >
                   Place Order
                 </Button>
               </div>
