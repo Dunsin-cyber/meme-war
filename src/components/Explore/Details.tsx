@@ -12,7 +12,7 @@ import {
   useCalculatePrice,
 } from "@/hooks/index";
 import { toast } from "react-hot-toast";
-import { formatEther, parseEther } from "viem";
+import { formatEther, parseAbiItem, parseEther } from "viem";
 import { bscTestnet } from "viem/chains";
 import {
   useAccount,
@@ -27,6 +27,7 @@ import { useRouter } from "next/router";
 import { useAppSelector } from "@/redux/hook";
 import { Select, Input, Button } from "antd";
 import { watchContractEvent } from "viem/actions";
+import { createPublicClient, http } from "viem";
 
 const Explore = () => {
   const chartContainerRef = React.useRef(null);
@@ -45,6 +46,7 @@ const Explore = () => {
   const { data: memeDetail } = useGetAMemeDetail(id);
   const [logsFetching, setLogsFetching] = React.useState(false);
   console.log("memeDetail", memeDetail);
+  
 
   useGetTokenDetails(1, memeDetail && memeDetail[2]);
   useGetTokenDetails(2, memeDetail && memeDetail[3]);
@@ -55,7 +57,10 @@ const Explore = () => {
       const foundToken = [tokens.token1, tokens.token2].find(
         (token) => token?.address === selectedToken
       );
-      console.log("HELLO", parseEther((+amount * +foundToken.price).toString()))
+      console.log(
+        "HELLO",
+        parseEther((+amount * +foundToken.price).toString())
+      );
       if (!amount || !selectedToken || (!amount && !selectedToken)) {
         return toast.error("please select token to buy and amount");
       } else if (!foundToken) {
@@ -74,7 +79,7 @@ const Explore = () => {
         args: [parseEther(amount)],
         chain: undefined,
         account: address,
-                            // 30        // 0.001       
+        // 30        // 0.001
         value: parseEther((+amount * +foundToken.price).toString()),
       });
       toast.success("purchsed successfully");
@@ -88,9 +93,27 @@ const Explore = () => {
     }
   };
 
+  const publicClient = createPublicClient({
+    chain: bscTestnet,
+    transport: http(),
+  });
+
   const GetTokenLogs = async () => {
     try {
-      setLogsFetching(false);
+      if (tokens.token1) {
+        setLogsFetching(false);
+        const logs = await publicClient.watchContractEvent({
+          address: tokens?.token1?.address,
+          abi: bep20Abi.abi,
+          onLogs: (logs) => console.log(logs),
+          eventName: "Transfer",
+          // event: parseAbiItem(
+          //   "event Transfer(address indexed from, address indexed to, uint256 value)"
+          // ),
+        });
+
+        console.log("LOGSSSSSSSSSSSS", logs);
+      }
 
       // const unwatch = watchContractEvent(config, {
       //   address: "0x6b175474e89094c44da98b954eedeac495271d0f",
@@ -110,7 +133,7 @@ const Explore = () => {
   };
   React.useEffect(() => {
     GetTokenLogs();
-  }, []);
+  }, [tokens]);
 
   React.useEffect(() => {
     if (chartContainerRef.current) {
@@ -130,16 +153,16 @@ const Explore = () => {
       });
 
       areaSeries.setData([
-        { time: "2018-12-22", value: 32.51 },
-        { time: "2018-12-23", value: 31.11 },
-        { time: "2018-12-24", value: 27.02 },
-        { time: "2018-12-25", value: 27.32 },
-        { time: "2018-12-26", value: 25.17 },
-        { time: "2018-12-27", value: 28.89 },
-        { time: "2018-12-28", value: 25.46 },
-        { time: "2018-12-29", value: 23.92 },
-        { time: "2018-12-30", value: 22.68 },
-        { time: "2018-12-31", value: 22.67 },
+        { time: "2024-12-22", value: 32.51 },
+        { time: "2024-12-23", value: 31.11 },
+        { time: "2024-12-24", value: 27.02 },
+        { time: "2024-12-25", value: 27.32 },
+        { time: "2024-12-26", value: 25.17 },
+        { time: "2024-12-27", value: 28.89 },
+        { time: "2024-12-28", value: 25.46 },
+        { time: "2024-12-29", value: 23.92 },
+        { time: "2024-12-30", value: 22.68 },
+        { time: "2024-12-31", value: 22.67 },
       ]);
 
       const areaSeries_ = chart.addAreaSeries({
@@ -149,20 +172,20 @@ const Explore = () => {
       });
 
       areaSeries_.setData([
-        { time: "2018-12-22", value: 32.51 },
-        { time: "2018-12-23", value: 31.11 },
-        { time: "2018-12-24", value: 27.02 },
-        { time: "2018-12-25", value: 37.32 },
-        { time: "2018-12-26", value: 35.17 },
-        { time: "2018-12-27", value: 38.89 },
-        { time: "2018-12-28", value: 25.46 },
-        { time: "2018-12-29", value: 23.92 },
-        { time: "2018-12-30", value: 22.68 },
-        { time: "2018-12-31", value: 22.67 },
-        { time: "2019-01-01", value: 35.46 },
-        { time: "2019-01-02", value: 33.92 },
-        { time: "2019-01-03", value: 32.68 },
-        { time: "2019-01-04", value: 32.67 },
+        { time: "2024-12-22", value: 32.51 },
+        { time: "2024-12-23", value: 31.11 },
+        { time: "2024-12-24", value: 27.02 },
+        { time: "2024-12-25", value: 37.32 },
+        { time: "2024-12-26", value: 35.17 },
+        { time: "2024-12-27", value: 38.89 },
+        { time: "2024-12-28", value: 25.46 },
+        { time: "2024-12-29", value: 23.92 },
+        { time: "2024-12-30", value: 22.68 },
+        { time: "2024-12-31", value: 22.67 },
+        { time: "2025-01-01", value: 35.46 },
+        { time: "2025-01-02", value: 33.92 },
+        { time: "2025-01-03", value: 32.68 },
+        { time: "2025-01-04", value: 32.67 },
       ]);
 
       return () => {
@@ -184,10 +207,33 @@ const Explore = () => {
           <span className="text-[#28A745]">{tokens?.token2?.name}</span>
         </div>
         <div className="flex flex-col md:flex-row">
-          <div
-            className="mt-5 w-full  md:w-[70%] h-[70vh]"
-            ref={chartContainerRef}
-          ></div>
+          <div className="mt-5 w-full  md:w-[70%]">
+            <div className=" h-[70vh]" ref={chartContainerRef}></div>
+            <div className="flex justify-between mt-2">
+              <p
+                className="cursor-pointer"
+                onClick={() =>
+                  window.open(
+                    `https://testnet.bscscan.com/address/${tokens?.token1?.address}`,
+                    "_blank"
+                  )
+                }
+              >
+                View {tokens?.token1?.name} on Explorer
+              </p>
+              <p
+                className="cursor-pointer"
+                onClick={() =>
+                  window.open(
+                    `https://testnet.bscscan.com/address/${tokens?.token2?.address}`,
+                    "_blank"
+                  )
+                }
+              >
+                View {tokens?.token2?.name} on Explorer
+              </p>
+            </div>
+          </div>
 
           {/* right hand side */}
           <div className="flex flex-col mx-auto w-full   md:w-[25%]">
