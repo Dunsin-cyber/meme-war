@@ -4,3 +4,17 @@ name: string;
 id: string
 }
 
+
+export interface TokenDetail {
+  address: `0x${string}`;
+  name: string;
+  symbol: string;
+}
+
+export interface Token {
+    token1: TokenDetail
+    token2: TokenDetail
+}
+
+
+

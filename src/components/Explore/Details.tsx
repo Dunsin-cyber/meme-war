@@ -3,7 +3,7 @@ import React from "react";
 import { useClient } from "@/context";
 import { SidebarDemo } from "@/components/Sidebar";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { Input, createListCollection } from "@chakra-ui/react";
+import { createListCollection } from "@chakra-ui/react";
 import { createChart } from "lightweight-charts";
 import {
   SelectContent,
@@ -14,20 +14,26 @@ import {
   SelectValueText,
 } from "@/components/ui/select";
 import { Table } from "@chakra-ui/react";
-import { useGetAMemeDetail, useGetTokenBalance } from "@/hooks/index";
+import {
+  useGetAMemeDetail,
+  useGetTokenBalance,
+  useGetTokenDetails,
+} from "@/hooks/index";
 import { toast } from "react-hot-toast";
 import { formatEther, parseEther } from "viem";
 import { bscTestnet } from "viem/chains";
 import { useAccount, useWriteContract, useConnect } from "wagmi";
-import erc20Abi from "@/hooks/erc-20.json";
+import bep20Abi from "@/hooks/bep-20.json";
 import { config } from "@/utils/wagmi";
 import { injected } from "wagmi/connectors";
 import { useRouter } from "next/router";
+import { useAppSelector } from "@/redux/hook";
+import { Select, Input, Button } from "antd";
 
 const Explore = () => {
   const chartContainerRef = React.useRef(null);
   const [active, setActive] = React.useState(true);
-  const { setIsCreateModalOpen } = useClient();
+  const tokens = useAppSelector((state) => state.token);
   const router = useRouter();
   const { id } = router.query;
   const { address } = useAccount();
@@ -35,24 +41,21 @@ const Explore = () => {
     config,
   });
   const { connectAsync } = useConnect();
-
+  const [selectedToken, setSelectedToken] = React.useState<`0x${string}`>();
+  const [amount, setAmount] = React.useState<string>("");
+  const [loading, setLoading] = React.useState(false);
   const { data: memeDetail } = useGetAMemeDetail(id);
   console.log("memeDetail", memeDetail);
 
-  const { data, error } = useGetTokenBalance(memeDetail && memeDetail[2]);
-  // if (data) {
-  console.log("token 1 contract balance", data);
-  // }
-  console.log("token contract error", error);
+  useGetTokenDetails(1, memeDetail && memeDetail[2]);
+  useGetTokenDetails(2, memeDetail && memeDetail[3]);
 
-  /* TOKEN TWO */
-    const { data:data2  } = useGetTokenBalance(memeDetail && memeDetail[3]);
-  // if (data) {
-  console.log("token  2 contract balance", data2);
-
-  const BuyToken = async (tokenAddress: `0x${string}`) => {
+  const BuyToken = async () => {
     try {
-      if (!address) {
+      setLoading(true);
+      if (!amount || !selectedToken || !amount && !selectedToken) {
+        return toast.error("please select token to buy and amount");
+      } else if (!address) {
         await connectAsync({
           chainId: bscTestnet.id,
           connector: injected(),
@@ -60,18 +63,21 @@ const Explore = () => {
       }
       const data = await writeContractAsync({
         chainId: bscTestnet.id,
-        address: memeDetail[2], // tokenAddress, // change to receipient address
+        address: selectedToken, // tokenAddress, // change to receipient address
         functionName: "buyTokens",
-        abi: erc20Abi,
-        args: [parseEther("1")],
+        abi: bep20Abi.abi,
+        args: [parseEther(amount)],
         chain: undefined,
         account: address,
       });
       toast.success("purchsed successfully");
+      setAmount("")
       console.log(data);
     } catch (err) {
       console.log(err);
       toast.error(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -143,8 +149,8 @@ const Explore = () => {
         </div>
 
         <div>
-          <span className="text-[#2962FF]">RAGNER</span> vs{" "}
-          <span className="text-[#28A745]">FLOKI</span>
+          <span className="text-[#2962FF]">{tokens?.token1?.name}</span> vs{" "}
+          <span className="text-[#28A745]">{tokens?.token2?.name}</span>
         </div>
         <div className="flex flex-col md:flex-row">
           <div
@@ -174,34 +180,47 @@ const Explore = () => {
                   SELL
                 </button>
               </div>
-              <div className="flex">
-                <SelectRoot collection={frameworks}>
-                  <SelectLabel>Token</SelectLabel>
-                  <SelectTrigger>
-                    <SelectValueText placeholder="Select token" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {frameworks.items.map((movie) => (
-                      <SelectItem item={movie} key={movie.value}>
-                        {movie.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </SelectRoot>
+              <div className="flex w-full ">
+                {tokens.token1 && tokens.token2 && (
+                  <Select
+                    className="w-full"
+                    showSearch
+                    placeholder="Select Token"
+                    onChange={(token) => setSelectedToken(token)}
+                    filterOption={(input, option) =>
+                      (option?.label ?? "")
+                        .toLowerCase()
+                        .includes(input.toLowerCase())
+                    }
+                    options={[
+                      {
+                        value: tokens?.token1?.address,
+                        label: tokens?.token1?.name,
+                      },
+                      {
+                        value: tokens?.token2?.address,
+                        label: tokens?.token2?.name,
+                      },
+                    ]}
+                  />
+                )}
               </div>
               <div>
-                <Input width="full" placeholder="0.00" variant="outline" />
+                <Input
+                  type="number"
+                  placeholder="0.00"
+                  name="pointTarget"
+                  value={amount}
+                  onChange={(e) => {
+                    setAmount(e.target.value);
+                  }}
+                />
               </div>
               {/* submit button */}
               <div className="flex justify-center">
-                <button
-                  className="btn bg-gray-700 "
-                  onClick={() =>
-                    BuyToken("0x0305631Ba091823Da01A488d150311ce34300ae7")
-                  }
-                >
+                <Button loading={loading} className="btn bg-gray-700 " onClick={() => BuyToken()}>
                   Place Order
-                </button>
+                </Button>
               </div>
             </div>
 

@@ -2,11 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useWriteContract, useReadContract } from "wagmi";
 import contractAbi from "@/hooks/abi.json";
 import erc20Abi from "@/hooks/erc-20.json"
+import bep20Abi from "@/hooks/bep-20.json"
 import type { Address } from "viem";
 import { config } from "@/utils/wagmi";
 import { formatEther } from "viem";
+import { useAppDispatch } from "@/redux/hook";
+import { addToken1, addToken2 } from "@/redux/slice/TokenSlice";
 
-export const contractAddress = "0x6eebBa28dBb953E5E0976f368777dDbcb69B0E14";
+export const contractAddress = "0xa414e73BA933bEEd29D765D69aDF3737a8504A6B";
 
 type ReturnType = {
   isLoading: boolean;
@@ -30,9 +33,57 @@ export const useGetTokenBalance = (tokenAddress:`0x${string}`) => {
    };
 }
 
-export const useBuyToken = () => {
 
-}
+export const useGetTokenDetails = (
+  tokenIndex: number,
+  tokenAddress: `0x${string}`
+) => {
+  const dispatch = useAppDispatch();
+
+  const { data: name } = useReadContract({
+    address: tokenAddress,
+    abi: bep20Abi.abi,
+    functionName: "name",
+  });
+
+  const { data: symbol } = useReadContract({
+    address: tokenAddress,
+    abi: bep20Abi.abi,
+    functionName: "symbol",
+  });
+
+  const { data: decimals } = useReadContract({
+    address: tokenAddress,
+    abi: bep20Abi.abi,
+    functionName: "decimals",
+  });
+
+  // UseEffect to dispatch only when the data changes
+  useEffect(() => {
+    if (typeof name === "string" && typeof symbol === "string") {
+      const param = {
+        address: tokenAddress,
+        name,
+        symbol,
+      };
+
+      if (tokenIndex === 1) {
+        dispatch(addToken1(param));
+      } else if (tokenIndex === 2) {
+        dispatch(addToken2(param));
+      }
+    }
+  }, [name, symbol, tokenIndex, tokenAddress, dispatch]);
+
+  console.log(`Name: ${name}, Symbol: ${symbol}, Decimals: ${decimals}`);
+
+  return {
+    name,
+    symbol,
+    decimals,
+  };
+};
+
 
 export const useGetMemeWars = () => {
   // Fetch data for each item

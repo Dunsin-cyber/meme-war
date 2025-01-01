@@ -33,22 +33,22 @@ export function Form({ id }: { id: number }) {
   } = useForm();
 
   const handleCreateMeme = async (data: any) => {
-    // if (memeData.memeUrl.length < 10) {
-    //   toast.error("upload a meme pic");
-    //   return;
-    // }
+    if (memeData.memeUrl.length < 10) {
+      toast.error("upload a meme pic");
+      return;
+    }
     try {
       setLoading(true);
-      // await writeContractAsync({
-      //   chainId: bscTestnet.id,
-      //   address: contractAddress,
-      //   functionName: "acceptMemeWar",
-      //   abi: contractAbi,
-      //   args: [id, data.name, data.symbol, memeData.memeUrl],
-      //   chain: undefined,
-      //   account: address,
-      // });
-      await handlePostOnX(data)
+      await writeContractAsync({
+        chainId: bscTestnet.id,
+        address: contractAddress,
+        functionName: "acceptMemeWar",
+        abi: contractAbi,
+        args: [id, data.name, data.symbol, memeData.memeUrl],
+        chain: undefined,
+        account: address,
+      });
+      // await handlePostOnX(data)
       setLoading(false);
       toast.success("joined successfully");
       router.push("/explore");
