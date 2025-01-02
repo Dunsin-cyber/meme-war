@@ -66,6 +66,7 @@ const UploadMeme: React.FC = () => {
 
       // return;
     }
+    console.log(info.file.status);
     if (info.file.status === "done") {
       console.log("GOT TOinfo.file.status === done");
 
