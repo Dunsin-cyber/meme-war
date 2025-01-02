@@ -62,6 +62,8 @@ const UploadMeme: React.FC = () => {
   const handleChange: UploadProps["onChange"] = (info) => {
     if (info.file.status === "uploading") {
       setUploading(true);
+            console.log("info.file.status === uploading");
+
       // return;
     }
     if (info.file.status === "done") {
