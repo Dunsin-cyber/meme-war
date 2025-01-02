@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import { Flex, message, Upload } from "antd";
@@ -5,8 +6,6 @@ import type { GetProp, UploadProps } from "antd";
 import { pinata } from "@/utils/config";
 import { useMemeClient } from "@/context/createMemeContext";
 import toast from "react-hot-toast";
-
-
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
@@ -28,16 +27,14 @@ const beforeUpload = (file: FileType) => {
   return isJpgOrPng && isLt2M;
 };
 
- 
-
 const UploadMeme: React.FC = () => {
   const [imageUrl, setImageUrl] = useState<string>();
-  const [file ,setFile] = useState<File>()
-  const [loading, setLoading] = useState<boolean>(false)
+  const [file, setFile] = useState<File>();
+  const [loading, setLoading] = useState<boolean>(false);
   const [uploading, setUploading] = useState(false);
-     const { memeData, setMemeData } = useMemeClient();
-    
-  const uploadFile = async (file_:File) => {
+  const { memeData, setMemeData } = useMemeClient();
+
+  const uploadFile = async (file_: File) => {
     if (!file_) {
       toast.error("No file selected");
       return;
@@ -45,10 +42,10 @@ const UploadMeme: React.FC = () => {
 
     try {
       setUploading(true);
-      console.log("GOT TO UPLOAD FILE TRY BLOCK")
+      console.log("GOT TO UPLOAD FILE TRY BLOCK");
       const keyRequest = await fetch("/api/ipfs");
       const keyData = await keyRequest.json();
-      console.log(keyData)
+      console.log(keyData);
       const upload = await pinata.upload.file(file_).key(keyData.key.JWT);
       const ipfsUrl = await pinata.gateways.convert(upload.IpfsHash);
       setImageUrl(ipfsUrl);
@@ -62,28 +59,21 @@ const UploadMeme: React.FC = () => {
     }
   };
 
- 
   const handleChange: UploadProps["onChange"] = (info) => {
     if (info.file.status === "uploading") {
       setUploading(true);
-      return;
+      // return;
     }
     if (info.file.status === "done") {
-            console.log("GOT TOinfo.file.status === done")
+      console.log("GOT TOinfo.file.status === done");
 
-      const fileData = new FormData()
-      const newFile = new File(
-        [info.file.originFileObj],
-        info.file.name,
-        {
-          type: info.file.type,
-        }
-      );
+      const fileData = new FormData();
+      const newFile = new File([info.file.originFileObj], info.file.name, {
+        type: info.file.type,
+      });
       fileData.append("file", newFile);
-      setFile(newFile)
-       uploadFile(newFile);
-   
-   
+      setFile(newFile);
+      uploadFile(newFile);
     }
   };
 
@@ -117,10 +107,9 @@ const UploadMeme: React.FC = () => {
 
 export default UploadMeme;
 
-
-   // Get this url from response in real world.
-      // getBase64(info.file.originFileObj as FileType, (url) => {
-      //   setLoading(false);
-      //   setImageUrl(url);
-      //   console.log("url",url)
-      // });
+// Get this url from response in real world.
+// getBase64(info.file.originFileObj as FileType, (url) => {
+//   setLoading(false);
+//   setImageUrl(url);
+//   console.log("url",url)
+// });

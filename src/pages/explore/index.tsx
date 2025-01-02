@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import Explore_ from "@/components/Explore";
 import Head from "@/components/Head";

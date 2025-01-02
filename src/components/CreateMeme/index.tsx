@@ -114,7 +114,7 @@ export default function TokenModal() {
         }
         toast.success("meme created on twitter")
         console.log(data)
-        const url = `https://x/com/${username}/status/${data?.data?.id}`;
+        const url = `https://x.com/${username}/status/${data?.data?.id}`;
         // setMemeData({...memeData, meme1Twitter: url })
         return url
       } catch (err) {
