@@ -45,6 +45,7 @@ const UploadMeme: React.FC = () => {
 
     try {
       setUploading(true);
+      console.log("GOT TO UPLOAD FILE TRY BLOCK")
       const keyRequest = await fetch("/api/ipfs");
       const keyData = await keyRequest.json();
       console.log(keyData)
@@ -68,6 +69,8 @@ const UploadMeme: React.FC = () => {
       return;
     }
     if (info.file.status === "done") {
+            console.log("GOT TOinfo.file.status === done")
+
       const fileData = new FormData()
       const newFile = new File(
         [info.file.originFileObj],
