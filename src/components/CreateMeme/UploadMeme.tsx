@@ -1,11 +1,19 @@
-"use client";
+// "use client";
 import React, { useState } from "react";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
-import { Flex, message, Upload } from "antd";
+import { Flex, message } from "antd";
 import type { GetProp, UploadProps } from "antd";
 import { pinata } from "@/utils/config";
 import { useMemeClient } from "@/context/createMemeContext";
 import toast from "react-hot-toast";
+import { Button } from "@/components/ui/button";
+import {
+  FileUploadList,
+  FileUploadRoot,
+  FileUploadTrigger,
+} from "@/components/ui/file-upload";
+import { HiUpload } from "react-icons/hi";
+import { Box } from "@chakra-ui/react";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
@@ -59,25 +67,33 @@ const UploadMeme: React.FC = () => {
     }
   };
 
-  const handleChange: UploadProps["onChange"] = (info) => {
-    if (info.file.status === "uploading") {
-      setUploading(true);
-            console.log("info.file.status === uploading");
+  const handleChange = (e) => {
+    const image = e.target.files?.[0];
+    beforeUpload(image);
+    // const fileData = new FormData();
 
-      // return;
-    }
-    console.log(info.file.status);
-    if (info.file.status === "done") {
-      console.log("GOT TOinfo.file.status === done");
+    // fileData.append("file", image);
+    setFile(image);
+    uploadFile(image);
 
-      const fileData = new FormData();
-      const newFile = new File([info.file.originFileObj], info.file.name, {
-        type: info.file.type,
-      });
-      fileData.append("file", newFile);
-      setFile(newFile);
-      uploadFile(newFile);
-    }
+    // if (info.file.status === "uploading") {
+    //   setUploading(true);
+    //         console.log("info.file.status === uploading");
+
+    //   // return;
+    // }
+    // console.log(info.file.status);
+    // if (info.file.status === "done") {
+    //   console.log("GOT TOinfo.file.status === done");
+
+    //   const fileData = new FormData();
+    //   const newFile = new File([info.file.originFileObj], info.file.name, {
+    //     type: info.file.type,
+    //   });
+    //   fileData.append("file", newFile);
+    //   setFile(newFile);
+    //   uploadFile(newFile);
+    // }
   };
 
   const uploadButton = (
@@ -89,7 +105,32 @@ const UploadMeme: React.FC = () => {
 
   return (
     <Flex gap="middle" wrap>
-      <Upload
+      <FileUploadRoot onChange={handleChange}>
+        <FileUploadTrigger asChild>
+          <Button variant="outline" size="sm">
+            {uploading ? (
+              <LoadingOutlined />
+            ) : (
+              <Box
+                gap={3}
+                py={3}
+                px={3}
+                display={"flex"}
+                justifyContent={"center"}
+                alignItems="center"
+                borderWidth={"2px"}
+                borderRadius={"15px"}
+                borderColor={"red.500"}
+              >
+                <HiUpload /> Upload meme
+              </Box>
+            )}
+          </Button>
+        </FileUploadTrigger>
+        {imageUrl && <FileUploadList />}
+      </FileUploadRoot>
+
+      {/* <Upload
         name="avatar"
         listType="picture-card"
         className="avatar-uploader"
@@ -103,7 +144,7 @@ const UploadMeme: React.FC = () => {
         ) : (
           uploadButton
         )}
-      </Upload>
+      </Upload> */}
     </Flex>
   );
 };

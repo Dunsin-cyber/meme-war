@@ -26,7 +26,7 @@ export default async function handler(
             },
           },
         },
-        maxUses: 3,
+        maxUses: 1,
       });
       return res.status(200).json({key: keyData});
     } catch (error) {
