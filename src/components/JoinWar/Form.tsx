@@ -38,34 +38,34 @@ export function Form({ id }: { id: number }) {
       toast.error("upload a meme pic");
       return;
     }
-       if (!address) {
-            await connectAsync({
-              connector: injected(),
-            });
-          }
+    if (!address) {
+      await connectAsync({
+        connector: injected(),
+      });
+    }
 
-          try {
-            const post = {
-              title: data.name + "(FROM MEME WAR)",
-              option: data.symbol,
-              option2: "VOTE AGAINST ME",
-            };
-           const url = await handlePostOnX(post)
-            
-            setLoading(true);
-            await writeContractAsync({
-              chainId: bscTestnet.id,
-              address: contractAddress,
-              functionName: "acceptMemeWar",
-              abi: contractAbi,
-              args: [id, data.name, data.symbol, memeData.memeUrl, url],
-              chain: undefined,
-              account: address,
-            });
-            setLoading(false);
-            toast.success("joined successfully");
-            router.push("/explore");
-          } catch (err) {
+    try {
+      const post = {
+        title: data.name + "(FROM MEME WAR)",
+        option: data.symbol,
+        option2: "VOTE AGAINST ME",
+      };
+      const url = await handlePostOnX(post);
+
+      setLoading(true);
+      await writeContractAsync({
+        chainId: bscTestnet.id,
+        address: contractAddress,
+        functionName: "acceptMemeWar",
+        abi: contractAbi,
+        args: [id, data.name, data.symbol, memeData.memeUrl, url],
+        chain: undefined,
+        account: address,
+      });
+      setLoading(false);
+      toast.success("joined successfully");
+      router.push("/explore");
+    } catch (err) {
       toast.error(err.message);
       console.log("[ERROR JOINING MEME]", err);
     } finally {
@@ -75,7 +75,7 @@ export function Form({ id }: { id: number }) {
 
   const handlePostOnX = async (param: any) => {
     try {
-        const username = localStorage.getItem("xname")
+      const username = localStorage.getItem("xname");
 
       const createPost = await fetch("/api/post-tweet", {
         method: "POST",
@@ -87,12 +87,14 @@ export function Form({ id }: { id: number }) {
       const data = await createPost.json();
       if (data.error) {
         toast.error(data.error);
+        toast.error("Please link your X account before creating a meme");
+        throw new Error();
       }
       toast.success("meme created on twitter");
       console.log(data);
       const url = `https://x/com/${username}/status/${data?.data?.id}`;
       // setMemeData({...memeData, meme2Twitter: url })
-        return url
+      return url;
     } catch (err) {
       toast.error(err.message);
       console.log("[ERROR POSTING MEME ON X]", err);

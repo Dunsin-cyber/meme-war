@@ -4,7 +4,7 @@ import {
   useAccount,
   useWriteContract,
   useConnect,
-  useReadContract,
+  // useReadContract,
 } from "wagmi";
 import { config } from "../../utils/wagmi";
 import { injected } from "wagmi/connectors";
@@ -36,21 +36,29 @@ export default function TokenModal() {
 
   const handleCreateMeme = async () => {
     try {
-       const post = {
-         title: memeData.memeName + "(FROM MEME WAR)",
-         option: memeData.tokenSymbol,
-         option2: "Vote Against Me",
-       };
-       const url = await handlePostOnX(post);
+      const post = {
+        title: memeData.milestone + "(FROM MEME WAR)",
+        option: memeData.memeName,
+        option2: "Vote Against Me",
+      };
+      const url = await handlePostOnX(post);
 
       const data = await writeContractAsync({
         chainId: bscTestnet.id,
         address: contractAddress, // change to receipient address
         functionName: "createMemeWar",
         abi: contractAbi,
-        args: [memeData.memeUrl, url, memeData.pointTarget, memeData.deadline, memeData.prize, memeData.milestone],
+        args: [
+          memeData.memeUrl,
+          url,
+          +memeData.pointTarget,
+          memeData.deadline,
+          parseEther(memeData.prize),
+          memeData.milestone,
+        ],
         chain: undefined,
         account: address,
+        value: parseEther(memeData.prize),
       });
       setLoading(true);
       toast.success("meme created");
@@ -113,8 +121,8 @@ export default function TokenModal() {
       const data = await createPost.json();
       if (data.error) {
         toast.error(data.error);
-         toast.error("Please link your X account before creating a meme");
-        return
+        toast.error("Please link your X account before creating a meme");
+        throw new Error();
       }
       toast.success("meme created on twitter");
       console.log(data);
@@ -162,12 +170,14 @@ export default function TokenModal() {
       if (
         memeData.memeUrl.length > 1 &&
         memeData.memeName.length > 1 &&
-        memeData.pointTarget > 0 &&
-        memeData.deadline.length > 2 &&
-        memeData.prize.length > 1
+        +memeData.pointTarget > 0 &&
+        memeData.deadline > 2 &&
+        +memeData.prize > 0
       ) {
-        await handleSubmit();
-        return setSteps(steps + 1);
+        const done = await handleSubmit();
+        if (done) {
+          setSteps(steps + 1);
+        }
       } else {
         //if no content in meme page,
         toast.error("make sure all fields are filled");
@@ -178,7 +188,7 @@ export default function TokenModal() {
         memeData.tokenSymbol.length > 1 &&
         memeData.description.length > 1 &&
         memeData.saleTarget > 0 &&
-        memeData.deadline.length > 2
+        memeData.deadline > 2
       ) {
         handleSubmit();
       } else {

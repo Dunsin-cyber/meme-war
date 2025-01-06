@@ -64,7 +64,7 @@ function CreateMeme() {
         <div className="flex flex-col space-y-3 w-full">
           <p>Prize</p>
           <Input
-            type="text"
+            type="number"
             size="large"
             name="prize"
             value={memeData.prize}

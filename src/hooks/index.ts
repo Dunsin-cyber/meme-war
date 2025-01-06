@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useWriteContract, useReadContract, useAccount } from "wagmi";
 import contractAbi from "@/hooks/abi.json";
-import erc20Abi from "@/hooks/erc-20.json"
-import bep20Abi from "@/hooks/bep-20.json"
+import erc20Abi from "@/hooks/erc-20.json";
+import bep20Abi from "@/hooks/bep-20.json";
 import type { Address } from "viem";
 import { config } from "@/utils/wagmi";
 import { formatEther } from "viem";
@@ -17,20 +17,20 @@ type ReturnType = {
   refetch?: any;
 };
 
-export const useGetTokenBalance = (tokenAddress:`0x${string}`) => {
-   const { data, error } = useReadContract({
-     abi: erc20Abi,
-     address: tokenAddress,
-     functionName: "balanceOf",
-     args: [tokenAddress]
-   });
+export const useGetTokenBalance = (tokenAddress: `0x${string}`) => {
+  const { data, error } = useReadContract({
+    abi: erc20Abi,
+    address: tokenAddress,
+    functionName: "balanceOf",
+    args: [tokenAddress],
+  });
 
-   return {
-     isLoading: !data && !error,
-     data: data as any,
-     error,
-   };
-}
+  return {
+    isLoading: !data && !error,
+    data: data as any,
+    error,
+  };
+};
 export const useCalculatePrice = (tokenAddress: `0x${string}`) => {
   const { data, error } = useReadContract({
     abi: bep20Abi.abi,
@@ -45,7 +45,6 @@ export const useCalculatePrice = (tokenAddress: `0x${string}`) => {
     error,
   };
 };
-
 
 export const useGetTokenDetails = (
   tokenIndex: number,
@@ -71,27 +70,26 @@ export const useGetTokenDetails = (
     functionName: "decimals",
   });
 
-    const { data:price } = useReadContract({
-      abi: bep20Abi.abi,
-      address: tokenAddress,
-      functionName: "calculatePrice",
-      args: [],
-    });
+  const { data: price } = useReadContract({
+    abi: bep20Abi.abi,
+    address: tokenAddress,
+    functionName: "calculatePrice",
+    args: [],
+  });
 
-    
-    // UseEffect to dispatch only when the data changes
+  // UseEffect to dispatch only when the data changes
   useEffect(() => {
     if (
       typeof name === "string" &&
       typeof symbol === "string" &&
       typeof price === "bigint"
     ) {
-      console.log("PRICEEEE",(Number(price)/ 10 ** 18));
+      console.log("PRICEEEE", Number(price) / 10 ** 18);
       const param = {
         address: tokenAddress,
         name,
         symbol,
-        price:formatEther(price)
+        price: formatEther(price),
       };
 
       if (tokenIndex === 1) {
@@ -111,7 +109,6 @@ export const useGetTokenDetails = (
   };
 };
 
-
 export const useGetMemeWars = () => {
   // Fetch data for each item
   const { data, error } = useReadContract({
@@ -126,10 +123,21 @@ export const useGetMemeWars = () => {
     error,
   };
 };
+/* 
+  const {data:joinedID} = useGetJoinedWars()
+  console.log(joinedID)
+  // console.log(data);
+  const items_ = data?.map((d: any, index: number) => ({
+      ...d,
+      id: index + 1, // Increment the id starting from 1
+    }));
 
+    const items = items_?.filter((item => joinedID?.some(joined => String(item.id).includes(Number(joined)))))
+
+*/
 // getUserJoinedWars
 export const useGetJoinedWars = () => {
-  const {address} = useAccount();
+  const { address } = useAccount();
   // Fetch data for each item
   const { data, error } = useReadContract({
     abi: contractAbi,
@@ -177,7 +185,6 @@ export const useGetContentCount = () => {
 };
 
 export const useGetAMemeDetail = (id: any) => {
-
   const shouldFetch = React.useMemo(() => !!id, [id]); // Only allow fetching if id exists
 
   const { data, error } = useReadContract({
@@ -194,7 +201,6 @@ export const useGetAMemeDetail = (id: any) => {
     error,
   };
 };
-
 
 export const useGetAllCampaigns = (): ReturnType => {
   const { data, error, refetch } = useReadContract({

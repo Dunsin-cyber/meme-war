@@ -100,7 +100,7 @@ function JoinWar ({id}: {id: string}) {
             {/* Your war */}
 
             <div className="max-w-full md:w-[50%] space-y-6">
-              <Form id={+id} />
+              <Form id={+id}  />
             </div>
           </div>
         </div>
