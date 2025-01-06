@@ -6,14 +6,26 @@ import { formatEther } from "viem";
 import { FaXTwitter, FaGithub, FaMedium } from "react-icons/fa6";
 import { FaDiscord } from "react-icons/fa";
 import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
-import {Form} from "./Form"
-import {useGetAMemeDetail} from "@/hooks"
+import { Form } from "./Form";
+import { useGetAMemeDetail } from "@/hooks";
+import {millisecondsToDaysLeft} from "@/utils/TimeConverter"
 
-function JoinWar ({id}: {id: string}) {
 
-  const {data, isLoading} = useGetAMemeDetail(+id)
-  console.log("DETAIL",data);
-  
+import { Statistic, Col,CountdownProps } from "antd";
+
+
+const { Countdown } = Statistic;
+
+const deadline = Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30; // Dayjs is also OK
+
+const onFinish: CountdownProps["onFinish"] = () => {
+  console.log("finished!");
+};
+
+function JoinWar({ id }: { id: string }) {
+  const { data, isLoading } = useGetAMemeDetail(+id);
+  console.log("DETAIL", data);
+
   return (
     <SidebarDemo>
       {data && (
@@ -32,24 +44,35 @@ function JoinWar ({id}: {id: string}) {
               {/* stat */}
               <div className="flex flex-row justify-between gap-y-3">
                 <div className=" flex-1 gap-y-3">
-                  <p className="text-zinc-400 tracking-wide leading-relaxed text-sm">
-                    Duration
-                  </p>
-                  <div className="flex-1 gap-x-5">
-                    <Tag color="red.400">21 days</Tag>
-                  </div>
+                  <Col span={12}>
+                    <Countdown
+                      title="Time left"
+                      value={Number(data[10])}
+                      onFinish={onFinish}
+                    />
+                  </Col>
                 </div>
-
-                <div className=" flex-1 gap-y-3">
-                  <p className="text-zinc-400 tracking-wide leading-relaxed text-sm">
-                    Target
-                  </p>
-                  <div className="flex-1 gap-x-5">
-                    <Tag color="yellow.500">
-                      {Number(formatEther(data[8])).toLocaleString()}
-                    </Tag>
+                {data[13] === true ? (
+                  <div className=" flex-1 gap-y-3">
+                    <p className="text-zinc-400 tracking-wide leading-relaxed text-sm">
+                      Sales Required
+                    </p>
+                    <div className="flex-1 gap-x-5">
+                      <Tag color="yellow.500">
+                        {Number(formatEther(data[8])).toLocaleString()}
+                      </Tag>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div className=" flex-1 gap-y-3">
+                    <p className="text-zinc-400 tracking-wide leading-relaxed text-sm">
+                      Votes Required
+                    </p>
+                    <div className="flex-1 gap-x-5">
+                      <Tag color="yellow.500">{data[9].toLocaleString()}</Tag>
+                    </div>
+                  </div>
+                )}
               </div>
               {/* creator info */}
               <div className="flex flex-row justify-between gap-y-3">
@@ -64,10 +87,12 @@ function JoinWar ({id}: {id: string}) {
 
                 <div className=" flex-1 gap-y-3">
                   <p className="text-zinc-400 tracking-wide leading-relaxed text-sm">
-                    Market Cap
+                    Reward
                   </p>
                   <div className="flex-1 gap-x-5">
-                    <Tag color="green.700">---</Tag>
+                    <Tag color="green.100">
+                      {formatEther(data[11]).toLocaleString()}TBnB
+                    </Tag>
                   </div>
                 </div>
               </div>
@@ -100,7 +125,7 @@ function JoinWar ({id}: {id: string}) {
             {/* Your war */}
 
             <div className="max-w-full md:w-[50%] space-y-6">
-              <Form id={+id}  />
+              <Form id={+id} />
             </div>
           </div>
         </div>
