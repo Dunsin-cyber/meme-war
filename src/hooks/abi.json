@@ -116,7 +116,7 @@
     ],
     "name": "acceptMemeWar",
     "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "payable",
     "type": "function"
   },
   {
@@ -149,8 +149,9 @@
       { "internalType": "string", "name": "symbol", "type": "string" },
       { "internalType": "uint256", "name": "saleTarget", "type": "uint256" },
       { "internalType": "string", "name": "_meme1URI", "type": "string" },
-      { "internalType": "string", "name": "_description", "type": "string" },
-      { "internalType": "string", "name": "_meme1Twitter", "type": "string" }
+      { "internalType": "string", "name": "_meme1Twitter", "type": "string" },
+      { "internalType": "uint256", "name": "_duration", "type": "uint256" },
+      { "internalType": "string", "name": "_description", "type": "string" }
     ],
     "name": "createMemeTokenWar",
     "outputs": [],
@@ -160,12 +161,15 @@
   {
     "inputs": [
       { "internalType": "string", "name": "_meme1URI", "type": "string" },
+      { "internalType": "string", "name": "_meme1Twitter", "type": "string" },
       { "internalType": "uint256", "name": "_pointTarget", "type": "uint256" },
+      { "internalType": "uint256", "name": "_duration", "type": "uint256" },
+      { "internalType": "uint256", "name": "_prize", "type": "uint256" },
       { "internalType": "string", "name": "_description", "type": "string" }
     ],
     "name": "createMemeWar",
     "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "payable",
     "type": "function"
   },
   {
@@ -230,6 +234,8 @@
             "name": "pointTarget",
             "type": "uint256"
           },
+          { "internalType": "uint256", "name": "duration", "type": "uint256" },
+          { "internalType": "uint256", "name": "prize", "type": "uint256" },
           { "internalType": "bool", "name": "isResolved", "type": "bool" },
           { "internalType": "bool", "name": "isTokenWar", "type": "bool" },
           { "internalType": "address", "name": "winner", "type": "address" },
@@ -299,6 +305,8 @@
       { "internalType": "string", "name": "meme2Twitter", "type": "string" },
       { "internalType": "uint256", "name": "saleTarget", "type": "uint256" },
       { "internalType": "uint256", "name": "pointTarget", "type": "uint256" },
+      { "internalType": "uint256", "name": "duration", "type": "uint256" },
+      { "internalType": "uint256", "name": "prize", "type": "uint256" },
       { "internalType": "bool", "name": "isResolved", "type": "bool" },
       { "internalType": "bool", "name": "isTokenWar", "type": "bool" },
       { "internalType": "address", "name": "winner", "type": "address" },
