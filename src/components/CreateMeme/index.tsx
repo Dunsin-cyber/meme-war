@@ -145,10 +145,10 @@ export default function TokenModal() {
       }
       if (steps === 1) {
         //create meme
-        await handleCreateMeme();
+      return  await handleCreateMeme();
       } else if (steps === 2) {
         // create meme token
-        await handleCreateMemeToken();
+        return await handleCreateMemeToken();
       }
     } catch (err) {
       console.log(err);
