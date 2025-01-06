@@ -22,6 +22,8 @@ import SelectType from "./SelectType";
 import erc20Abi from "@/hooks/erc-20.json";
 import { bscTestnet } from "wagmi/chains";
 import { useAppSelector } from "@/redux/hook";
+import {getTimestampFromDateAndTime} from "@/utils/TimeConverter"
+
 
 export default function TokenModal() {
   const { isCreateModalOpen, setIsCreateModalOpen } = useClient();
@@ -52,7 +54,7 @@ export default function TokenModal() {
           memeData.memeUrl,
           url,
           +memeData.pointTarget,
-          memeData.deadline,
+          getTimestampFromDateAndTime(memeData.date, memeData.time),
           parseEther(memeData.prize),
           memeData.milestone,
         ],
@@ -91,7 +93,7 @@ export default function TokenModal() {
           parseEther(memeData.saleTarget.toString()),
           memeData.memeUrl,
           url,
-          memeData.deadline,
+          getTimestampFromDateAndTime(memeData.date, memeData.time),
           memeData.description,
         ],
         chain: undefined,
@@ -160,6 +162,7 @@ export default function TokenModal() {
   const description = "steps to create a meme";
 
   const handleNext = async () => {
+    console.log(memeData.date.length, memeData.time.length);
     if (steps === 0) {
       if (memeData.memeType.length > 1) {
         setSteps(steps + 1);
@@ -171,7 +174,8 @@ export default function TokenModal() {
         memeData.memeUrl.length > 1 &&
         memeData.memeName.length > 1 &&
         +memeData.pointTarget > 0 &&
-        memeData.deadline > 2 &&
+        memeData.date.length > 2 &&
+        memeData.time.length > 2 &&
         +memeData.prize > 0
       ) {
         const done = await handleSubmit();
@@ -188,7 +192,8 @@ export default function TokenModal() {
         memeData.tokenSymbol.length > 1 &&
         memeData.description.length > 1 &&
         memeData.saleTarget > 0 &&
-        memeData.deadline > 2
+        memeData.date.length > 2 &&
+        memeData.time.length > 2
       ) {
         handleSubmit();
       } else {

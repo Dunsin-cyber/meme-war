@@ -20,6 +20,7 @@
     "@twitter-api-v2/plugin-rate-limit": "^1.1.0",
     "antd": "^5.0.0",
     "axios": "^1.7.9",
+    "dayjs": "^1.11.13",
     "framer-motion": "^11.13.1",
     "iron-session": "^8.0.4",
     "lightweight-charts": "^4.2.2",

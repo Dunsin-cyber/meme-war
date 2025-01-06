@@ -9,7 +9,9 @@ import { formatEther } from "viem";
 import { useAppDispatch } from "@/redux/hook";
 import { addToken1, addToken2 } from "@/redux/slice/TokenSlice";
 
-export const contractAddress = "0x83edB0c04bC545C31a0bdaFbf67A4D920d4327aD";
+export const contractAddress = "0x8bc4Cb42b26C544ea95E744082e332D078297325";
+
+
 type ReturnType = {
   isLoading: boolean;
   data: any;

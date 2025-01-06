@@ -1,6 +1,7 @@
 import React from "react";
-import { DatePicker, Input, Switch } from "antd";
+import { DatePicker, Input, Switch, TimePicker } from "antd";
 import { useMemeClient } from "@/context/createMemeContext";
+import dayjs from "dayjs";
 
 function CreateToken() {
   const { memeData, setMemeData } = useMemeClient();
@@ -67,18 +68,33 @@ function CreateToken() {
           onChange={handleMilestoneChange}
         />
       </div> */}
-      <div className="flex flex-col  space-y-3 w-[70%]">
-        <p>Duration</p>
-        <DatePicker
-          name="deadline"
-          size="large"
-          onChange={(date, dateString: string) => {
-            setMemeData({
-              ...memeData,
-              deadline: new Date(dateString).getTime(),
-            });
-          }}
-        />
+      <div className="flex justify-between space-x-2 items-center w-[70%]">
+        <div className="flex flex-col  space-y-3 w-[70%]">
+          <p>Duration</p>
+          <DatePicker
+            name="deadline"
+            size="large"
+            onChange={(date, dateString: string) => {
+              setMemeData({
+                ...memeData,
+                deadline: new Date(dateString).getTime(),
+              });
+            }}
+          />
+        </div>
+        <div className="flex flex-col space-y-3 ">
+          <p>Time</p>
+          <TimePicker
+            size="large"
+            onChange={(time, timeString) => {
+              setMemeData({
+                ...memeData,
+                time: timeString,
+              });
+            }}
+            defaultOpenValue={dayjs("00:00:00", "HH:mm:ss")}
+          />
+        </div>
       </div>
     </div>
   );

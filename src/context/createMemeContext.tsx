@@ -33,7 +33,9 @@ export const useCreateMemeContext = () => {
       description: "",
       meme1Twitter:"",
       meme2Twitter: "" ,
-      prize:0
+      prize:0,
+      date: "",
+      time: ""
     });
 
     // console.log("memeData",memeData)

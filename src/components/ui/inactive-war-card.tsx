@@ -137,7 +137,7 @@ export default function HoverEffect({ className }: { className?: string }) {
               ) : (
                 <div className=" flex-1 gap-y-3">
                   <p className="text-zinc-400 tracking-wide leading-relaxed text-sm">
-                    Point Target
+                    Vote Target
                   </p>
                   <div className="flex-1 gap-x-5">
                     <Tag color="yellow.500">
@@ -146,6 +146,17 @@ export default function HoverEffect({ className }: { className?: string }) {
                   </div>
                 </div>
               )}
+
+              <div className=" flex flex-col gap-y-3">
+                <p className="text-zinc-400 tracking-wide leading-relaxed text-sm">
+                  Reward
+                </p>
+                <div className="flex-1 gap-x-5">
+                  <Tag color="yellow.500">
+                    {Number(formatEther(item?.prize)).toLocaleString()}TBnB
+                  </Tag>
+                </div>
+              </div>
             </div>
             {/* creator info */}
             <div className="flex flex-row justify-between gap-y-3">
@@ -155,7 +166,7 @@ export default function HoverEffect({ className }: { className?: string }) {
                 </p>
                 <div className="flex-1 gap-x-5">
                   <Tag className="text-primary100">
-                    {item.creator.slice(0, 20)}...
+                    {item.creator.slice(0, 10)}...
                   </Tag>
                 </div>
               </div>
