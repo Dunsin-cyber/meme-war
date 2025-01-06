@@ -34,13 +34,13 @@ function JoinWar({ id }: { id: string }) {
           <div className="flex  py-6 flex-col md:flex-row">
             {/* Exixsting War */}
             <div className=" max-w-full md:max-w-[50%] space-y-6">
-              {/*  <p className="text-secondary100 text-2xl font-bold">
+               <p className="text-secondary100 text-2xl font-bold">
               {" "}
-              Subzero Coin
-            </p> */}
+              {data[22]}
+            </p>
               <img src={data[4]} alt="meme" className="h-[300px] w-[300px]" />
               {/* description */}
-              <p className="text-gray-400">{data[13]}</p>
+              <p className="text-gray-400">{data[20]}</p>
               {/* stat */}
               <div className="flex flex-row justify-between gap-y-3">
                 <div className=" flex-1 gap-y-3">
@@ -84,17 +84,29 @@ function JoinWar({ id }: { id: string }) {
                     <Tag className="text-primary100">{data[0]}</Tag>
                   </div>
                 </div>
-
-                <div className=" flex-1 gap-y-3">
-                  <p className="text-zinc-400 tracking-wide leading-relaxed text-sm">
-                    Reward
-                  </p>
-                  <div className="flex-1 gap-x-5">
-                    <Tag color="green.100">
-                      {formatEther(data[11]).toLocaleString()}TBnB
-                    </Tag>
+                {data[13] ? (
+                  <div className=" flex-1 gap-y-3">
+                    <p className="text-zinc-400 tracking-wide leading-relaxed text-sm">
+                      Reward
+                    </p>
+                    <div className="flex-1 gap-x-5">
+                      <Tag color="green.100">
+                        50% of your opponent token
+                      </Tag>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div className=" flex-1 gap-y-3">
+                    <p className="text-zinc-400 tracking-wide leading-relaxed text-sm">
+                      Reward
+                    </p>
+                    <div className="flex-1 gap-x-5">
+                      <Tag color="green.100">
+                        {formatEther(data[11]).toLocaleString()}TBnB
+                      </Tag>
+                    </div>
+                  </div>
+                )}
               </div>
               {/* Social */}
               <div className="flex justify-center mt-3">
@@ -125,7 +137,7 @@ function JoinWar({ id }: { id: string }) {
             {/* Your war */}
 
             <div className="max-w-full md:w-[50%] space-y-6">
-              <Form id={+id} />
+              <Form id={+id} prize={data[11]} isToken={data[13]} />
             </div>
           </div>
         </div>

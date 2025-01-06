@@ -130,7 +130,7 @@ export default function HoverEffect({ className }: { className?: string }) {
                   </p>
                   <div className="flex-1 gap-x-5">
                     <Tag color="red.400">
-                      {Number(formatEther(item.saleTarget)).toLocaleString()}
+                      {formatEther(item.saleTarget).toLocaleString()}
                     </Tag>
                   </div>
                 </div>
@@ -146,17 +146,18 @@ export default function HoverEffect({ className }: { className?: string }) {
                   </div>
                 </div>
               )}
-
-              <div className=" flex flex-col gap-y-3">
-                <p className="text-zinc-400 tracking-wide leading-relaxed text-sm">
-                  Reward
-                </p>
-                <div className="flex-1 gap-x-5">
-                  <Tag color="yellow.500">
-                    {Number(formatEther(item?.prize)).toLocaleString()}TBnB
-                  </Tag>
+              {!item.isTokenWar && (
+                <div className=" flex flex-col gap-y-3">
+                  <p className="text-zinc-400 tracking-wide leading-relaxed text-sm">
+                    Reward
+                  </p>
+                  <div className="flex-1 gap-x-5">
+                    <Tag color="yellow.500">
+                      {(formatEther(item?.prize)).toLocaleString()}TBnB
+                    </Tag>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
             {/* creator info */}
             <div className="flex flex-row justify-between gap-y-3">

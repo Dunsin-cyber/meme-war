@@ -72,12 +72,12 @@ function CreateToken() {
         <div className="flex flex-col  space-y-3 w-[70%]">
           <p>Duration</p>
           <DatePicker
-            name="deadline"
+            name="date"
             size="large"
             onChange={(date, dateString: string) => {
               setMemeData({
                 ...memeData,
-                deadline: new Date(dateString).getTime(),
+                date: dateString,
               });
             }}
           />
@@ -86,6 +86,7 @@ function CreateToken() {
           <p>Time</p>
           <TimePicker
             size="large"
+            name="time"
             onChange={(time, timeString) => {
               setMemeData({
                 ...memeData,

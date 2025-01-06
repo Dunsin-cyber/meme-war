@@ -2,15 +2,75 @@ import React from "react";
 import { SidebarDemo } from "@/components/Sidebar";
 import Link from "next/link";
 import { Tag } from "@/components/ui/tag";
-import { formatEther } from "viem";
 import { FaXTwitter, FaGithub, FaMedium } from "react-icons/fa6";
 import { FaDiscord } from "react-icons/fa";
 import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
-import {useGetAMemeDetail} from "@/hooks"
+import { useGetAMemeDetail } from "@/hooks";
+import {
+  useAccount,
+  useWriteContract,
+  useConnect,
+  // useReadContract,
+} from "wagmi";
+import { config } from "../../utils/wagmi";
+import { injected } from "wagmi/connectors";
+import contractAbi from "@/hooks/abi.json";
+import { contractAddress } from "@/hooks";
+import { Statistic, Col, CountdownProps, Checkbox } from "antd";
+import { toast } from "react-hot-toast";
+import { parseEther, formatEther } from "viem";
+import { bscTestnet } from "wagmi/chains";
+
+const { Countdown } = Statistic;
 
 function MemeWarDetails({ id }: { id: string }) {
+  const [ended, setEnded] = React.useState(false);
+  const [voted, setVoted] = React.useState(false)
+  const [loading, setLoading] = React.useState(false);
   const { data, isLoading } = useGetAMemeDetail(+id);
+  const { address, chainId } = useAccount();
   console.log("DETAIL", data);
+
+
+  const onFinish: CountdownProps["onFinish"] = () => {
+    console.log("finished!");
+    setEnded(true);
+  };
+
+  
+  const { writeContractAsync } = useWriteContract({
+    config,
+  });
+  const { connectAsync } = useConnect();
+
+  const handleVote = async (index: number) => {
+    try {
+      setLoading(true);
+      if (!address) {
+        await connectAsync({
+          connector: injected(),
+        });
+      }
+
+      const data = await writeContractAsync({
+        chainId: bscTestnet.id,
+        address: contractAddress, // change to receipient address
+        functionName: "voteForMeme",
+        abi: contractAbi,
+        args: [+id, index],
+        chain: undefined,
+        account: address,
+      });
+      setLoading(true);
+      setVoted(true)
+      toast.success("Vote Recorded");
+    } catch (err) {
+      toast.error("something  went wrong");
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <SidebarDemo>
@@ -20,22 +80,23 @@ function MemeWarDetails({ id }: { id: string }) {
           <div className="flex  py-6 flex-col md:flex-row">
             {/* FIRST MEME  */}
             <div className=" max-w-full md:max-w-[45%] mx-auto space-y-6">
-              {/*  <p className="text-secondary100 text-2xl font-bold">
-              {" "}
-              Subzero Coin
-            </p> */}
+              <p className="text-secondary100 text-2xl font-bold">
+                {" "}
+                {data[22]}
+              </p>
               <img src={data[4]} alt="meme" className="h-[300px] w-[300px]" />
               {/* description */}
-              <p className="text-gray-400">{data[13]}</p>
+              <p className="text-gray-400">{data[20]}</p>
               {/* stat */}
               <div className="flex flex-row justify-between gap-y-3">
                 <div className=" flex-1 gap-y-3">
-                  <p className="text-zinc-400 tracking-wide leading-relaxed text-sm">
-                    Duration
-                  </p>
-                  <div className="flex-1 gap-x-5">
-                    <Tag color="red.400">21 days</Tag>
-                  </div>
+                  <Col span={12}>
+                    <Countdown
+                      title="Time left"
+                      value={Number(data[10])}
+                      onFinish={onFinish}
+                    />
+                  </Col>
                 </div>
 
                 <div className=" flex-1 gap-y-3">
@@ -62,20 +123,27 @@ function MemeWarDetails({ id }: { id: string }) {
 
                 <div className=" flex-1 gap-y-3">
                   <p className="text-zinc-400 tracking-wide leading-relaxed text-sm">
-                    Market Cap
+                    Reward
                   </p>
                   <div className="flex-1 gap-x-5">
-                    <Tag color="green.700">---</Tag>
+                    <Tag color="green.100">
+                      {formatEther(data[11]).toLocaleString()}TBnB
+                    </Tag>
                   </div>
                 </div>
               </div>
               {/* Social */}
-              <div className="flex justify-center mt-3 text-2xl">
-                <div className="flex gap-7 z-[100] items-center">
-                  vote here ▶
+              <div className="flex flex-col items-center mt-3 text-xl space-y-4">
+                <div className="flex gap-3 z-[100] items-center">
+                  vote on
                   <a href={data[6]} target="_blank" rel="meme war Twitter">
                     <FaXTwitter />
                   </a>
+                </div>
+                <p>or </p>
+                <div className="flex gap-3 z-[100] items-center">
+                  on meme war
+                  <Checkbox onChange={() => handleVote(1)}>Checkbox</Checkbox>
                 </div>
               </div>
 
@@ -95,22 +163,23 @@ function MemeWarDetails({ id }: { id: string }) {
             {/* SECOND MEME */}
             <div className="max-w-full md:w-[45%] space-y-6 mx-auto">
               <div className=" space-y-6">
-                {/*  <p className="text-secondary100 text-2xl font-bold">
-              {" "}
-              Subzero Coin
-            </p> */}
+                <p className="text-secondary100 text-2xl font-bold">
+                  {" "}
+                  {data[23]}
+                </p>
                 <img src={data[5]} alt="meme" className="h-[300px] w-[300px]" />
                 {/* description */}
-                <p className="text-gray-400">{data[13]}</p>
+                <p className="text-gray-400">{data[21]}</p>
                 {/* stat */}
                 <div className="flex flex-row justify-between gap-y-3">
                   <div className=" flex-1 gap-y-3">
-                    <p className="text-zinc-400 tracking-wide leading-relaxed text-sm">
-                      Duration
-                    </p>
-                    <div className="flex-1 gap-x-5">
-                      <Tag color="red.400">21 days</Tag>
-                    </div>
+                    <Col span={12}>
+                      <Countdown
+                        title="Time left"
+                        value={Number(data[10])}
+                        onFinish={onFinish}
+                      />
+                    </Col>
                   </div>
 
                   <div className=" flex-1 gap-y-3">
@@ -137,24 +206,29 @@ function MemeWarDetails({ id }: { id: string }) {
 
                   <div className=" flex-1 gap-y-3">
                     <p className="text-zinc-400 tracking-wide leading-relaxed text-sm">
-                      Market Cap
+                      Reward
                     </p>
                     <div className="flex-1 gap-x-5">
-                      <Tag color="green.700">---</Tag>
+                      <Tag color="green.100">
+                        {formatEther(data[11]).toLocaleString()}TBnB
+                      </Tag>
                     </div>
                   </div>
                 </div>
                 {/* Social */}
-                <div className="flex justify-center mt-3">
-                  <div className="flex gap-7 z-[100] items-center">
-                  vote here ▶
-                  <a href={data[7]} target="_blank" rel="Suii Twitter">
-                    <FaXTwitter />
-                  </a>
+                <div className="flex flex-col items-center mt-3 text-xl space-y-4">
+                  <div className="flex gap-3 z-[100] items-center">
+                    vote on
+                    <a href={data[6]} target="_blank" rel="meme war Twitter">
+                      <FaXTwitter />
+                    </a>
+                  </div>
+                  <p>or </p>
+                  <div className="flex gap-3 z-[100] items-center">
+                    on meme war
+                    <Checkbox onChange={() => handleVote(2)}>Checkbox</Checkbox>
+                  </div>
                 </div>
-                </div>
-
-               
 
                 {/* Infinte moving cards */}
 

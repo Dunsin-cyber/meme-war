@@ -57,6 +57,8 @@ export default function TokenModal() {
           getTimestampFromDateAndTime(memeData.date, memeData.time),
           parseEther(memeData.prize),
           memeData.milestone,
+          memeData.memeName,
+          memeData.milestone,
         ],
         chain: undefined,
         account: address,
@@ -75,13 +77,6 @@ export default function TokenModal() {
 
   const handleCreateMemeToken = async () => {
     try {
-      const post = {
-        title: memeData.memeName + "(FROM MEME WAR)",
-        option: memeData.tokenSymbol,
-        option2: "Vote Against Me",
-      };
-      const url = await handlePostOnX(post);
-      console.log("MEMEDATA", url);
       const data = await writeContractAsync({
         chainId: bscTestnet.id,
         address: contractAddress, // change to receipient address
@@ -92,8 +87,10 @@ export default function TokenModal() {
           memeData.tokenSymbol,
           parseEther(memeData.saleTarget.toString()),
           memeData.memeUrl,
-          url,
+          "",
           getTimestampFromDateAndTime(memeData.date, memeData.time),
+          memeData.description,
+          memeData.memeName,
           memeData.description,
         ],
         chain: undefined,
@@ -178,10 +175,10 @@ export default function TokenModal() {
         memeData.time.length > 2 &&
         +memeData.prize > 0
       ) {
-        const done = await handleSubmit();
-        if (done) {
+       await handleSubmit();
+        // if (done) {
           setSteps(steps + 1);
-        }
+        // }
       } else {
         //if no content in meme page,
         toast.error("make sure all fields are filled");

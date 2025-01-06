@@ -1,1 +1,461 @@
-[{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"warId","type":"uint256"},{"indexed":false,"internalType":"address","name":"challenger","type":"address"}],"name":"MemeWarAccepted","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"warId","type":"uint256"},{"indexed":false,"internalType":"address","name":"creator","type":"address"},{"indexed":false,"internalType":"bool","name":"isTokenWar","type":"bool"}],"name":"MemeWarCreated","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"warId","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"newPointTarget","type":"uint256"}],"name":"MemeWarPointTargetUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"warId","type":"uint256"},{"indexed":false,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"newPoints","type":"uint256"}],"name":"MemeWarPointUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"warId","type":"uint256"},{"indexed":false,"internalType":"address","name":"winner","type":"address"}],"name":"MemeWarResolved","type":"event"},{"inputs":[{"internalType":"uint256","name":"warId","type":"uint256"},{"internalType":"string","name":"name","type":"string"},{"internalType":"string","name":"symbol","type":"string"},{"internalType":"string","name":"_meme2URI","type":"string"},{"internalType":"string","name":"_meme2Twitter","type":"string"},{"internalType":"string","name":"_meme2Title","type":"string"},{"internalType":"string","name":"_meme2Description","type":"string"}],"name":"acceptMemeWar","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"activeWars","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"warId","type":"uint256"},{"internalType":"address","name":"user","type":"address"}],"name":"checkPointTargetReached","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"closedWars","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"string","name":"name","type":"string"},{"internalType":"string","name":"symbol","type":"string"},{"internalType":"uint256","name":"saleTarget","type":"uint256"},{"internalType":"string","name":"_meme1URI","type":"string"},{"internalType":"string","name":"_meme1Twitter","type":"string"},{"internalType":"uint256","name":"_duration","type":"uint256"},{"internalType":"string","name":"_description","type":"string"},{"internalType":"string","name":"_meme1Title","type":"string"},{"internalType":"string","name":"_meme1Description","type":"string"}],"name":"createMemeTokenWar","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"_meme1URI","type":"string"},{"internalType":"string","name":"_meme1Twitter","type":"string"},{"internalType":"uint256","name":"_pointTarget","type":"uint256"},{"internalType":"uint256","name":"_duration","type":"uint256"},{"internalType":"uint256","name":"_prize","type":"uint256"},{"internalType":"string","name":"_description","type":"string"},{"internalType":"string","name":"_meme1Title","type":"string"},{"internalType":"string","name":"_meme1Description","type":"string"}],"name":"createMemeWar","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"getActiveMemeWars","outputs":[{"internalType":"uint256[]","name":"","type":"uint256[]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getAllMemeTokenWars","outputs":[{"internalType":"uint256[]","name":"","type":"uint256[]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getAllMemeWars","outputs":[{"components":[{"internalType":"address","name":"creator","type":"address"},{"internalType":"address","name":"challenger","type":"address"},{"internalType":"address","name":"creatorToken","type":"address"},{"internalType":"address","name":"challengerToken","type":"address"},{"internalType":"string","name":"meme1URI","type":"string"},{"internalType":"string","name":"meme2URI","type":"string"},{"internalType":"string","name":"meme1Twitter","type":"string"},{"internalType":"string","name":"meme2Twitter","type":"string"},{"internalType":"uint256","name":"saleTarget","type":"uint256"},{"internalType":"uint256","name":"pointTarget","type":"uint256"},{"internalType":"uint256","name":"duration","type":"uint256"},{"internalType":"uint256","name":"prize","type":"uint256"},{"internalType":"bool","name":"isResolved","type":"bool"},{"internalType":"bool","name":"isTokenWar","type":"bool"},{"internalType":"address","name":"winner","type":"address"},{"internalType":"string","name":"description","type":"string"},{"internalType":"uint256","name":"upVotes1","type":"uint256"},{"internalType":"uint256","name":"upVotes2","type":"uint256"},{"internalType":"uint256","name":"likes1","type":"uint256"},{"internalType":"uint256","name":"likes2","type":"uint256"},{"internalType":"string","name":"meme1Description","type":"string"},{"internalType":"string","name":"meme2Description","type":"string"},{"internalType":"string","name":"meme1Title","type":"string"},{"internalType":"string","name":"meme2Title","type":"string"}],"internalType":"struct MemeCultureWar.MemeWarDetails[]","name":"","type":"tuple[]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getClosedMemeWars","outputs":[{"internalType":"uint256[]","name":"","type":"uint256[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"getUserJoinedWars","outputs":[{"internalType":"uint256[]","name":"","type":"uint256[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"getUserWonWars","outputs":[{"internalType":"uint256[]","name":"","type":"uint256[]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"memeWarIdCounter","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"memeWars","outputs":[{"internalType":"address","name":"creator","type":"address"},{"internalType":"address","name":"challenger","type":"address"},{"internalType":"address","name":"creatorToken","type":"address"},{"internalType":"address","name":"challengerToken","type":"address"},{"internalType":"string","name":"meme1URI","type":"string"},{"internalType":"string","name":"meme2URI","type":"string"},{"internalType":"string","name":"meme1Twitter","type":"string"},{"internalType":"string","name":"meme2Twitter","type":"string"},{"internalType":"uint256","name":"saleTarget","type":"uint256"},{"internalType":"uint256","name":"pointTarget","type":"uint256"},{"internalType":"uint256","name":"duration","type":"uint256"},{"internalType":"uint256","name":"prize","type":"uint256"},{"internalType":"bool","name":"isResolved","type":"bool"},{"internalType":"bool","name":"isTokenWar","type":"bool"},{"internalType":"address","name":"winner","type":"address"},{"internalType":"string","name":"description","type":"string"},{"internalType":"uint256","name":"upVotes1","type":"uint256"},{"internalType":"uint256","name":"upVotes2","type":"uint256"},{"internalType":"uint256","name":"likes1","type":"uint256"},{"internalType":"uint256","name":"likes2","type":"uint256"},{"internalType":"string","name":"meme1Description","type":"string"},{"internalType":"string","name":"meme2Description","type":"string"},{"internalType":"string","name":"meme1Title","type":"string"},{"internalType":"string","name":"meme2Title","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"warId","type":"uint256"},{"internalType":"address","name":"winner","type":"address"},{"internalType":"string","name":"criteria","type":"string"}],"name":"resolveMemeWar","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"warId","type":"uint256"},{"internalType":"uint256","name":"newPointTarget","type":"uint256"}],"name":"updatePointTarget","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"warId","type":"uint256"},{"internalType":"address","name":"user","type":"address"},{"internalType":"uint256","name":"newPoints","type":"uint256"}],"name":"updatePoints","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"warId","type":"uint256"},{"internalType":"uint256","name":"likes1","type":"uint256"},{"internalType":"uint256","name":"likes2","type":"uint256"}],"name":"updateTwitterLikes","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"},{"internalType":"uint256","name":"","type":"uint256"}],"name":"userJoinedWars","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"address","name":"","type":"address"}],"name":"userPoints","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"},{"internalType":"uint256","name":"","type":"uint256"}],"name":"userWonWars","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"},{"internalType":"uint256","name":"","type":"uint256"}],"name":"usersLostWars","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"warId","type":"uint256"},{"internalType":"uint8","name":"memeIndex","type":"uint8"}],"name":"voteForMeme","outputs":[],"stateMutability":"nonpayable","type":"function"}]
+[
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "warId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "challenger",
+        "type": "address"
+      }
+    ],
+    "name": "MemeWarAccepted",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "warId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "creator",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "isTokenWar",
+        "type": "bool"
+      }
+    ],
+    "name": "MemeWarCreated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "warId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "newPointTarget",
+        "type": "uint256"
+      }
+    ],
+    "name": "MemeWarPointTargetUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "warId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "newPoints",
+        "type": "uint256"
+      }
+    ],
+    "name": "MemeWarPointUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "warId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "winner",
+        "type": "address"
+      }
+    ],
+    "name": "MemeWarResolved",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "warId", "type": "uint256" },
+      { "internalType": "string", "name": "name", "type": "string" },
+      { "internalType": "string", "name": "symbol", "type": "string" },
+      { "internalType": "string", "name": "_meme2URI", "type": "string" },
+      { "internalType": "string", "name": "_meme2Twitter", "type": "string" },
+      { "internalType": "string", "name": "_meme2Title", "type": "string" },
+      {
+        "internalType": "string",
+        "name": "_meme2Description",
+        "type": "string"
+      }
+    ],
+    "name": "acceptMemeWar",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "name": "activeWars",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "warId", "type": "uint256" },
+      { "internalType": "address", "name": "user", "type": "address" }
+    ],
+    "name": "checkPointTargetReached",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "name": "closedWars",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "string", "name": "name", "type": "string" },
+      { "internalType": "string", "name": "symbol", "type": "string" },
+      { "internalType": "uint256", "name": "saleTarget", "type": "uint256" },
+      { "internalType": "string", "name": "_meme1URI", "type": "string" },
+      { "internalType": "string", "name": "_meme1Twitter", "type": "string" },
+      { "internalType": "uint256", "name": "_duration", "type": "uint256" },
+      { "internalType": "string", "name": "_description", "type": "string" },
+      { "internalType": "string", "name": "_meme1Title", "type": "string" },
+      {
+        "internalType": "string",
+        "name": "_meme1Description",
+        "type": "string"
+      }
+    ],
+    "name": "createMemeTokenWar",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "string", "name": "_meme1URI", "type": "string" },
+      { "internalType": "string", "name": "_meme1Twitter", "type": "string" },
+      { "internalType": "uint256", "name": "_pointTarget", "type": "uint256" },
+      { "internalType": "uint256", "name": "_duration", "type": "uint256" },
+      { "internalType": "uint256", "name": "_prize", "type": "uint256" },
+      { "internalType": "string", "name": "_description", "type": "string" },
+      { "internalType": "string", "name": "_meme1Title", "type": "string" },
+      {
+        "internalType": "string",
+        "name": "_meme1Description",
+        "type": "string"
+      }
+    ],
+    "name": "createMemeWar",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getActiveMemeWars",
+    "outputs": [
+      { "internalType": "uint256[]", "name": "", "type": "uint256[]" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getAllMemeTokenWars",
+    "outputs": [
+      { "internalType": "uint256[]", "name": "", "type": "uint256[]" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getAllMemeWars",
+    "outputs": [
+      {
+        "components": [
+          { "internalType": "address", "name": "creator", "type": "address" },
+          {
+            "internalType": "address",
+            "name": "challenger",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "creatorToken",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "challengerToken",
+            "type": "address"
+          },
+          { "internalType": "string", "name": "meme1URI", "type": "string" },
+          { "internalType": "string", "name": "meme2URI", "type": "string" },
+          {
+            "internalType": "string",
+            "name": "meme1Twitter",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "meme2Twitter",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "saleTarget",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "pointTarget",
+            "type": "uint256"
+          },
+          { "internalType": "uint256", "name": "duration", "type": "uint256" },
+          { "internalType": "uint256", "name": "prize", "type": "uint256" },
+          { "internalType": "bool", "name": "isResolved", "type": "bool" },
+          { "internalType": "bool", "name": "isTokenWar", "type": "bool" },
+          { "internalType": "address", "name": "winner", "type": "address" },
+          { "internalType": "string", "name": "description", "type": "string" },
+          { "internalType": "uint256", "name": "upVotes1", "type": "uint256" },
+          { "internalType": "uint256", "name": "upVotes2", "type": "uint256" },
+          { "internalType": "uint256", "name": "likes1", "type": "uint256" },
+          { "internalType": "uint256", "name": "likes2", "type": "uint256" },
+          {
+            "internalType": "string",
+            "name": "meme1Description",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "meme2Description",
+            "type": "string"
+          },
+          { "internalType": "string", "name": "meme1Title", "type": "string" },
+          { "internalType": "string", "name": "meme2Title", "type": "string" }
+        ],
+        "internalType": "struct MemeCultureWar.MemeWarDetails[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getClosedMemeWars",
+    "outputs": [
+      { "internalType": "uint256[]", "name": "", "type": "uint256[]" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "user", "type": "address" }
+    ],
+    "name": "getUserJoinedWars",
+    "outputs": [
+      { "internalType": "uint256[]", "name": "", "type": "uint256[]" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "user", "type": "address" }
+    ],
+    "name": "getUserWonWars",
+    "outputs": [
+      { "internalType": "uint256[]", "name": "", "type": "uint256[]" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "memeWarIdCounter",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "name": "memeWars",
+    "outputs": [
+      { "internalType": "address", "name": "creator", "type": "address" },
+      { "internalType": "address", "name": "challenger", "type": "address" },
+      { "internalType": "address", "name": "creatorToken", "type": "address" },
+      {
+        "internalType": "address",
+        "name": "challengerToken",
+        "type": "address"
+      },
+      { "internalType": "string", "name": "meme1URI", "type": "string" },
+      { "internalType": "string", "name": "meme2URI", "type": "string" },
+      { "internalType": "string", "name": "meme1Twitter", "type": "string" },
+      { "internalType": "string", "name": "meme2Twitter", "type": "string" },
+      { "internalType": "uint256", "name": "saleTarget", "type": "uint256" },
+      { "internalType": "uint256", "name": "pointTarget", "type": "uint256" },
+      { "internalType": "uint256", "name": "duration", "type": "uint256" },
+      { "internalType": "uint256", "name": "prize", "type": "uint256" },
+      { "internalType": "bool", "name": "isResolved", "type": "bool" },
+      { "internalType": "bool", "name": "isTokenWar", "type": "bool" },
+      { "internalType": "address", "name": "winner", "type": "address" },
+      { "internalType": "string", "name": "description", "type": "string" },
+      { "internalType": "uint256", "name": "upVotes1", "type": "uint256" },
+      { "internalType": "uint256", "name": "upVotes2", "type": "uint256" },
+      { "internalType": "uint256", "name": "likes1", "type": "uint256" },
+      { "internalType": "uint256", "name": "likes2", "type": "uint256" },
+      {
+        "internalType": "string",
+        "name": "meme1Description",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "meme2Description",
+        "type": "string"
+      },
+      { "internalType": "string", "name": "meme1Title", "type": "string" },
+      { "internalType": "string", "name": "meme2Title", "type": "string" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "warId", "type": "uint256" },
+      { "internalType": "address", "name": "winner", "type": "address" },
+      { "internalType": "string", "name": "criteria", "type": "string" }
+    ],
+    "name": "resolveMemeWar",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "warId", "type": "uint256" },
+      { "internalType": "uint256", "name": "newPointTarget", "type": "uint256" }
+    ],
+    "name": "updatePointTarget",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "warId", "type": "uint256" },
+      { "internalType": "address", "name": "user", "type": "address" },
+      { "internalType": "uint256", "name": "newPoints", "type": "uint256" }
+    ],
+    "name": "updatePoints",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "warId", "type": "uint256" },
+      { "internalType": "uint256", "name": "likes1", "type": "uint256" },
+      { "internalType": "uint256", "name": "likes2", "type": "uint256" }
+    ],
+    "name": "updateTwitterLikes",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "", "type": "address" },
+      { "internalType": "uint256", "name": "", "type": "uint256" }
+    ],
+    "name": "userJoinedWars",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "", "type": "uint256" },
+      { "internalType": "address", "name": "", "type": "address" }
+    ],
+    "name": "userPoints",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "", "type": "address" },
+      { "internalType": "uint256", "name": "", "type": "uint256" }
+    ],
+    "name": "userWonWars",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "", "type": "address" },
+      { "internalType": "uint256", "name": "", "type": "uint256" }
+    ],
+    "name": "usersLostWars",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "warId", "type": "uint256" },
+      { "internalType": "uint8", "name": "memeIndex", "type": "uint8" }
+    ],
+    "name": "voteForMeme",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]

@@ -14,8 +14,10 @@ import { toast } from "react-hot-toast";
 import { useRouter } from "next/router";
 import { useMemeClient } from "@/context/createMemeContext";
 import { useForm } from "react-hook-form";
+import { formatEther, parseEther } from "viem";
+import { Alert } from "antd";
 
-export function Form({ id }: { id: number }) {
+export function Form({ id, prize, isToken }: { id: number, prize: bigint, isToken:boolean }) {
   const [name, setName] = useState("");
   const [symbol, setSymbol] = useState("");
   const { address, chainId } = useAccount();
@@ -26,7 +28,7 @@ export function Form({ id }: { id: number }) {
   const router = useRouter();
   const { memeData, setMemeData } = useMemeClient();
   const { connectAsync } = useConnect();
-
+  console.log("PRIZE NI OOOO", prize)
   const {
     register,
     handleSubmit,
@@ -46,8 +48,8 @@ export function Form({ id }: { id: number }) {
 
     try {
       const post = {
-        title: data.name + "(FROM MEME WAR)",
-        option: data.symbol,
+        title: data.description + "(FROM MEME WAR)",
+        option: data.name,
         option2: "VOTE AGAINST ME",
       };
       const url = await handlePostOnX(post);
@@ -58,9 +60,18 @@ export function Form({ id }: { id: number }) {
         address: contractAddress,
         functionName: "acceptMemeWar",
         abi: contractAbi,
-        args: [id, data.name, data.symbol, memeData.memeUrl, url],
+        args: [
+          id,
+          data.name,
+          data.symbol,
+          memeData.memeUrl,
+          url,
+          data.name,
+          data.description,
+        ],
         chain: undefined,
         account: address,
+        value: prize,
       });
       setLoading(false);
       toast.success("joined successfully");
@@ -125,13 +136,23 @@ export function Form({ id }: { id: number }) {
             />
           </LabelInputContainer>
         </div>
-        <LabelInputContainer>
+        <LabelInputContainer className="mb-6">
+          <Label htmlFor="description">Description</Label>
+          <Input
+            {...register("description", { required: true })}
+            id="description"
+            placeholder="my meme means..."
+            type="text"
+          />
+        </LabelInputContainer>
+
+        <LabelInputContainer className="mb-6">
           <Label htmlFor="lastname">Symbol</Label>
           <Input
-            className={`my-4 items-center pr-8 pl-2 h-[2rem] border-[#595959] hover:border-[#fc923b]  bg-[#141414] border-solid border rounded-[6px] flex  ${
+            className={` items-center pr-8 pl-2 h-[2rem] border-[#595959] hover:border-[#fc923b]  bg-[#141414] border-solid border rounded-[6px] flex  ${
               errors.symbol ? "border-9 border-red-700" : "border-[#595959]"
             }`}
-            id="lastname"
+            id="symbol"
             placeholder="AXN"
             type="text"
             {...register("symbol", { required: true })}
@@ -142,25 +163,15 @@ export function Form({ id }: { id: number }) {
           <UploadPic />
         </LabelInputContainer>
 
-        {/* <LabelInputContainer className="mb-4">
-          <Label htmlFor="email">Total Supply</Label>
-          <Input id="email" placeholder="0" type="number" />
-        </LabelInputContainer>
-        <LabelInputContainer className="mb-4">
-          <Label htmlFor="password">X Handle</Label>
-          <Input id="password" placeholder="https://x.xom.mmm" type="text" />
-        </LabelInputContainer> */}
-        {/* <LabelInputContainer className="mb-8">
-          <Label htmlFor="twitterpassword">unknown</Label>
-          <Input
-            id="twitterpassword"
-            placeholder="••••••••"
-            type="twitterpassword"
-          />
-        </LabelInputContainer> */}
+        {!isToken && (
+
+          <div className="my-5">
+          <Alert message={`${(formatEther(prize)).toLocaleString()}TBnB Will be deducted from your account to join this war`} type="warning" showIcon closable />
+        </div>
+        )}
 
         <button
-          className="bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
+          className="my- 4 bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
           type="submit"
           disabled={loading}
         >
