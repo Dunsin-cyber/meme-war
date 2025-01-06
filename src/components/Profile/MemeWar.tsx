@@ -34,10 +34,21 @@ import {
 } from "antd";
 import abi from "@/hooks/abi.json";
 import {contractAddress} from "@/hooks/index"
+import {
+  useAccount,
+  useWriteContract,
+  useConnect,
+  useReadContract,
+} from "wagmi";
+import erc20Abi from "@/hooks/erc-20.json";
+import { config } from "@/utils/wagmi";
+import { injected } from "wagmi/connectors";
+import { bscTestnet } from "viem/chains";
+
+
 
 const { Countdown } = Statistic;
 
-const deadline = Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30; // Dayjs is also OK
 
 const onFinish: CountdownProps["onFinish"] = () => {
   console.log("finished!");
@@ -51,6 +62,11 @@ function MemeWar({ id }: { id: string }) {
   const [range, setRange] = React.useState(0);
     const [claiming, setClaiming] = React.useState(false)
 
+    const { address, chainId } = useAccount();
+  const { writeContractAsync } = useWriteContract({
+    config,
+  });
+  const { connectAsync } = useConnect();
 
    const handleClaimVictory = async() => {
     try {
