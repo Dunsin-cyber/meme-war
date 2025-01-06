@@ -3,7 +3,7 @@ import React from "react";
 import { SidebarDemo } from "@/components/Sidebar";
 import Link from "next/link";
 import { Tag } from "@/components/ui/tag";
-import { formatEther } from "viem";
+import { formatEther, parseEther } from "viem";
 import { FaXTwitter, FaGithub, FaMedium } from "react-icons/fa6";
 import { FaDiscord } from "react-icons/fa";
 import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
@@ -30,10 +30,10 @@ import {
   Tag as AntdTag,
   CountdownProps,
   Button,
-  Badge
+  Badge,
 } from "antd";
 import abi from "@/hooks/abi.json";
-import {contractAddress} from "@/hooks/index"
+import { contractAddress, useGetTokenDetails } from "@/hooks/index";
 import {
   useAccount,
   useWriteContract,
@@ -44,11 +44,9 @@ import erc20Abi from "@/hooks/erc-20.json";
 import { config } from "@/utils/wagmi";
 import { injected } from "wagmi/connectors";
 import { bscTestnet } from "viem/chains";
-
-
+import { useAppSelector } from "@/redux/hook";
 
 const { Countdown } = Statistic;
-
 
 const onFinish: CountdownProps["onFinish"] = () => {
   console.log("finished!");
@@ -60,17 +58,53 @@ function MemeWar({ id }: { id: string }) {
   const { data, isLoading } = useGetAMemeDetail(+id);
   console.log("DETAIL", data);
   const [range, setRange] = React.useState(0);
-    const [claiming, setClaiming] = React.useState(false)
+  const [priceRange, setPriceRange] = React.useState(0);
 
-    const { address, chainId } = useAccount();
+  const [claiming, setClaiming] = React.useState(false);
+  const tokens = useAppSelector((state) => state.token);
+
+  const { address, chainId } = useAccount();
   const { writeContractAsync } = useWriteContract({
     config,
   });
   const { connectAsync } = useConnect();
 
-   const handleClaimVictory = async() => {
+  useGetTokenDetails(1, data && data[2]);
+  useGetTokenDetails(2, data && data[3]);
+
+  const handleApprove = async () => {
+    setLoading(true);
     try {
-      setClaiming(true)
+      if (!address) {
+        await connectAsync({
+          chainId: bscTestnet.id,
+          connector: injected(),
+        });
+      }
+
+      const approve = await writeContractAsync({
+        chainId: bscTestnet.id,
+        chain: undefined,
+        account: address,
+        address: data[2] /* content?.tokenAddress */,
+        abi: erc20Abi,
+        functionName: "approve",
+        args: [contractAddress, parseEther("500000")],
+      });
+      toast.success("Approved!");
+
+      // closeModal();
+    } catch (err) {
+      console.log(err);
+      toast.error("Something Went Wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleClaimVictory = async () => {
+    try {
+      setClaiming(true);
       if (!address) {
         await connectAsync({
           chainId: bscTestnet.id,
@@ -85,18 +119,16 @@ function MemeWar({ id }: { id: string }) {
         address: contractAddress /* content?.tokenAddress */,
         abi: abi,
         functionName: "resolveMemeWar",
-        args: [id, address, "Winsss"],
+        args: [id, address, "votes"],
       });
       toast.success("Congratulations! Reward disbursed to your wallet!");
-
-    }catch (err) {
-      console.log(err)
-      toast.error("Something went wrong")
+    } catch (err) {
+      console.log(err);
+      toast.error("Something went wrong");
     } finally {
-      setClaiming(false)
+      setClaiming(false);
     }
-  }
-
+  };
 
   const onFinish: CountdownProps["onFinish"] = () => {
     console.log("finished!");
@@ -140,12 +172,23 @@ function MemeWar({ id }: { id: string }) {
     setRange(dd);
   };
 
+  const calcPriceStat = () => {
+    const dd =
+      ((+tokens?.token2.price - +tokens?.token1.price) /
+        (+tokens?.token2.price + +tokens?.token1.price)) *
+      100;
+    setPriceRange(dd);
+  };
+
   React.useEffect(() => {
     if (data) {
       calcStat();
       knowIfEnded();
     }
-  }, [data]);
+    if (tokens) {
+      calcPriceStat();
+    }
+  }, [data, tokens]);
 
   // for memes,
   //get user's tweet and competitors tweet
@@ -217,6 +260,13 @@ function MemeWar({ id }: { id: string }) {
                 </div>
               </div>
               {/* Social */}
+              {data[13] && (
+                <div className="flex justify-center">
+                  <Button loading={loading} onClick={() => handleApprove()}>
+                    Approve MemeWar
+                  </Button>
+                </div>
+              )}
 
               {/* Infinte moving cards */}
 
@@ -235,55 +285,74 @@ function MemeWar({ id }: { id: string }) {
             <div className="max-w-full md:w-[45%] space-y-6 mx-auto">
               <p>Here is how your meme is doing...</p>
               {data[13] ? (
-                <div className="space-y-6 mx-auto">
-                  <p className="font-bold text-primary100">
-                    Token Price is 20TBNBn
-                  </p>
-                  <Row gutter={16}>
-                    <Col span={12}>
-                      <Card bordered={false}>
-                        <Statistic
-                          title="20 TBNB"
-                          value={11.28}
-                          precision={2}
-                          valueStyle={{ color: "#3f8600" }}
-                          prefix={<ArrowUpOutlined />}
-                          suffix="%"
-                        />
-                      </Card>
-                    </Col>
-                    <Col span={12}>
-                      <Countdown
-                        title="Time left"
-                        value={Number(data[10])}
-                        onFinish={onFinish}
-                      />
-                    </Col>
-                    {/* <Col span={12}>
-                      <Card bordered={false}>
-                        <Statistic
-                          title="Idle"
-                          value={9.3}
-                          precision={2}
-                          valueStyle={{ color: "#cf1322" }}
-                          prefix={<ArrowDownOutlined />}
-                          suffix="%"
-                        />
-                      </Card>
-                    </Col> */}
-                  </Row>
-                  <div className="flex space-x-3">
-                    <p>Your token HYU is </p>
-                    {/* <AntdTag icon={<CheckCircleOutlined />} color="success">
-                      winning
-                    </AntdTag> */}
-                    <AntdTag
-                      icon={<ExclamationCircleOutlined />}
-                      color="warning"
-                    >
-                      loosing
-                    </AntdTag>
-                  </div>
+                <div>
+                  {tokens.token2 && (
+                    <div className="space-y-6 mx-auto">
+                      <p className="font-bold text-primary100">
+                        Token Price is {tokens?.token2?.price}TBNB
+                      </p>
+                      <Row gutter={16}>
+                        {priceRange > 0 ? (
+                          <Col span={12}>
+                            <Card bordered={false}>
+                              <Statistic
+                                title={`${tokens?.token2?.price} TBnB`}
+                                value={priceRange}
+                                precision={2}
+                                valueStyle={{ color: "#3f8600" }}
+                                prefix={<ArrowUpOutlined />}
+                                suffix="%"
+                              />
+                            </Card>
+                          </Col>
+                        ) : (
+                          <Col span={12}>
+                            <Card bordered={false}>
+                              <Statistic
+                                title={`${tokens?.token2?.price} TBnB`}
+                                value={priceRange * -1}
+                                precision={2}
+                                valueStyle={{ color: "#cf1322" }}
+                                prefix={<ArrowDownOutlined />}
+                                suffix="%"
+                              />
+                            </Card>
+                          </Col>
+                        )}
+
+                        <Col span={12}>
+                          <Countdown
+                            title="Time left"
+                            value={Number(data[10])}
+                            onFinish={onFinish}
+                          />
+                        </Col>
+                        {/* */}
+                      </Row>
+                      <div className="flex my-3 space-y-3 flex-col text-wrap ">
+                        <p>Name: {data[23]}</p>
+                        <p className="text-wrap text-primary200">{data[21]}</p>
+                      </div>
+                      <div className="flex space-x-3">
+                        <p>Your token {tokens?.token2?.symbol} is </p>
+                        {priceRange > 0 ? (
+                          <AntdTag
+                            icon={<CheckCircleOutlined />}
+                            color="success"
+                          >
+                            winning
+                          </AntdTag>
+                        ) : (
+                          <AntdTag
+                            icon={<ExclamationCircleOutlined />}
+                            color="warning"
+                          >
+                            loosing
+                          </AntdTag>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div className="space-y-6 mx-auto">
@@ -338,35 +407,40 @@ function MemeWar({ id }: { id: string }) {
                       />
                     </Col>
                   </Row>
-                    {ended && (
-
-                      <Badge.Ribbon
+                  {ended && (
+                    <Badge.Ribbon
                       text="Hippies"
                       color={`${
-                      data[17] >= data[9] && data[17] > data[16]
-                        ? `green`
-                        : `red`
-                    }`}
-                  >
-                    <Card
-                      title={`${
                         data[17] >= data[9] && data[17] > data[16]
-                          ? `${data[23]} WON THE BATTLE WITH ${data[17]} VOTES`
-                          : `${data[23]} LOST THE BATTLE WITH ${data[17]} VOTES`
+                          ? `green`
+                          : `red`
                       }`}
-                      size="small"
                     >
-                      voting has ended
-                    </Card>
-                  </Badge.Ribbon>
-                    )}
+                      <Card
+                        title={`${
+                          data[17] >= data[9] && data[17] > data[16]
+                            ? `${data[23]} WON THE BATTLE WITH ${data[17]} VOTES`
+                            : `${data[23]} LOST THE BATTLE WITH ${data[17]} VOTES`
+                        }`}
+                        size="small"
+                      >
+                        voting has ended
+                      </Card>
+                    </Badge.Ribbon>
+                  )}
                 </div>
               )}
             </div>
-            <Button onClick={() => handleClaimVictory()} loading={claiming}  
-              disabled={!(Number(data[17]) >= Number(data[9]) && Number(data[17]) > Number(data[16]))}
-
-              >
+            <Button
+              onClick={() => handleClaimVictory()}
+              loading={claiming}
+              disabled={
+                !(
+                  Number(data[17]) >= Number(data[9]) &&
+                  Number(data[17]) > Number(data[16])
+                )
+              }
+            >
               Claim Victory
             </Button>
           </div>

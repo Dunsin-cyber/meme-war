@@ -30,7 +30,7 @@ import {
   Tag as AntdTag,
   CountdownProps,
   Button,
-  Badge
+  Badge,
 } from "antd";
 import {
   useAccount,
@@ -43,11 +43,10 @@ import { config } from "@/utils/wagmi";
 import { injected } from "wagmi/connectors";
 import { bscTestnet } from "viem/chains";
 import abi from "@/hooks/abi.json";
-import {contractAddress} from "@/hooks/index"
-
+import { contractAddress, useGetTokenDetails } from "@/hooks/index";
+import { useAppSelector } from "@/redux/hook";
 
 const { Countdown } = Statistic;
-
 
 const onFinish: CountdownProps["onFinish"] = () => {
   console.log("finished!");
@@ -59,12 +58,15 @@ function CreatedWar({ id }: { id: string }) {
   const { data, isLoading } = useGetAMemeDetail(+id);
   console.log("DETAIL", data);
   const [range, setRange] = React.useState(0);
-    const { address, chainId } = useAccount();
+  const [priceRange, setPriceRange] = React.useState(0);
+
+  const { address, chainId } = useAccount();
   const { writeContractAsync } = useWriteContract({
     config,
   });
   const { connectAsync } = useConnect();
-  const [claiming, setClaiming] = React.useState(false)
+  const [claiming, setClaiming] = React.useState(false);
+  const tokens = useAppSelector((state) => state.token);
 
   const onFinish: CountdownProps["onFinish"] = () => {
     console.log("finished!");
@@ -92,6 +94,9 @@ function CreatedWar({ id }: { id: string }) {
     }
   };
 
+  useGetTokenDetails(1, data && data[2]);
+  useGetTokenDetails(2, data && data[3]);
+
   React.useEffect(() => {
     if (data && data[11] === false) {
       handleGetTweets(
@@ -108,15 +113,25 @@ function CreatedWar({ id }: { id: string }) {
     setRange(dd);
   };
 
+  const calcPriceStat = () => {
+    const dd =
+      ((+tokens?.token1?.price - +tokens?.token2?.price) /
+        (+tokens?.token1?.price + +tokens?.token2?.price)) *
+      100;
+    setPriceRange(dd);
+  };
+
   React.useEffect(() => {
     if (data) {
       calcStat();
       knowIfEnded();
     }
-  }, [data]);
+    if (tokens) {
+      calcPriceStat();
+    }
+  }, [data, tokens]);
 
-
-    const handleApprove = async () => {
+  const handleApprove = async () => {
     setLoading(true);
     try {
       if (!address) {
@@ -146,10 +161,9 @@ function CreatedWar({ id }: { id: string }) {
     }
   };
 
-
-  const handleClaimVictory = async() => {
+  const handleClaimVictory = async () => {
     try {
-      setClaiming(true)
+      setClaiming(true);
       if (!address) {
         await connectAsync({
           chainId: bscTestnet.id,
@@ -164,17 +178,16 @@ function CreatedWar({ id }: { id: string }) {
         address: contractAddress /* content?.tokenAddress */,
         abi: abi,
         functionName: "resolveMemeWar",
-        args: [id, address, "Winsss"],
+        args: [id, address, "votes"],
       });
       toast.success("Congratulations! Reward disbursed to your wallet!");
-
-    }catch (err) {
-      console.log(err)
-      toast.error("Something went wrong")
+    } catch (err) {
+      console.log(err);
+      toast.error("Something went wrong");
     } finally {
-      setClaiming(false)
+      setClaiming(false);
     }
-  }
+  };
 
   // for memes,
   //get user's tweet and competitors tweet
@@ -248,8 +261,10 @@ function CreatedWar({ id }: { id: string }) {
               {/* Social */}
               {data[13] && (
                 <div className="flex justify-center">
-                <Button onClick={() => handleApprove()}>Approve MemeWar</Button>
-</div>
+                  <Button loading={loading} onClick={() => handleApprove()}>
+                    Approve MemeWar
+                  </Button>
+                </div>
               )}
               {/* Infinte moving cards */}
 
@@ -268,55 +283,68 @@ function CreatedWar({ id }: { id: string }) {
             <div className="max-w-full md:w-[45%] space-y-6 mx-auto">
               <p>Here is how your meme is doing...</p>
               {data[13] ? (
-                <div className="space-y-6 mx-auto">
-                  <p className="font-bold text-primary100">
-                    Token Price is 20TBNBn
-                  </p>
-                  <Row gutter={16}>
-                    <Col span={12}>
-                      <Card bordered={false}>
-                        <Statistic
-                          title="20 TBNB"
-                          value={11.28}
-                          precision={2}
-                          valueStyle={{ color: "#3f8600" }}
-                          prefix={<ArrowUpOutlined />}
-                          suffix="%"
-                        />
-                      </Card>
-                    </Col>
-                    <Col span={12}>
-                      <Countdown
-                        title="Time left"
-                        value={Number(data[10])}
-                        onFinish={onFinish}
-                      />
-                    </Col>
-                    {/* <Col span={12}>
-                      <Card bordered={false}>
-                        <Statistic
-                          title="Idle"
-                          value={9.3}
-                          precision={2}
-                          valueStyle={{ color: "#cf1322" }}
-                          prefix={<ArrowDownOutlined />}
-                          suffix="%"
-                        />
-                      </Card>
-                    </Col> */}
-                  </Row>
-                  <div className="flex space-x-3">
-                    <p>Your token HYU is </p>
-                    {/* <AntdTag icon={<CheckCircleOutlined />} color="success">
+                <div>
+                  {tokens.token1 && (
+                    <div className="space-y-6 mx-auto">
+                      <p className="font-bold text-primary100">
+                        Token Price is {tokens?.token1?.price}TBNB
+                      </p>
+                      <Row gutter={16}>
+                        {priceRange > 0 ? (
+                          <Col span={12}>
+                            <Card bordered={false}>
+                              <Statistic
+                                title={`${tokens?.token1?.price} TBnB`}
+                                value={priceRange}
+                                precision={2}
+                                valueStyle={{ color: "#3f8600" }}
+                                prefix={<ArrowUpOutlined />}
+                                suffix="%"
+                              />
+                            </Card>
+                          </Col>
+                        ) : (
+                          <Col span={12}>
+                            <Card bordered={false}>
+                              <Statistic
+                                title={`${tokens?.token1?.price} TBnB`}
+                                value={priceRange * -1}
+                                precision={2}
+                                valueStyle={{ color: "#cf1322" }}
+                                prefix={<ArrowDownOutlined />}
+                                suffix="%"
+                              />
+                            </Card>
+                          </Col>
+                        )}
+                        <Col span={12}>
+                          <Countdown
+                            title="Time left"
+                            value={Number(data[10])}
+                            onFinish={onFinish}
+                          />
+                        </Col>
+                        {/*  */}
+                      </Row>
+                      <div className="flex space-x-3">
+                        <p>Your token {tokens?.token1?.symbol} is </p>
+                        {priceRange > 0 ? (
+                          
+                             <AntdTag icon={<CheckCircleOutlined />} color="success">
                       winning
-                    </AntdTag> */}
-                    <AntdTag
-                      icon={<ExclamationCircleOutlined />}
-                      color="warning"
-                    >
-                      loosing
-                    </AntdTag>
-                  </div>
+                    </AntdTag> 
+                        
+                        ) : (
+                          <AntdTag
+                            icon={<ExclamationCircleOutlined />}
+                            color="warning"
+                          >
+                            loosing
+                          </AntdTag>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div className="space-y-6 mx-auto">
@@ -371,35 +399,40 @@ function CreatedWar({ id }: { id: string }) {
                       />
                     </Col>
                   </Row>
-                    {ended && (
-
-                      <Badge.Ribbon
+                  {ended && (
+                    <Badge.Ribbon
                       text="Hippies"
                       color={`${
-                      data[16] >= data[9] && data[16] > data[17]
-                        ? `green`
-                        : `red`
-                    }`}
-                  >
-                    <Card
-                      title={`${
                         data[16] >= data[9] && data[16] > data[17]
-                          ? `${data[22]} WON THE BATTLE WITH ${data[16]} VOTES`
-                          : `${data[22]} LOST THE BATTLE WITH ${data[16]} VOTES`
+                          ? `green`
+                          : `red`
                       }`}
-                      size="small"
                     >
-                      voting has ended
-                    </Card>
-                  </Badge.Ribbon>
-                    )}
+                      <Card
+                        title={`${
+                          data[16] >= data[9] && data[16] > data[17]
+                            ? `${data[22]} WON THE BATTLE WITH ${data[16]} VOTES`
+                            : `${data[22]} LOST THE BATTLE WITH ${data[16]} VOTES`
+                        }`}
+                        size="small"
+                      >
+                        voting has ended
+                      </Card>
+                    </Badge.Ribbon>
+                  )}
                 </div>
               )}
             </div>
-            <Button onClick={() => handleClaimVictory()} loading={claiming} 
-             disabled={!(Number(data[16]) >= Number(data[9]) && Number(data[16]) > Number(data[17]))}
-
-                    >
+            <Button
+              onClick={() => handleClaimVictory()}
+              loading={claiming}
+              disabled={
+                !(
+                  Number(data[16]) >= Number(data[9]) &&
+                  Number(data[16]) > Number(data[17])
+                )
+              }
+            >
               Claim Victory
             </Button>
           </div>
