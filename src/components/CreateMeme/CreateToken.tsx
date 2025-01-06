@@ -67,16 +67,19 @@ function CreateToken() {
           onChange={handleMilestoneChange}
         />
       </div> */}
-      {/* <div className="flex flex-col  space-y-3 w-[70%]">
+      <div className="flex flex-col  space-y-3 w-[70%]">
         <p>Duration</p>
         <DatePicker
           name="deadline"
           size="large"
-          onChange={(date, dateString) => {
-            setMemeData({ ...memeData, deadline: dateString });
+          onChange={(date, dateString: string) => {
+            setMemeData({
+              ...memeData,
+              deadline: new Date(dateString).getTime(),
+            });
           }}
         />
-      </div> */}
+      </div>
     </div>
   );
 }

@@ -36,12 +36,19 @@ export default function TokenModal() {
 
   const handleCreateMeme = async () => {
     try {
+       const post = {
+         title: memeData.memeName + "(FROM MEME WAR)",
+         option: memeData.tokenSymbol,
+         option2: "Vote Against Me",
+       };
+       const url = await handlePostOnX(post);
+
       const data = await writeContractAsync({
         chainId: bscTestnet.id,
         address: contractAddress, // change to receipient address
         functionName: "createMemeWar",
         abi: contractAbi,
-        args: [memeData.memeUrl, memeData.pointTarget, memeData.milestone],
+        args: [memeData.memeUrl, url, memeData.pointTarget, memeData.deadline, memeData.prize, memeData.milestone],
         chain: undefined,
         account: address,
       });
@@ -75,8 +82,9 @@ export default function TokenModal() {
           memeData.tokenSymbol,
           parseEther(memeData.saleTarget.toString()),
           memeData.memeUrl,
-          memeData.description,
           url,
+          memeData.deadline,
+          memeData.description,
         ],
         chain: undefined,
         account: address,

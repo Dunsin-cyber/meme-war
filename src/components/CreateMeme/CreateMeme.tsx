@@ -1,5 +1,5 @@
 import React from "react";
-import { Input, Upload } from "antd";
+import { DatePicker, Input, Upload } from "antd";
 import { useMemeClient } from "@/context/createMemeContext";
 import UploadMeme from "./UploadMeme";
 import toast from "react-hot-toast";
@@ -30,6 +30,7 @@ function CreateMeme() {
             // onPressEnter={handleInputConfirm}
           />
         </div>
+
         <div className="flex flex-col space-y-3 w-full">
           <p>Point Target</p>
           <Input
@@ -44,6 +45,32 @@ function CreateMeme() {
       <div className="flex flex-col space-y-3 w-[70%]">
         <p>meme</p>
         <UploadMeme />
+      </div>
+      <div className="flex justify-between space-x-2 items-center w-[70%]">
+        <div className="flex flex-col  space-y-3 w-[70%]">
+          <p>Duration</p>
+          <DatePicker
+            name="deadline"
+            size="large"
+            onChange={(date, dateString: string) => {
+              setMemeData({
+                ...memeData,
+                deadline: new Date(dateString).getTime(),
+              });
+            }}
+          />
+        </div>
+
+        <div className="flex flex-col space-y-3 w-full">
+          <p>Prize</p>
+          <Input
+            type="text"
+            size="large"
+            name="prize"
+            value={memeData.prize}
+            onChange={handleInputChange}
+          />
+        </div>
       </div>
       <div className="flex flex-col  space-y-3 w-[70%]">
         <p>milestone</p>

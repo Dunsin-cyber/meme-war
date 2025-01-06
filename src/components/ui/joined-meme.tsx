@@ -30,7 +30,7 @@ export default function HoverEffect({ className }: { className?: string }) {
   }));
 
   const items = items_?.filter((item) =>
-    joinedID?.some((joined) => String(item.id).includes(Number(joined)))
+    joinedID?.some((joined) => String(item.id).includes(String(Number(joined))))
   );
 
   return (

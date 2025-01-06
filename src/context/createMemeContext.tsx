@@ -26,13 +26,14 @@ export const useCreateMemeContext = () => {
       tokenName: "",
       tokenSymbol: "",
       milestoneBased: false,
-      deadline: "",
+      deadline: 0,
       memeId: "",
       saleTarget: 0,
       pointTarget: 0,
       description: "",
       meme1Twitter:"",
-      meme2Twitter: "" 
+      meme2Twitter: "" ,
+      prize:0
     });
 
     // console.log("memeData",memeData)
