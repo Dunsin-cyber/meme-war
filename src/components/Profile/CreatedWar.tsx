@@ -3,7 +3,7 @@ import React from "react";
 import { SidebarDemo } from "@/components/Sidebar";
 import Link from "next/link";
 import { Tag } from "@/components/ui/tag";
-import { formatEther } from "viem";
+import { formatEther, parseEther } from "viem";
 import { FaXTwitter, FaGithub, FaMedium } from "react-icons/fa6";
 import { FaDiscord } from "react-icons/fa";
 import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
@@ -32,8 +32,19 @@ import {
   Button,
   Badge
 } from "antd";
+import {
+  useAccount,
+  useWriteContract,
+  useConnect,
+  useReadContract,
+} from "wagmi";
+import erc20Abi from "@/hooks/erc-20.json";
+import { config } from "@/utils/wagmi";
+import { injected } from "wagmi/connectors";
+import { bscTestnet } from "viem/chains";
 import abi from "@/hooks/abi.json";
 import {contractAddress} from "@/hooks/index"
+
 
 const { Countdown } = Statistic;
 
@@ -43,44 +54,18 @@ const onFinish: CountdownProps["onFinish"] = () => {
   console.log("finished!");
 };
 
-function MemeWar({ id }: { id: string }) {
+function CreatedWar({ id }: { id: string }) {
   const [ended, setEnded] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const { data, isLoading } = useGetAMemeDetail(+id);
   console.log("DETAIL", data);
   const [range, setRange] = React.useState(0);
-    const [claiming, setClaiming] = React.useState(false)
-
-
-   const handleClaimVictory = async() => {
-    try {
-      setClaiming(true)
-      if (!address) {
-        await connectAsync({
-          chainId: bscTestnet.id,
-          connector: injected(),
-        });
-      }
-
-      const approve = await writeContractAsync({
-        chainId: bscTestnet.id,
-        chain: undefined,
-        account: address,
-        address: contractAddress /* content?.tokenAddress */,
-        abi: abi,
-        functionName: "resolveMemeWar",
-        args: [id, address, "Winsss"],
-      });
-      toast.success("Congratulations! Reward disbursed to your wallet!");
-
-    }catch (err) {
-      console.log(err)
-      toast.error("Something went wrong")
-    } finally {
-      setClaiming(false)
-    }
-  }
-
+    const { address, chainId } = useAccount();
+  const { writeContractAsync } = useWriteContract({
+    config,
+  });
+  const { connectAsync } = useConnect();
+  const [claiming, setClaiming] = React.useState(false)
 
   const onFinish: CountdownProps["onFinish"] = () => {
     console.log("finished!");
@@ -119,7 +104,7 @@ function MemeWar({ id }: { id: string }) {
   }, [data]);
 
   const calcStat = () => {
-    const dd = ((Number(data[17]) - Number(data[16])) / Number(data[9])) * 100;
+    const dd = ((Number(data[16]) - Number(data[17])) / Number(data[9])) * 100;
     console.log(dd);
     setRange(dd);
   };
@@ -130,6 +115,67 @@ function MemeWar({ id }: { id: string }) {
       knowIfEnded();
     }
   }, [data]);
+
+
+    const handleApprove = async () => {
+    setLoading(true);
+    try {
+      if (!address) {
+        await connectAsync({
+          chainId: bscTestnet.id,
+          connector: injected(),
+        });
+      }
+
+      const approve = await writeContractAsync({
+        chainId: bscTestnet.id,
+        chain: undefined,
+        account: address,
+        address: data[2] /* content?.tokenAddress */,
+        abi: erc20Abi,
+        functionName: "approve",
+        args: [contractAddress, parseEther("500000")],
+      });
+      toast.success("Approved!");
+
+      // closeModal();
+    } catch (err) {
+      console.log(err);
+      toast.error("Something Went Wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+  const handleClaimVictory = async() => {
+    try {
+      setClaiming(true)
+      if (!address) {
+        await connectAsync({
+          chainId: bscTestnet.id,
+          connector: injected(),
+        });
+      }
+
+      const approve = await writeContractAsync({
+        chainId: bscTestnet.id,
+        chain: undefined,
+        account: address,
+        address: contractAddress /* content?.tokenAddress */,
+        abi: abi,
+        functionName: "resolveMemeWar",
+        args: [id, address, "Winsss"],
+      });
+      toast.success("Congratulations! Reward disbursed to your wallet!");
+
+    }catch (err) {
+      console.log(err)
+      toast.error("Something went wrong")
+    } finally {
+      setClaiming(false)
+    }
+  }
 
   // for memes,
   //get user's tweet and competitors tweet
@@ -154,7 +200,7 @@ function MemeWar({ id }: { id: string }) {
                   {" "}
                   Subzero Coin
                 </p> */}
-              <img src={data[5]} alt="meme" className="h-[300px] w-[300px]" />
+              <img src={data[4]} alt="meme" className="h-[300px] w-[300px]" />
               {/* description */}
               <p className="text-gray-400">{data[13]}</p>
               {/* stat */}
@@ -187,7 +233,7 @@ function MemeWar({ id }: { id: string }) {
                     Created By
                   </p>
                   <div className="flex-1 gap-x-5">
-                    <Tag className="text-primary100">{data[1]}</Tag>
+                    <Tag className="text-primary100">{data[0]}</Tag>
                   </div>
                 </div>
 
@@ -201,7 +247,11 @@ function MemeWar({ id }: { id: string }) {
                 </div>
               </div>
               {/* Social */}
-
+              {data[13] && (
+                <div className="flex justify-center">
+                <Button onClick={() => handleApprove()}>Approve MemeWar</Button>
+</div>
+              )}
               {/* Infinte moving cards */}
 
               <div className="h-[10rem] rounded-md flex flex-col antialiased bg-grid-white/[0.05] items-center justify-center relative overflow-hidden">
@@ -301,8 +351,8 @@ function MemeWar({ id }: { id: string }) {
                     )}
 
                     <div className="flex space-y-3 flex-col text-wrap ">
-                      <p>Name: {data[23]}</p>
-                      <p className="text-wrap">{data[21]}</p>
+                      <p>Name: {data[22]}</p>
+                      <p className="text-wrap">{data[20]}</p>
                     </div>
                   </div>
 
@@ -317,7 +367,7 @@ function MemeWar({ id }: { id: string }) {
                     <Col span={12}>
                       <Statistic
                         title="Distance from Target"
-                        value={data[17]}
+                        value={data[16]}
                         suffix={`/ ${data[9]}`}
                       />
                     </Col>
@@ -327,16 +377,16 @@ function MemeWar({ id }: { id: string }) {
                       <Badge.Ribbon
                       text="Hippies"
                       color={`${
-                      data[17] >= data[9] && data[17] > data[16]
+                      data[16] >= data[9] && data[16] > data[17]
                         ? `green`
                         : `red`
                     }`}
                   >
                     <Card
                       title={`${
-                        data[17] >= data[9] && data[17] > data[16]
-                          ? `${data[23]} WON THE BATTLE WITH ${data[17]} VOTES`
-                          : `${data[23]} LOST THE BATTLE WITH ${data[17]} VOTES`
+                        data[16] >= data[9] && data[16] > data[17]
+                          ? `${data[22]} WON THE BATTLE WITH ${data[16]} VOTES`
+                          : `${data[22]} LOST THE BATTLE WITH ${data[16]} VOTES`
                       }`}
                       size="small"
                     >
@@ -347,10 +397,10 @@ function MemeWar({ id }: { id: string }) {
                 </div>
               )}
             </div>
-            <Button onClick={() => handleClaimVictory()} loading={claiming}  
-              disabled={!(Number(data[17]) >= Number(data[9]) && Number(data[17]) > Number(data[16]))}
+            <Button onClick={() => handleClaimVictory()} loading={claiming} 
+             disabled={!(Number(data[16]) >= Number(data[9]) && Number(data[16]) > Number(data[17]))}
 
-              >
+                    >
               Claim Victory
             </Button>
           </div>
@@ -360,7 +410,7 @@ function MemeWar({ id }: { id: string }) {
   );
 }
 
-export default MemeWar;
+export default CreatedWar;
 
 const testimonials = [
   {

@@ -20,24 +20,34 @@ import { Statistic, Col, CountdownProps, Checkbox } from "antd";
 import { toast } from "react-hot-toast";
 import { parseEther, formatEther } from "viem";
 import { bscTestnet } from "wagmi/chains";
+import { Badge, Card, Space } from "antd";
 
 const { Countdown } = Statistic;
 
 function MemeWarDetails({ id }: { id: string }) {
   const [ended, setEnded] = React.useState(false);
-  const [voted, setVoted] = React.useState(false)
+  const [voted, setVoted] = React.useState(false);
+  const [voteIndex, setVoteIndex] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
   const { data, isLoading } = useGetAMemeDetail(+id);
   const { address, chainId } = useAccount();
   console.log("DETAIL", data);
-
 
   const onFinish: CountdownProps["onFinish"] = () => {
     console.log("finished!");
     setEnded(true);
   };
 
-  
+  const knowIfEnded = () => {
+    if (Number(data[10]) < Date.now()) {
+      setEnded(true)
+    }
+  }
+
+  React.useEffect(() => {
+          knowIfEnded();
+  }, [data])
+
   const { writeContractAsync } = useWriteContract({
     config,
   });
@@ -62,7 +72,8 @@ function MemeWarDetails({ id }: { id: string }) {
         account: address,
       });
       setLoading(true);
-      setVoted(true)
+      setVoted(true);
+      setVoteIndex(index);
       toast.success("Vote Recorded");
     } catch (err) {
       toast.error("something  went wrong");
@@ -133,19 +144,44 @@ function MemeWarDetails({ id }: { id: string }) {
                 </div>
               </div>
               {/* Social */}
-              <div className="flex flex-col items-center mt-3 text-xl space-y-4">
-                <div className="flex gap-3 z-[100] items-center">
-                  vote on
-                  <a href={data[6]} target="_blank" rel="meme war Twitter">
-                    <FaXTwitter />
-                  </a>
+              {ended ? (
+                <Badge.Ribbon
+                  text="Hippies"
+                  color={`${
+                    data[16] >= data[9] && data[16] > data[17] ? `green` : `red`
+                  }`}
+                >
+                  <Card
+                    title={`${
+                      data[16] >= data[9] && data[16] > data[17]
+                        ? `${data[23]} WON THE BATTLE WITH ${data[16]} VOTES`
+                        : `${data[23]} LOST THE BATTLE WITH ${data[16]} VOTES`
+                    }`}
+                    size="small"
+                  >
+                    voting has ended
+                  </Card>
+                </Badge.Ribbon>
+              ) : (
+                <div className="flex flex-col items-center mt-3 text-xl space-y-4">
+                  <div className="flex gap-3 z-[100] items-center">
+                    vote on
+                    <a href={data[6]} target="_blank" rel="meme war Twitter">
+                      <FaXTwitter />
+                    </a>
+                  </div>
+                  <p>or </p>
+                  <div className="flex gap-3 z-[100] items-center">
+                    on meme war
+                    <Checkbox
+                      checked={voted && voteIndex === 1}
+                      onChange={() => handleVote(1)}
+                    >
+                      Vote
+                    </Checkbox>
+                  </div>
                 </div>
-                <p>or </p>
-                <div className="flex gap-3 z-[100] items-center">
-                  on meme war
-                  <Checkbox onChange={() => handleVote(1)}>Checkbox</Checkbox>
-                </div>
-              </div>
+              )}
 
               {/* Infinte moving cards */}
 
@@ -216,20 +252,46 @@ function MemeWarDetails({ id }: { id: string }) {
                   </div>
                 </div>
                 {/* Social */}
-                <div className="flex flex-col items-center mt-3 text-xl space-y-4">
-                  <div className="flex gap-3 z-[100] items-center">
-                    vote on
-                    <a href={data[6]} target="_blank" rel="meme war Twitter">
-                      <FaXTwitter />
-                    </a>
+                {ended ? (
+                  <Badge.Ribbon
+                    text="Hippies"
+                    color={`${
+                      data[17] >= data[9] && data[17] > data[16]
+                        ? `green`
+                        : `red`
+                    }`}
+                  >
+                    <Card
+                      title={`${
+                        data[17] >= data[9] && data[17] > data[16]
+                          ? `${data[24]} WON THE BATTLE WITH ${data[17]} VOTES`
+                          : `${data[24]} LOST THE BATTLE WITH ${data[17]} VOTES`
+                      }`}
+                      size="small"
+                    >
+                      voting has ended
+                    </Card>
+                  </Badge.Ribbon>
+                ) : (
+                  <div className="flex flex-col items-center mt-3 text-xl space-y-4">
+                    <div className="flex gap-3 z-[100] items-center">
+                      vote on
+                      <a href={data[6]} target="_blank" rel="meme war Twitter">
+                        <FaXTwitter />
+                      </a>
+                    </div>
+                    <p>or </p>
+                    <div className="flex gap-3 z-[100] items-center">
+                      on meme war
+                      <Checkbox
+                        checked={voted && voteIndex === 2}
+                        onChange={() => handleVote(2)}
+                      >
+                        Vote
+                      </Checkbox>
+                    </div>
                   </div>
-                  <p>or </p>
-                  <div className="flex gap-3 z-[100] items-center">
-                    on meme war
-                    <Checkbox onChange={() => handleVote(2)}>Checkbox</Checkbox>
-                  </div>
-                </div>
-
+                )}
                 {/* Infinte moving cards */}
 
                 <div className="h-[10rem] rounded-md flex flex-col antialiased bg-grid-white/[0.05] items-center justify-center relative overflow-hidden">

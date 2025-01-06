@@ -38,7 +38,7 @@ export default function HoverEffect({ className }: { className?: string }) {
   const { data, isLoading, error } = useGetMemeWars();
   // console.log(data);
   const items = data
-    ?.filter((item) => item.challenger === address || item.creator === address)
+    ?.filter((item) => item.creator === address)
     .map((d: any, index: number) => ({
       ...d,
       id: index + 1, // Increment the id starting from 1
@@ -82,7 +82,10 @@ export default function HoverEffect({ className }: { className?: string }) {
       )}
     >
       {items?.map((item, idx) => (
-        <div
+        <Link
+         href={`/profile/created-war/${item?.id}`}
+              onMouseEnter={() => setHoveredIndex(idx)}
+          onMouseLeave={() => setHoveredIndex(null)}
           key={Number(item?.id)}
           className="relative group  block p-2 h-full w-full"
         >
@@ -158,14 +161,15 @@ export default function HoverEffect({ className }: { className?: string }) {
               <div className="flex justify-end">
                 <button
                   className="btn py-2 px-6"
-                  onClick={() => handleApprove(item.creator === address ?  item.creatorToken: item.challengerToken)}
+                  onClick={() => router.push(`/profile/created-war/${item?.id}`)}
+                  // onClick={() => handleApprove(item.creator === address ?  item.creatorToken: item.challengerToken)}
                 >
                   Approve Meme war
                 </button>
               </div>
             )}
           </Card>
-        </div>
+        </Link>
         //  </div>
       ))}
     </div>
