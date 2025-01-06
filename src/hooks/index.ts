@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useWriteContract, useReadContract } from "wagmi";
+import { useWriteContract, useReadContract, useAccount } from "wagmi";
 import contractAbi from "@/hooks/abi.json";
 import erc20Abi from "@/hooks/erc-20.json"
 import bep20Abi from "@/hooks/bep-20.json"
@@ -9,7 +9,7 @@ import { formatEther } from "viem";
 import { useAppDispatch } from "@/redux/hook";
 import { addToken1, addToken2 } from "@/redux/slice/TokenSlice";
 
-export const contractAddress = "0x170e49be4c4D11eD393447c6406558fF50F79DFc";
+export const contractAddress = "0x83edB0c04bC545C31a0bdaFbf67A4D920d4327aD";
 type ReturnType = {
   isLoading: boolean;
   data: any;
@@ -118,6 +118,35 @@ export const useGetMemeWars = () => {
     abi: contractAbi,
     address: contractAddress,
     functionName: "getAllMemeWars",
+  });
+
+  return {
+    isLoading: !data && !error,
+    data: data as any,
+    error,
+  };
+};
+/* 
+  const {data:joinedID} = useGetJoinedWars()
+  console.log(joinedID)
+  // console.log(data);
+  const items_ = data?.map((d: any, index: number) => ({
+      ...d,
+      id: index + 1, // Increment the id starting from 1
+    }));
+
+    const items = items_?.filter((item => joinedID?.some(joined => String(item.id).includes(Number(joined)))))
+
+*/
+// getUserJoinedWars
+export const useGetJoinedWars = () => {
+  const {address} = useAccount();
+  // Fetch data for each item
+  const { data, error } = useReadContract({
+    abi: contractAbi,
+    address: contractAddress,
+    functionName: "getUserJoinedWars",
+    args: [address],
   });
 
   return {

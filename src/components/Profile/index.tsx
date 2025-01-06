@@ -8,6 +8,8 @@ import { Tag } from "@/components/ui/tag";
 import { PieChart } from "react-minimal-pie-chart";
 import WithdrawModal from "./WithdrawModal";
 import MyCreatedWar from "@/components/ui/my-created-war"
+
+import JoinedWar from "@/components/ui/joined-meme"
 import { toast } from "react-hot-toast";
 import { FaXTwitter } from "react-icons/fa6";
 // import { Button, InputNumber } from "antd";
@@ -25,7 +27,7 @@ const Profile = () => {
   const handleGetAuthLink = async () => {
     try {
       setXLoading(true);
-      if (userDetails?.username?.length > 1) {
+      if (userDetails) {
         handleLogout();
         return;
       }
@@ -117,8 +119,10 @@ const Profile = () => {
 
         {/* allocation */}
         <div>
-          <p className="text-gray-600 font-semibold">
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quidem
+          <p className="text-gray-600 font-semibold md:max-w-[60%]" >
+           Here is your profile, you can link your X account, 
+           connect your wallet, approve meme war to spend your meme tokens, 
+           check all the wars you have joined, won or lost and lots more
           </p>
           {/* allocation */}
           <div className="flex justify-between">
@@ -186,10 +190,15 @@ const Profile = () => {
           </div>
         </div>
         <p className="font-semibold text-3xl text-secondary50">
-          Explore More ⚔️
+          My Created Memes ⚔️
         </p>
         <MyCreatedWar />
-      </div>
+
+          <p className="font-semibold text-3xl text-secondary50">
+          Joined Memes ⚔️
+        </p>
+        <JoinedWar/>
+              </div>
       <WithdrawModal />
     </SidebarDemo>
   );

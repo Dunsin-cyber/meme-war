@@ -32,9 +32,7 @@ export default function TokenModal() {
   });
   const { connectAsync } = useConnect();
   const { steps, setSteps, memeData, setMemeData } = useMemeClient();
-    const userDetails = useAppSelector((state) => state.profile);
-  
-
+  const userDetails = useAppSelector((state) => state.profile);
 
   const handleCreateMeme = async () => {
     try {
@@ -43,17 +41,13 @@ export default function TokenModal() {
         address: contractAddress, // change to receipient address
         functionName: "createMemeWar",
         abi: contractAbi,
-        args: [
-          memeData.memeUrl,
-          memeData.pointTarget,
-          memeData.milestone,
-        ],
+        args: [memeData.memeUrl, memeData.pointTarget, memeData.milestone],
         chain: undefined,
         account: address,
       });
       setLoading(true);
       toast.success("meme created");
-        if (memeData.memeType === "meme") return setIsCreateModalOpen(false);
+      if (memeData.memeType === "meme") return setIsCreateModalOpen(false);
     } catch (err) {
       toast.error(err.message);
       console.log("[ERROR CREATING MEME]", err);
@@ -64,29 +58,29 @@ export default function TokenModal() {
 
   const handleCreateMemeToken = async () => {
     try {
-         const post = {
-           title: memeData.memeName + "(FROM MEME WAR)",
-           option: memeData.tokenSymbol,
-           option2: "Vote Against Me",
-         };
-       const url = await handlePostOnX(post);
-         console.log("MEMEDATA",url)
-        const data = await writeContractAsync({
-          chainId: bscTestnet.id,
-          address: contractAddress, // change to receipient address
-          functionName: "createMemeTokenWar",
-          abi: contractAbi,
-          args: [
-            memeData.tokenName,
-            memeData.tokenSymbol,
-            parseEther(memeData.saleTarget.toString()),
-            memeData.memeUrl,
-            memeData.description,
-            url,
-          ],
-          chain: undefined,
-          account: address,
-        });
+      const post = {
+        title: memeData.memeName + "(FROM MEME WAR)",
+        option: memeData.tokenSymbol,
+        option2: "Vote Against Me",
+      };
+      const url = await handlePostOnX(post);
+      console.log("MEMEDATA", url);
+      const data = await writeContractAsync({
+        chainId: bscTestnet.id,
+        address: contractAddress, // change to receipient address
+        functionName: "createMemeTokenWar",
+        abi: contractAbi,
+        args: [
+          memeData.tokenName,
+          memeData.tokenSymbol,
+          parseEther(memeData.saleTarget.toString()),
+          memeData.memeUrl,
+          memeData.description,
+          url,
+        ],
+        chain: undefined,
+        account: address,
+      });
       setLoading(true);
       toast.success("meme token created");
       setIsCreateModalOpen(false);
@@ -98,33 +92,34 @@ export default function TokenModal() {
     }
   };
 
-    const handlePostOnX = async (param: any) => {
-      try {
-        const username = localStorage.getItem("xname")
-        const createPost = await fetch("/api/post-tweet", {
-          method: "POST",
-          body: JSON.stringify(param),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        const data = await createPost.json();
-        if (data.error) {
-          toast.error(data.error)
-        }
-        toast.success("meme created on twitter")
-        console.log(data)
-        const url = `https://x.com/${username}/status/${data?.data?.id}`;
-        // setMemeData({...memeData, meme1Twitter: url })
-        return url
-      } catch (err) {
-        toast.error(err.message);
-        console.log("[ERROR POSTING MEME ON X]", err);
+  const handlePostOnX = async (param: any) => {
+    try {
+      const username = localStorage.getItem("xname");
+      const createPost = await fetch("/api/post-tweet", {
+        method: "POST",
+        body: JSON.stringify(param),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await createPost.json();
+      if (data.error) {
+        toast.error(data.error);
+         toast.error("Please link your X account before creating a meme");
+        return
       }
-    };
+      toast.success("meme created on twitter");
+      console.log(data);
+      const url = `https://x.com/${username}/status/${data?.data?.id}`;
+      // setMemeData({...memeData, meme1Twitter: url })
+      return url;
+    } catch (err) {
+      toast.error(err.message);
+      console.log("[ERROR POSTING MEME ON X]", err);
+    }
+  };
 
   const handleSubmit = async () => {
-  
     setLoading(true);
     try {
       if (!address) {
@@ -148,7 +143,7 @@ export default function TokenModal() {
 
   const description = "steps to create a meme";
 
-  const handleNext = async() => {
+  const handleNext = async () => {
     if (steps === 0) {
       if (memeData.memeType.length > 1) {
         setSteps(steps + 1);
@@ -156,29 +151,29 @@ export default function TokenModal() {
       }
       return;
     } else if (steps === 1) {
-
-        if (memeData.memeUrl.length > 1 && memeData.memeName.length > 1 && memeData.pointTarget > 0) {
+      if (
+        memeData.memeUrl.length > 1 &&
+        memeData.memeName.length > 1 &&
+        memeData.pointTarget > 0
+      ) {
         await handleSubmit();
-          return setSteps(steps + 1);
-        }
-        else {
-          //if no content in meme page,
-          toast.error("make sure all fields are filled");
-        }
-   
+        return setSteps(steps + 1);
+      } else {
+        //if no content in meme page,
+        toast.error("make sure all fields are filled");
+      }
     } else if (steps === 2) {
-        if (
-          memeData.tokenName.length > 1 &&
-          memeData.tokenSymbol.length > 1 &&
-          memeData.description.length > 1 &&
-          memeData.saleTarget > 0
-        ) {
-          handleSubmit();
-        }
-        else {
+      if (
+        memeData.tokenName.length > 1 &&
+        memeData.tokenSymbol.length > 1 &&
+        memeData.description.length > 1 &&
+        memeData.saleTarget > 0
+      ) {
+        handleSubmit();
+      } else {
         //if no content in meme token page or all fields have not been filled yet,
-          toast.error("make sure all fields are filled");
-        }
+        toast.error("make sure all fields are filled");
+      }
     }
   };
 

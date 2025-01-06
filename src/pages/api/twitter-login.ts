@@ -33,7 +33,6 @@ export default async function handler(
       const codeVerifier = session.codeVerifier;
       const sessionState = session.state;
 
-      console.log("state", state, "sessionState", sessionState);
       if (!codeVerifier || !state || !sessionState || !code) {
         return res
           .status(400)
