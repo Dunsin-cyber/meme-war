@@ -162,7 +162,9 @@ export default function TokenModal() {
       if (
         memeData.memeUrl.length > 1 &&
         memeData.memeName.length > 1 &&
-        memeData.pointTarget > 0
+        memeData.pointTarget > 0 &&
+        memeData.deadline.length > 2 &&
+        memeData.prize.length > 1
       ) {
         await handleSubmit();
         return setSteps(steps + 1);
@@ -175,7 +177,8 @@ export default function TokenModal() {
         memeData.tokenName.length > 1 &&
         memeData.tokenSymbol.length > 1 &&
         memeData.description.length > 1 &&
-        memeData.saleTarget > 0
+        memeData.saleTarget > 0 &&
+        memeData.deadline.length > 2
       ) {
         handleSubmit();
       } else {
