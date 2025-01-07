@@ -190,6 +190,34 @@ function MemeWar({ id }: { id: string }) {
     }
   }, [data, tokens]);
 
+   const handleClaimTokenVictory = async () => {
+     try {
+       setClaiming(true);
+       if (!address) {
+         await connectAsync({
+           chainId: bscTestnet.id,
+           connector: injected(),
+         });
+       }
+
+       const approve = await writeContractAsync({
+         chainId: bscTestnet.id,
+         chain: undefined,
+         account: address,
+         address: contractAddress /* content?.tokenAddress */,
+         abi: abi,
+         functionName: "resolveMemeTokenWar",
+         args: [id],
+       });
+       toast.success("Congratulations! Reward disbursed to your wallet!");
+     } catch (err) {
+       console.log(err);
+       toast.error("Something went wrong");
+     } finally {
+       setClaiming(false);
+     }
+   };
+
   // for memes,
   //get user's tweet and competitors tweet
   //compare it woth each other and also with the goal
@@ -431,28 +459,30 @@ function MemeWar({ id }: { id: string }) {
                 </div>
               )}
             </div>
-             {data[13] ? (
-                         <Button
-                           onClick={() => handleClaimVictory()}
-                           loading={claiming}
-                           disabled={ended && +tokens?.token1?.price > +tokens?.token2?.price}
-                         >
-                           Claim Victory
-                         </Button>
-                       ) : (
-                         <Button
-                           onClick={() => handleClaimVictory()}
-                           loading={claiming}
-                           disabled={
-                             !(
-                               Number(data[16]) >= Number(data[9]) &&
-                               Number(data[16]) > Number(data[17])
-                             )
-                           }
-                         >
-                           Claim Victory
-                         </Button>
-                       )}
+            {data[13] ? (
+              <Button
+                onClick={() => handleClaimTokenVictory()}
+                loading={claiming}
+                disabled={
+                  ended && +tokens?.token1?.price > +tokens?.token2?.price
+                }
+              >
+                Claim Victory
+              </Button>
+            ) : (
+              <Button
+                onClick={() => handleClaimVictory()}
+                loading={claiming}
+                disabled={
+                  !(
+                    Number(data[16]) >= Number(data[9]) &&
+                    Number(data[16]) > Number(data[17])
+                  )
+                }
+              >
+                Claim Victory
+              </Button>
+            )}
           </div>
         </div>
       )}

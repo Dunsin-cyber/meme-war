@@ -178,7 +178,7 @@ function CreatedWar({ id }: { id: string }) {
         address: contractAddress /* content?.tokenAddress */,
         abi: abi,
         functionName: "resolveMemeWar",
-        args: [id, address, "votes"],
+        args: [id, "votes"],
       });
       toast.success("Congratulations! Reward disbursed to your wallet!");
     } catch (err) {
@@ -188,6 +188,34 @@ function CreatedWar({ id }: { id: string }) {
       setClaiming(false);
     }
   };
+
+  const handleClaimTokenVictory = async() => {
+    try {
+      setClaiming(true);
+      if (!address) {
+        await connectAsync({
+          chainId: bscTestnet.id,
+          connector: injected(),
+        });
+      }
+
+      const approve = await writeContractAsync({
+        chainId: bscTestnet.id,
+        chain: undefined,
+        account: address,
+        address: contractAddress /* content?.tokenAddress */,
+        abi: abi,
+        functionName: "resolveMemeTokenWar",
+        args: [id],
+      });
+      toast.success("Congratulations! Reward disbursed to your wallet!");
+    } catch (err) {
+      console.log(err);
+      toast.error("Something went wrong");
+    } finally {
+      setClaiming(false);
+    }
+  }
 
   // for memes,
   //get user's tweet and competitors tweet
@@ -426,7 +454,7 @@ function CreatedWar({ id }: { id: string }) {
             </div>
             {data[13] ? (
               <Button
-                onClick={() => handleClaimVictory()}
+                onClick={() => handleClaimTokenVictory()}
                 loading={claiming}
                 disabled={
                   ended && +tokens?.token2?.price > +tokens?.token1?.price
