@@ -20,7 +20,9 @@ const UserContext = React.createContext<{
   setOpenWithdrawModal:any;
   openWithdrawModal: any;
   userDetails: any;
-  setUserDetails:any
+  setUserDetails:any;
+  openXModal: any;
+  setOpenXModal: any
 }>({
   isModalOpen: undefined,
   setIsModalOpen: undefined,
@@ -32,7 +34,9 @@ const UserContext = React.createContext<{
   setOpenWithdrawModal:undefined,
   openWithdrawModal: undefined,
   userDetails: undefined,
-  setUserDetails: undefined
+  setUserDetails: undefined,
+  openXModal: undefined,
+  setOpenXModal: undefined
 });
 
 export const useUserContext = () => {
@@ -41,6 +45,7 @@ export const useUserContext = () => {
   const [activePic, setActivePic] = useState("");
   const [activeId, setActiveId] = useState<number>(0);
   const [openWithdrawModal,setOpenWithdrawModal] = useState(false);
+  const [openXModal, setOpenXModal] = React.useState(false)
   const { address } = useAccount();
   const router = useRouter();
     const [userDetails, setUserDetails] = React.useState({
@@ -72,7 +77,9 @@ export const useUserContext = () => {
     setOpenWithdrawModal,
     openWithdrawModal,
     userDetails,
-    setUserDetails
+    setUserDetails,
+      openXModal,
+  setOpenXModal
   };
 };
 

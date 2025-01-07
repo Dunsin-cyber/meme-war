@@ -12,7 +12,7 @@ import { PagesProgressBar as ProgressBar } from "next-nprogress-bar";
 import { Provider as ReduxProvider } from "react-redux";
 import store from "@/redux/store";
 import { ConfigProvider, theme } from "antd";
-
+import LinkXModal from "@/components/Modal/LinkXModal";
 import localFont from "next/font/local";
 
 const geistSans = localFont({
@@ -34,53 +34,53 @@ const App = ({ Component, pageProps }) => {
       <Head>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-          <ReduxProvider store={store}>
-
-      <ConfigProvider
-        theme={{
-          algorithm: theme.darkAlgorithm,
-          token: {
-            colorPrimaryActive: "#fc923b",
-            colorPrimary: "#fc923b",
-            colorPrimaryHover: "#fc923b",
-            colorText: "#fff",
-          },
-        }}
+      <ReduxProvider store={store}>
+        <ConfigProvider
+          theme={{
+            algorithm: theme.darkAlgorithm,
+            token: {
+              colorPrimaryActive: "#fc923b",
+              colorPrimary: "#fc923b",
+              colorPrimaryHover: "#fc923b",
+              colorText: "#fff",
+            },
+          }}
         >
-        <WagmiProvider config={config}>
-          <QueryClientProvider client={queryClient}>
-            <WalletProvider>
-              <Toaster
-                toastOptions={{
-                  className: "",
-                  style: {
-                    border: `1px solid #AC6AFF`,
-                    padding: "16px",
-                    color: "#AC6AFF",
-                    backgroundColor: "#FFC876",
-                    borderRadius: "8px",
-                    fontFamily: "Arial, sans-serif",
-                  },
-                }}
-              />
-              <UserContextProvider>
-                <div
-                  className={`${geistSans.variable} ${geistMono.variable} antialiased dark`}
-                >
-                  <Component {...pageProps} />
-                  <ProgressBar
-                    height="4px"
-                    color="#2497D0"
-                    options={{ showSpinner: false }}
-                    shallowRouting
-                  />
-                </div>
-              </UserContextProvider>
-            </WalletProvider>
-          </QueryClientProvider>
-        </WagmiProvider>
-      </ConfigProvider>
-        </ReduxProvider>
+          <WagmiProvider config={config}>
+            <QueryClientProvider client={queryClient}>
+              <WalletProvider>
+                <Toaster
+                  toastOptions={{
+                    className: "",
+                    style: {
+                      border: `1px solid #AC6AFF`,
+                      padding: "16px",
+                      color: "#AC6AFF",
+                      backgroundColor: "#FFC876",
+                      borderRadius: "8px",
+                      fontFamily: "Arial, sans-serif",
+                    },
+                  }}
+                />
+                <UserContextProvider>
+                  <div
+                    className={`${geistSans.variable} ${geistMono.variable} antialiased dark`}
+                  >
+                    <LinkXModal />
+                    <Component {...pageProps} />
+                    <ProgressBar
+                      height="4px"
+                      color="#2497D0"
+                      options={{ showSpinner: false }}
+                      shallowRouting
+                    />
+                  </div>
+                </UserContextProvider>
+              </WalletProvider>
+            </QueryClientProvider>
+          </WagmiProvider>
+        </ConfigProvider>
+      </ReduxProvider>
     </Provider>
   );
 };

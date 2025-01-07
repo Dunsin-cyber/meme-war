@@ -126,9 +126,9 @@ function CreatedWar({ id }: { id: string }) {
       calcStat();
       knowIfEnded();
     }
-    if (tokens) {
-      calcPriceStat();
-    }
+       if (tokens.token1 && tokens.token2) {
+        calcPriceStat();
+       }
   }, [data, tokens]);
 
   const handleApprove = async () => {

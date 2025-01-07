@@ -185,7 +185,7 @@ function MemeWar({ id }: { id: string }) {
       calcStat();
       knowIfEnded();
     }
-    if (tokens) {
+    if (tokens.token1 && tokens.token2) {
       calcPriceStat();
     }
   }, [data, tokens]);
