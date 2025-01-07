@@ -279,7 +279,7 @@ function MemeWarDetails({ id }: { id: string }) {
                   <div className="flex flex-col items-center mt-3 text-xl space-y-4">
                     <div className="flex gap-3 z-[100] items-center">
                       vote on
-                      <a href={data[6]} target="_blank" rel="meme war Twitter">
+                      <a href={data[7]} target="_blank" rel="meme war Twitter">
                         <FaXTwitter />
                       </a>
                     </div>

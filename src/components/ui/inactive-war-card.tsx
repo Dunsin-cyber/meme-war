@@ -130,7 +130,7 @@ export default function HoverEffect({ className }: { className?: string }) {
                   </p>
                   <div className="flex-1 gap-x-5">
                     <Tag color="red.400">
-                      {formatEther(item.saleTarget).toLocaleString()}
+                      {Number(formatEther(item.saleTarget)).toLocaleString()}
                     </Tag>
                   </div>
                 </div>

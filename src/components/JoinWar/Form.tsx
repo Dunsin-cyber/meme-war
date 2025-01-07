@@ -36,6 +36,7 @@ export function Form({ id, prize, isToken }: { id: number, prize: bigint, isToke
   } = useForm();
 
   const handleCreateMeme = async (data: any) => {
+    setLoading(true);
     if (memeData.memeUrl.length < 10) {
       toast.error("upload a meme pic");
       return;
@@ -54,7 +55,6 @@ export function Form({ id, prize, isToken }: { id: number, prize: bigint, isToke
       };
       const url = await handlePostOnX(post);
 
-      setLoading(true);
       await writeContractAsync({
         chainId: bscTestnet.id,
         address: contractAddress,
