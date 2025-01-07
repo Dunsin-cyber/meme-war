@@ -36,7 +36,8 @@ function LinkXModal() {
       !xname &&
       pathname.length > 1 &&
       pathname &&
-      !pathname.includes("profile")
+      !pathname.includes("profile") &&
+      !pathname.includes("resolve")
     ) {
       handleToggle();
     }

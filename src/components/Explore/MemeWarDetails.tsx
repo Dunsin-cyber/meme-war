@@ -45,7 +45,10 @@ function MemeWarDetails({ id }: { id: string }) {
   }
 
   React.useEffect(() => {
-          knowIfEnded();
+    if(data) {
+
+      knowIfEnded();
+    }
   }, [data])
 
   const { writeContractAsync } = useWriteContract({

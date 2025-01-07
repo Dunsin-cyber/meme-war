@@ -21,8 +21,7 @@ export const useCreateMemeContext = () => {
     const [memeData, setMemeData] = useState({
       memeType: "",
       memeName: "",
-      memeUrl:
-        "",
+      memeUrl:"",
       milestone: "",
       tokenName: "",
       tokenSymbol: "",
