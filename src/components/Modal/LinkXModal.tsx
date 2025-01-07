@@ -5,12 +5,15 @@ import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { FaXTwitter } from "react-icons/fa6";
 import { useAccount } from "wagmi";
 import { toast } from "react-hot-toast";
+import { useRouter } from "next/router";
 
 function LinkXModal() {
   const { openXModal, setOpenXModal } = useClient();
   const [loading, setLoading] = React.useState<boolean>(true);
   const dispatch = useAppDispatch();
   const { address } = useAccount();
+  const router = useRouter();
+  const pathname = router.pathname;
   const [xLoading, setXLoading] = React.useState(false);
 
   const showLoading = () => {
@@ -29,7 +32,7 @@ function LinkXModal() {
   //TODO: check for X cookie here, check if it exist and still valid
   React.useEffect(() => {
     const xname = localStorage.getItem("xname");
-    if (!xname) {
+    if (!xname && pathname.length > 1 ) {
       handleToggle();
     }
   }, [userDetails]);
@@ -91,7 +94,7 @@ function LinkXModal() {
           //   </Button>
           <div className="my-5">
             <Alert
-              message={`You can always link and unlink yout X account under profile page`}
+              message={`You can always link and unlink your X account under profile page`}
               type="info"
               showIcon
               closable
