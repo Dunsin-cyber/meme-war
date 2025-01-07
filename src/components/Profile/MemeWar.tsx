@@ -190,33 +190,33 @@ function MemeWar({ id }: { id: string }) {
     }
   }, [data, tokens]);
 
-   const handleClaimTokenVictory = async () => {
-     try {
-       setClaiming(true);
-       if (!address) {
-         await connectAsync({
-           chainId: bscTestnet.id,
-           connector: injected(),
-         });
-       }
+  const handleClaimTokenVictory = async () => {
+    try {
+      setClaiming(true);
+      if (!address) {
+        await connectAsync({
+          chainId: bscTestnet.id,
+          connector: injected(),
+        });
+      }
 
-       const approve = await writeContractAsync({
-         chainId: bscTestnet.id,
-         chain: undefined,
-         account: address,
-         address: contractAddress /* content?.tokenAddress */,
-         abi: abi,
-         functionName: "resolveMemeTokenWar",
-         args: [id],
-       });
-       toast.success("Congratulations! Reward disbursed to your wallet!");
-     } catch (err) {
-       console.log(err);
-       toast.error("Something went wrong");
-     } finally {
-       setClaiming(false);
-     }
-   };
+      const approve = await writeContractAsync({
+        chainId: bscTestnet.id,
+        chain: undefined,
+        account: address,
+        address: contractAddress /* content?.tokenAddress */,
+        abi: abi,
+        functionName: "resolveMemeTokenWar",
+        args: [id],
+      });
+      toast.success("Congratulations! Reward disbursed to your wallet!");
+    } catch (err) {
+      console.log(err);
+      toast.error("Something went wrong");
+    } finally {
+      setClaiming(false);
+    }
+  };
 
   // for memes,
   //get user's tweet and competitors tweet
@@ -256,16 +256,29 @@ function MemeWar({ id }: { id: string }) {
                   </Col>
                 </div>
 
-                <div className=" flex-1 gap-y-3">
-                  <p className="text-zinc-400 tracking-wide leading-relaxed text-sm">
-                    Vote Target
-                  </p>
-                  <div className="flex-1 gap-x-5">
-                    <Tag color="yellow.500">
-                      {Number(data[9]).toLocaleString()}
-                    </Tag>
+                {data[13] ? (
+                  <div className=" flex-1 gap-y-3">
+                    <p className="text-zinc-400 tracking-wide leading-relaxed text-sm">
+                      Sale Target
+                    </p>
+                    <div className="flex-1 gap-x-5">
+                      <Tag color="yellow.500">
+                        {Number(formatEther(data[8])).toLocaleString()}
+                      </Tag>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div className=" flex-1 gap-y-3">
+                    <p className="text-zinc-400 tracking-wide leading-relaxed text-sm">
+                      Vote Target
+                    </p>
+                    <div className="flex-1 gap-x-5">
+                      <Tag color="yellow.500">
+                        {Number(data[9]).toLocaleString()}
+                      </Tag>
+                    </div>
+                  </div>
+                )}
               </div>
               {/* creator info */}
               <div className="flex flex-row justify-between gap-y-3">
@@ -437,7 +450,7 @@ function MemeWar({ id }: { id: string }) {
                   </Row>
                   {ended && (
                     <Badge.Ribbon
-                      text="Hippies"
+                      text="MemeWar"
                       color={`${
                         data[17] >= data[9] && data[17] > data[16]
                           ? `green`

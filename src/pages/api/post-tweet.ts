@@ -41,7 +41,7 @@ export default async function handler(
 
 
       const { data: createdTweet } = await client.v2.tweet(post.title, {
-        poll: { duration_minutes: 5, options: [post.option, post.option2] },
+        poll: { duration_minutes: 15, options: [post.option, post.option2] },
       });
 
        return res.status(201).json({

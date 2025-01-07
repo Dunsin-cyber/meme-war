@@ -149,7 +149,7 @@ function MemeWarDetails({ id }: { id: string }) {
               {/* Social */}
               {ended ? (
                 <Badge.Ribbon
-                  text="Hippies"
+                  text="MemeWar"
                   color={`${
                     data[16] >= data[9] && data[16] > data[17] ? `green` : `red`
                   }`}
@@ -257,7 +257,7 @@ function MemeWarDetails({ id }: { id: string }) {
                 {/* Social */}
                 {ended ? (
                   <Badge.Ribbon
-                    text="Hippies"
+                    text="MemeWar"
                     color={`${
                       data[17] >= data[9] && data[17] > data[16]
                         ? `green`

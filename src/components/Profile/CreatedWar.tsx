@@ -254,17 +254,29 @@ function CreatedWar({ id }: { id: string }) {
                     />
                   </Col>
                 </div>
-
-                <div className=" flex-1 gap-y-3">
-                  <p className="text-zinc-400 tracking-wide leading-relaxed text-sm">
-                    Vote Target
-                  </p>
-                  <div className="flex-1 gap-x-5">
-                    <Tag color="yellow.500">
-                      {Number(data[9]).toLocaleString()}
-                    </Tag>
+                {data[13] ? (
+                  <div className=" flex-1 gap-y-3">
+                    <p className="text-zinc-400 tracking-wide leading-relaxed text-sm">
+                      Sale Target
+                    </p>
+                    <div className="flex-1 gap-x-5">
+                      <Tag color="yellow.500">
+                        {Number(formatEther(data[8])).toLocaleString()}
+                      </Tag>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div className=" flex-1 gap-y-3">
+                    <p className="text-zinc-400 tracking-wide leading-relaxed text-sm">
+                      Vote Target
+                    </p>
+                    <div className="flex-1 gap-x-5">
+                      <Tag color="yellow.500">
+                        {Number(data[9]).toLocaleString()}
+                      </Tag>
+                    </div>
+                  </div>
+                )}
               </div>
               {/* creator info */}
               <div className="flex flex-row justify-between gap-y-3">
