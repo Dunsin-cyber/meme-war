@@ -329,11 +329,12 @@ function CreatedWar({ id }: { id: string }) {
                       <div className="flex space-x-3">
                         <p>Your token {tokens?.token1?.symbol} is </p>
                         {priceRange > 0 ? (
-                          
-                             <AntdTag icon={<CheckCircleOutlined />} color="success">
-                      winning
-                    </AntdTag> 
-                        
+                          <AntdTag
+                            icon={<CheckCircleOutlined />}
+                            color="success"
+                          >
+                            winning
+                          </AntdTag>
                         ) : (
                           <AntdTag
                             icon={<ExclamationCircleOutlined />}
@@ -423,18 +424,30 @@ function CreatedWar({ id }: { id: string }) {
                 </div>
               )}
             </div>
-            <Button
-              onClick={() => handleClaimVictory()}
-              loading={claiming}
-              disabled={
-                !(
-                  Number(data[16]) >= Number(data[9]) &&
-                  Number(data[16]) > Number(data[17])
-                )
-              }
-            >
-              Claim Victory
-            </Button>
+            {data[13] ? (
+              <Button
+                onClick={() => handleClaimVictory()}
+                loading={claiming}
+                disabled={
+                  ended && +tokens?.token2?.price > +tokens?.token1?.price
+                }
+              >
+                Claim Victory
+              </Button>
+            ) : (
+              <Button
+                onClick={() => handleClaimVictory()}
+                loading={claiming}
+                disabled={
+                  !(
+                    Number(data[16]) >= Number(data[9]) &&
+                    Number(data[16]) > Number(data[17])
+                  )
+                }
+              >
+                Claim Victory
+              </Button>
+            )}
           </div>
         </div>
       )}

@@ -431,18 +431,28 @@ function MemeWar({ id }: { id: string }) {
                 </div>
               )}
             </div>
-            <Button
-              onClick={() => handleClaimVictory()}
-              loading={claiming}
-              disabled={
-                !(
-                  Number(data[17]) >= Number(data[9]) &&
-                  Number(data[17]) > Number(data[16])
-                )
-              }
-            >
-              Claim Victory
-            </Button>
+             {data[13] ? (
+                         <Button
+                           onClick={() => handleClaimVictory()}
+                           loading={claiming}
+                           disabled={ended && +tokens?.token1?.price > +tokens?.token2?.price}
+                         >
+                           Claim Victory
+                         </Button>
+                       ) : (
+                         <Button
+                           onClick={() => handleClaimVictory()}
+                           loading={claiming}
+                           disabled={
+                             !(
+                               Number(data[16]) >= Number(data[9]) &&
+                               Number(data[16]) > Number(data[17])
+                             )
+                           }
+                         >
+                           Claim Victory
+                         </Button>
+                       )}
           </div>
         </div>
       )}
