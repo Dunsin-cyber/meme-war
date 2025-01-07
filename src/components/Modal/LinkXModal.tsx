@@ -32,10 +32,15 @@ function LinkXModal() {
   //TODO: check for X cookie here, check if it exist and still valid
   React.useEffect(() => {
     const xname = localStorage.getItem("xname");
-    if (!xname && pathname.length > 1 ) {
+    if (
+      !xname &&
+      pathname.length > 1 &&
+      pathname &&
+      !pathname.includes("profile")
+    ) {
       handleToggle();
     }
-  }, [userDetails]);
+  }, [pathname]);
 
   const handleGetAuthLink = async () => {
     try {
