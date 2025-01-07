@@ -26,8 +26,10 @@ function LinkXModal() {
     setOpenXModal(true);
   };
 
+  //TODO: check for X cookie here, check if it exist and still valid
   React.useEffect(() => {
-    if (!userDetails) {
+    const xname = localStorage.getItem("xname");
+    if (!xname) {
       handleToggle();
     }
   }, [userDetails]);
@@ -84,15 +86,23 @@ function LinkXModal() {
         open={openXModal}
         onCancel={() => setOpenXModal(false)}
         footer={
-        //   <Button type="primary" onClick={showLoading}>
-        //     Cancel
-        //   </Button>
-         <div className="my-5">
-          <Alert message={`You can always link and unlink yout X account under profile page`} type="info" showIcon closable />
-        </div>
+          //   <Button type="primary" onClick={showLoading}>
+          //     Cancel
+          //   </Button>
+          <div className="my-5">
+            <Alert
+              message={`You can always link and unlink yout X account under profile page`}
+              type="info"
+              showIcon
+              closable
+            />
+          </div>
         }
       >
-        <div className="btn flex justify-center items-center my-7 px-6 bg-blue-700" onClick={handleGetAuthLink}>
+        <div
+          className="btn flex justify-center items-center my-7 px-6 bg-blue-700"
+          onClick={handleGetAuthLink}
+        >
           {xLoading ? (
             <p>
               {userDetails?.username?.length > 1
