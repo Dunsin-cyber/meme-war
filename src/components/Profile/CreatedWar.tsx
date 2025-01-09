@@ -9,7 +9,6 @@ import { FaDiscord } from "react-icons/fa";
 import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
 import { useGetAMemeDetail } from "@/hooks";
 import { toast } from "react-hot-toast";
-//hello
 import {
   ArrowDownOutlined,
   ArrowUpOutlined,
