@@ -37,12 +37,10 @@ export default function HoverEffect({ className }: { className?: string }) {
 
   const { data, isLoading, error } = useGetMemeWars();
   // console.log(data);
-  const items = data
-    ?.filter((item) => item.creator === address)
-    .map((d: any, index: number) => ({
+  const items = data?.map((d: any, index: number) => ({
       ...d,
       id: index + 1, // Increment the id starting from 1
-    }));
+    })).filter((item) => item.creator === address)
 
   const handleApprove = async (tokenAddress: `0x${string}`) => {
     setLoading(true);
