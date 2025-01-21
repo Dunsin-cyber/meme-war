@@ -53,6 +53,7 @@ export function Form({ id, prize, isToken }: { id: number, prize: bigint, isToke
         option: data.name,
         option2: "VOTE AGAINST ME",
       };
+      // if (isToken) 
       const url = await handlePostOnX(post);
 
       await writeContractAsync({
@@ -65,7 +66,7 @@ export function Form({ id, prize, isToken }: { id: number, prize: bigint, isToke
           data.name,
           data.symbol,
           memeData.memeUrl,
-          url,
+          isToken ? "" : url,
           data.name,
           data.description,
         ],
@@ -86,26 +87,28 @@ export function Form({ id, prize, isToken }: { id: number, prize: bigint, isToke
 
   const handlePostOnX = async (param: any) => {
     try {
-      const username = localStorage.getItem("xname");
+      if (!isToken) {
+        const username = localStorage.getItem("xname");
 
-      const createPost = await fetch("/api/post-tweet", {
-        method: "POST",
-        body: JSON.stringify(param),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const data = await createPost.json();
-      if (data.error) {
-        toast.error(data.error);
-        toast.error("Please link your X account before creating a meme");
-        throw new Error();
+        const createPost = await fetch("/api/post-tweet", {
+          method: "POST",
+          body: JSON.stringify(param),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const data = await createPost.json();
+        if (data.error) {
+          toast.error(data.error);
+          toast.error("Please link your X account before creating a meme");
+          throw new Error();
+        }
+        toast.success("meme created on twitter");
+        console.log(data);
       }
-      toast.success("meme created on twitter");
-      console.log(data);
-      const url = `https://x.com/${username}/status/${data?.data?.id}`;
-      // setMemeData({...memeData, meme2Twitter: url })
-      return url;
+        const url = `https://x.com/${username}/status/${data?.data?.id}`;
+        // setMemeData({...memeData, meme2Twitter: url })
+        return url;
     } catch (err) {
       toast.error(err.message);
       console.log("[ERROR POSTING MEME ON X]", err);

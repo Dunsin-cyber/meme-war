@@ -1,4 +1,5 @@
 # **MemeWar: Token-Based Meme War Platform**
+Imagine a war battle between $TRUMP and $MELANIA memecoins, where participants can wager on whose coin will outperform. 
 
 MemeWar is a decentralized platform that gamifies meme battles using token economics. Users can create meme wars, challenge others, and engage in a competitive marketplace to buy tokens, vote for memes, and win rewards. The platform integrates supply-based linear token pricing and airdrop mechanics, creating an exciting and fair ecosystem.
 
